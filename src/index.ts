@@ -1,12 +1,5 @@
-import express from 'express';
+import { createApp } from './app';
 
-const app = express();
-const port = 5000;
+createApp()
 
-app.get('/', (req, res) => {
-  res.send('Hello, TypeScript Node Express!');
-});
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
