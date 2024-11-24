@@ -25,13 +25,14 @@
     "express": "^4.21.1",
     "pg": "^8.13.1",
     "ts-node": "^10.9.2",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@eslint/js": "^9.14.0",
+    "@types/jest": "^29.5.14",
     "@types/pg": "^8.11.10",
     "drizzle-kit": "^0.28.1",
-    "@types/jest": "^29.5.14",
     "eslint": "^9.14.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.31.0",
