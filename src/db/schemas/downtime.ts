@@ -10,13 +10,15 @@ export const downtime = pgTable("downtime", {
   cause: varchar("cause", { length: 255 }).notNull()
 }, (table) => {
   return {
-    pk: primaryKey(
-      table.id_sender,
-      table.id_receiver,
-      table.id_equipment,
-      table.downtime_date,
-      table.id_dep_receiver
-    )
+    pk: primaryKey({
+      columns: [
+        table.id_sender,
+        table.id_receiver,
+        table.id_equipment,
+        table.downtime_date,
+        table.id_dep_receiver
+      ]
+    })
   };
 });
 

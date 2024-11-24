@@ -8,7 +8,13 @@ export const maintenance = pgTable("maintenance", {
   cost: real("cost").notNull()
 }, (table) => {
   return {
-    pk: primaryKey(table.id_technician, table.id_equipment, table.maintenance_date)
+    pk: primaryKey({
+      columns: [
+        table.id_technician,
+        table.id_equipment,
+        table.maintenance_date
+      ]
+    })
   };
 });
 
