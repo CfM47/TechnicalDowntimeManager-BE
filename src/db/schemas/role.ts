@@ -1,9 +1,9 @@
-import { pgTable, uuid, varchar } from 'drizzle-orm/pg-core';
+import { pgTable, serial, varchar } from 'drizzle-orm/pg-core';
 import { rate } from './rate';
 
 export const role = pgTable('role', {
-  id_role: uuid("id_role").primaryKey(),
-  role_name : varchar({ length: 255 }).notNull()
+  id: serial("id").primaryKey(),
+  name : varchar("name",{ length: 255 }).notNull()
 });
 
 export type Role = typeof role.$inferSelect;
