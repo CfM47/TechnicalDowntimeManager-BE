@@ -1,11 +1,12 @@
 import { pgTable, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
+import { department } from './department';
 
 export const equipment = pgTable("equipment", {
   id : uuid("id").primaryKey().defaultRandom(),
   name : varchar("name", {length: 255}).notNull(),
   type : varchar("type", {length: 255}).notNull(),
   state : varchar("state", {length: 255}).notNull(),
-  id_department : uuid("id_department").notNull(),//.references('department', 'id'),
+  id_department : uuid("id_department").references(() => department.id),
   acquisition_date : timestamp("acquisition_date").defaultNow().notNull(),
 });
 

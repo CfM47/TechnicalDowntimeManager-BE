@@ -1,10 +1,12 @@
 import { pgTable, uuid, timestamp, varchar, real, primaryKey } from "drizzle-orm/pg-core";
+import { technician } from './technician';
+import { equipment } from './equipment';
 
 export const maintenance = pgTable("maintenance", {
-  id_technician: uuid("id_technician").notNull().defaultRandom(),  //Add foreign key to Technician
-  id_equipment: uuid("id_equipment").notNull().defaultRandom(),    //Add foreign key to Equipment
-  maintenance_date: timestamp("maintenance_date").notNull(),
-  maintenance_type: varchar("maintenance_type", { length: 255 }).notNull(),
+  id_technician: uuid("id_technician").references(() => technician.id_user),
+  id_equipment: uuid("id_equipment").references(() => equipment.id),
+  date: timestamp("date").notNull(),
+  type: varchar("type", { length: 255 }).notNull(),
   cost: real("cost").notNull()
 }, (table) => {
   return {
@@ -12,7 +14,7 @@ export const maintenance = pgTable("maintenance", {
       columns: [
         table.id_technician,
         table.id_equipment,
-        table.maintenance_date
+        table.date
       ]
     })
   };
