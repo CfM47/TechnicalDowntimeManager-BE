@@ -1,7 +1,8 @@
 import {Router} from 'express';
-//import routes of models
+import { userRouter } from './features/User/router';
+
 export const appRouter = () => {
     const router = Router()
-    //router.use() <- here we add routes of models
+    router.use("/user", userRouter()) 
     return router
 }
