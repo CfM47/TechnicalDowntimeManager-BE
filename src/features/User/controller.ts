@@ -4,6 +4,7 @@ import { validateUser, validateUserUpdate } from './utils';
 import { NewUser, User } from '../../db/schemas/user';
 import * as crypto from 'node:crypto';
 import { ErrorMessage } from '../../utils';
+import bcrypt from 'bcrypt'
 export class UserController {
   userModel: IUserModel;
   constructor(userModel: IUserModel) {
@@ -20,6 +21,7 @@ export class UserController {
         id : crypto.randomUUID(),
         ...result.data
       };
+      userData.password = await bcrypt.hash(userData.password, 10);
       const newUser = await this.userModel.create(userData);
       res.status(201).json(newUser);
     }
