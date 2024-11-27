@@ -6,4 +6,3 @@ export const userSchema = z.object({
   id_department: z.string().uuid(),
   id_role: z.number().int().positive()
 });
-
