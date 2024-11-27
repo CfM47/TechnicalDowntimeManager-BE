@@ -1,6 +1,7 @@
 import { ZodObject, ZodRawShape, ZodSchema } from 'zod';
 import { IUserModel } from './features/Interfaces/IUserModel';
 import { ITechnicianModel } from './features/Interfaces/ITechnicianModel';
+import { IEquipmentModel } from './features/Interfaces/IEquipmentModel';
 
 export const ErrorMessage = (e: any) => {
   return { message: e instanceof Error ? e.message : 'An unknown error occurred' };
@@ -15,7 +16,7 @@ export function validateUpdate<T extends ZodRawShape>(object: any, schema: ZodOb
 }
 
 export type Models = {
-  userModel: IUserModel,
-  technicianModel: ITechnicianModel,
-}
-
+  userModel: IUserModel;
+  technicianModel: ITechnicianModel;
+  equipmentModel: IEquipmentModel;
+};

@@ -6,7 +6,7 @@ import { Models } from './utils';
 
 dotenv.config();
 
-export const createApp = (appModels : Models) => {
+export const createApp = (appModels: Models) => {
   const app = express();
   app.use(express.json());
   app.use(cors());

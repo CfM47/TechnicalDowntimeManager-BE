@@ -15,13 +15,14 @@ export class UserController {
     try {
       const result = validate(req.body, userSchema);
       if (!result.success) {
-        res.status(400).json({ message: JSON.parse(result.error.message)});
+        res.status(400).json({ message: JSON.parse(result.error.message) });
         return;
       }
       const userData: NewUser = {
         id: crypto.randomUUID(),
         ...result.data
       };
+      //TODO Verify if user department and user role exist before insert
       userData.password = await bcrypt.hash(userData.password, 10);
       const newUser = await this.userModel.create(userData);
       res.status(201).json(newUser);
@@ -57,16 +58,16 @@ export class UserController {
       const id = req.params.id;
       const result = validateUpdate(req.body, userSchema);
       if (!result.success) {
-        res.status(400).json({ message: JSON.parse(result.error.message)});
+        res.status(400).json({ message: JSON.parse(result.error.message) });
         return;
       }
       const userData: Partial<User> = { ...result.data };
-      //check if user exist before update
       const user = await this.userModel.getById(id);
       if (!user) {
         res.status(404).json({ message: 'User not found' });
         return;
       }
+      //TODO Verify if user department and user role exist before update
       const updatedUser = await this.userModel.update(id, userData);
       res.status(200).json(updatedUser);
     } catch (e) {
