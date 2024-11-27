@@ -1,4 +1,4 @@
-import { ITechnicianModel } from '../Interfaces/ITechnician';
+import { ITechnicianModel } from '../Interfaces/ITechnicianModel';
 import { NewTechnician, technician, Technician } from '../../db/schemas/technician';
 import { db } from '../../db/config/db_connect';
 import { eq } from 'drizzle-orm';
