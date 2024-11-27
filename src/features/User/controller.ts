@@ -15,7 +15,7 @@ export class UserController {
     try {
       const result = validate(req.body, userSchema);
       if (!result.success) {
-        res.status(400).json({ message: result.error.message });
+        res.status(400).json({ message: JSON.parse(result.error.message)});
         return;
       }
       const userData: NewUser = {
@@ -57,7 +57,7 @@ export class UserController {
       const id = req.params.id;
       const result = validateUpdate(req.body, userSchema);
       if (!result.success) {
-        res.status(400).json({ message: result.error.message });
+        res.status(400).json({ message: JSON.parse(result.error.message)});
         return;
       }
       const userData: Partial<User> = { ...result.data };
