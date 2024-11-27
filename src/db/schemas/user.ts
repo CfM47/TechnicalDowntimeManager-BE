@@ -7,8 +7,8 @@ export const user = pgTable('user', {
   name: varchar('name', { length: 255 }).notNull(),
   password: varchar('password', { length: 255 }).notNull(),
   id_department: uuid('id_department')
-    .notNull()
-    .references(() => department.id),
+    .references(() => department.id)
+    .notNull(),
   id_role: serial('id_role')
     .references(() => role.id)
     .notNull()

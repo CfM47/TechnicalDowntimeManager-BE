@@ -1,10 +1,11 @@
 import { IUserModel } from '../Interfaces/IUserModel';
 import { Request, Response } from 'express';
-import { validateUser, validateUserUpdate } from './utils';
+import { userSchema } from './utils';
 import { NewUser, User } from '../../db/schemas/user';
 import * as crypto from 'node:crypto';
-import { ErrorMessage } from '../../utils';
+import { ErrorMessage, validate, validateUpdate } from '../../utils';
 import bcrypt from 'bcrypt';
+
 export class UserController {
   userModel: IUserModel;
   constructor(userModel: IUserModel) {
@@ -12,7 +13,7 @@ export class UserController {
   }
   create = async (req: Request, res: Response) => {
     try {
-      const result = validateUser(req.body);
+      const result = validate(req.body, userSchema);
       if (!result.success) {
         res.status(400).json({ message: result.error.message });
         return;
@@ -54,7 +55,7 @@ export class UserController {
   update = async (req: Request, res: Response) => {
     try {
       const id = req.params.id;
-      const result = validateUserUpdate(req.body);
+      const result = validateUpdate(req.body, userSchema);
       if (!result.success) {
         res.status(400).json({ message: result.error.message });
         return;
