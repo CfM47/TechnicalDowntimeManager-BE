@@ -5,11 +5,9 @@ import { NewUser, User } from '../../db/schemas/user';
 import * as crypto from 'node:crypto';
 import { ErrorMessage } from '../../utils';
 import bcrypt from 'bcrypt';
+import { userModel } from '../../globals';
 export class UserController {
-  userModel: IUserModel;
-  constructor(userModel: IUserModel) {
-    this.userModel = userModel;
-  }
+  
   create = async (req: Request, res: Response) => {
     try {
       const result = validateUser(req.body);
@@ -22,7 +20,7 @@ export class UserController {
         ...result.data
       };
       userData.password = await bcrypt.hash(userData.password, 10);
-      const newUser = await this.userModel.create(userData);
+      const newUser = await userModel.create(userData);
       res.status(201).json(newUser);
     } catch (e) {
       res.status(500).json(ErrorMessage(e));
@@ -31,7 +29,7 @@ export class UserController {
 
   getAll = async (req: Request, res: Response) => {
     try {
-      const allUsers = await this.userModel.getAll();
+      const allUsers = await userModel.getAll();
       res.status(200).json(allUsers);
     } catch (e) {
       res.status(500).json(ErrorMessage(e));
@@ -41,7 +39,7 @@ export class UserController {
   getById = async (req: Request, res: Response) => {
     try {
       const id = req.params.id;
-      const user = await this.userModel.getById(id);
+      const user = await userModel.getById(id);
       if (!user) {
         res.status(404).json({ message: 'User not found' });
         return;
@@ -61,12 +59,12 @@ export class UserController {
       }
       const userData: Partial<User> = { ...result.data };
       //check if user exist before update
-      const user = await this.userModel.getById(id);
+      const user = await userModel.getById(id);
       if (!user) {
         res.status(404).json({ message: 'User not found' });
         return;
       }
-      const updatedUser = await this.userModel.update(id, userData);
+      const updatedUser = await userModel.update(id, userData);
       res.status(200).json(updatedUser);
     } catch (e) {
       res.status(500).json(ErrorMessage(e));
@@ -76,12 +74,12 @@ export class UserController {
   delete = async (req: Request, res: Response) => {
     try {
       const id = req.params.id;
-      const user = await this.userModel.getById(id);
+      const user = await userModel.getById(id);
       if (!user) {
         res.status(404).json({ message: 'User not found' });
         return;
       }
-      await this.userModel.delete(id);
+      await userModel.delete(id);
       res.status(200).json({ message: 'User deleted successfully' });
     } catch (e) {
       res.status(500).json(ErrorMessage(e));
