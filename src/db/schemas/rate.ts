@@ -14,7 +14,7 @@ export const rate = pgTable(
   (table) => {
     return {
       pk: primaryKey({
-        columns: [table.id_technician, table.id_user]
+        columns: [table.id_technician, table.id_user,table.date]
       })
     };
   }

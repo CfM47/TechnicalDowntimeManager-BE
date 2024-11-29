@@ -1,4 +1,5 @@
 import { Rate , NewRate} from '../../db/schemas/rate';
+import {SQL} from 'drizzle-orm';
 
 export interface IRateModel {
 
@@ -6,9 +7,9 @@ export interface IRateModel {
 
   getAll(): Promise<Rate[]>;
 
-  getById(id_technician: string, id_user: string): Promise<Rate | null>;
+  getById(keys : SQL[]): Promise<Rate | null>;
 
-  update(id_technician: string, id_user: string, rateData: Partial<Rate>): Promise<Rate | null>;
+  update(keys: SQL[], rateData : Partial<Rate>): Promise<Rate | null>;
 
-  delete(id_technician: string, id_user: string): Promise<void>;
+  delete(keys: SQL[]): Promise<void>;
 }
