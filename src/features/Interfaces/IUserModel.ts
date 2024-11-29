@@ -1,13 +1,14 @@
 import { User, NewUser } from '../../db/schemas/user';
+import { SQL } from 'drizzle-orm';
 
 export interface IUserModel {
   create(newUser: NewUser): Promise<User>;
 
   getAll(): Promise<User[]>;
 
-  getById(id: string): Promise<User | null>;
+  getById(keys: SQL[]): Promise<User | null>;
 
-  update(id: string, userData: Partial<User>): Promise<User | null>;
+  update(keys: SQL[], userData: Partial<User>): Promise<User | null>;
 
-  delete(id: string): Promise<void>;
+  delete(keys: SQL[]): Promise<void>;
 }

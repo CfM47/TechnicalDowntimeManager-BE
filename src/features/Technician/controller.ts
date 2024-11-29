@@ -4,6 +4,9 @@ import { ErrorMessage, validate, validateUpdate } from '../../utils';
 import { NewTechnician, Technician } from '../../db/schemas/technician';
 import { IUserModel } from '../Interfaces/IUserModel';
 import { ITechnicianModel } from '../Interfaces/ITechnicianModel';
+import { eq, SQL } from 'drizzle-orm';
+import { user } from '../../db/schemas/user';
+import { UserQueryBuilder } from '../User/utils';
 export class TechnicianController {
   userModel: IUserModel;
   technicianModel: ITechnicianModel;
@@ -18,8 +21,10 @@ export class TechnicianController {
         res.status(400).json({ message: JSON.parse(result.error.message) });
         return;
       }
-      const user = await this.userModel.getById(result.data.id_user);
-      if (!user) {
+      const userQuery = { id: result.data.id_user };
+      const userFilter = UserQueryBuilder(userQuery);
+      const userFound = await this.userModel.getById(userFilter);
+      if (!userFound) {
         res.status(404).json({ message: 'User not found' });
         return;
       }
