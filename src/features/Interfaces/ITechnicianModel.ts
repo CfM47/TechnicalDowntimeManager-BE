@@ -1,13 +1,14 @@
 import { Technician, NewTechnician } from '../../db/schemas/technician';
+import { SQL } from 'drizzle-orm';
 
 export interface ITechnicianModel {
   create(newTechnician: NewTechnician): Promise<Technician>;
 
   getAll(): Promise<Technician[]>;
 
-  getById(id: string): Promise<Technician | null>;
+  getById(keys : SQL[]): Promise<Technician | null>;
 
-  update(id: string, technicianData: Partial<Technician>): Promise<Technician | null>;
+  update(keys : SQL[], technicianData: Partial<Technician>): Promise<Technician | null>;
 
-  delete(id: string): Promise<void>;
+  delete(keys : SQL[]): Promise<void>;
 }

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { technicianSchema } from './utils';
+import { TechnicianQuery, TechnicianQueryBuilder, technicianSchema } from './utils';
 import { ErrorMessage, validate, validateUpdate } from '../../utils';
 import { NewTechnician, Technician } from '../../db/schemas/technician';
 import { IUserModel } from '../Interfaces/IUserModel';
@@ -50,7 +50,9 @@ export class TechnicianController {
   getById = async (req: Request, res: Response) => {
     try {
       const id = req.params.id;
-      const technician = await this.technicianModel.getById(id);
+      const technicianQuery : TechnicianQuery = {id_user: id};
+      const filter = TechnicianQueryBuilder(technicianQuery);
+      const technician = await this.technicianModel.getById(filter);
       if (!technician) {
         res.status(404).json({ message: 'Technician not found' });
         return;
@@ -70,12 +72,14 @@ export class TechnicianController {
       }
       const technicianData: Partial<Technician> = { ...result.data };
       //check if technician exist before update
-      const technician = await this.technicianModel.getById(id);
+      const technicianQuery : TechnicianQuery = {id_user: id};
+      const filter = TechnicianQueryBuilder(technicianQuery);
+      const technician = await this.technicianModel.getById(filter);
       if (!technician) {
         res.status(404).json({ message: 'Technician not found' });
         return;
       }
-      const updatedTechnician = await this.technicianModel.update(id, technicianData);
+      const updatedTechnician = await this.technicianModel.update(filter, technicianData);
       res.status(200).json(updatedTechnician);
     } catch (e) {
       res.status(500).json(ErrorMessage(e));
@@ -85,12 +89,14 @@ export class TechnicianController {
   delete = async (req: Request, res: Response) => {
     try {
       const id = req.params.id;
-      const technician = await this.technicianModel.getById(id);
+      const technicianQuery : TechnicianQuery = {id_user: id};
+      const filter = TechnicianQueryBuilder(technicianQuery);
+      const technician = await this.technicianModel.getById(filter);
       if (!technician) {
         res.status(404).json({ message: 'Technician not found' });
         return;
       }
-      await this.technicianModel.delete(id);
+      await this.technicianModel.delete(filter);
       res.status(200).json({ message: 'Technician deleted successfully' });
     } catch (e) {
       res.status(500).json(ErrorMessage(e));
