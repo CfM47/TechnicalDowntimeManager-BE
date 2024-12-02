@@ -2,6 +2,7 @@ import { ZodObject, ZodRawShape, ZodSchema } from 'zod';
 import { IUserModel } from './features/Interfaces/IUserModel';
 import { ITechnicianModel } from './features/Interfaces/ITechnicianModel';
 import { IEquipmentModel } from './features/Interfaces/IEquipmentModel';
+import { IRateModel } from './features/Interfaces/IRateModel';
 
 export const ErrorMessage = (e: any) => {
   return { message: e instanceof Error ? e.message : 'An unknown error occurred' };
@@ -19,4 +20,5 @@ export type Models = {
   userModel: IUserModel;
   technicianModel: ITechnicianModel;
   equipmentModel: IEquipmentModel;
+  rateModel: IRateModel
 };
