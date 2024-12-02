@@ -7,7 +7,7 @@ export const rate = pgTable(
   {
     id_technician: uuid('id_technician').references(() => technician.id_user),
     id_user: uuid('id_user').references(() => user.id),
-    date: timestamp('date').defaultNow(),
+    date: timestamp('date',{mode : 'string'}).defaultNow(),
     comment: varchar('comment', { length: 255 }).notNull(),
     score: integer('score').notNull()
   },

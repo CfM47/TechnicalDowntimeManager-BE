@@ -1,10 +1,7 @@
 import { IRateModel } from '../Interfaces/IRateModel';
 import {Request , Response} from 'express';
 import { validate, validateUpdate } from '../../utils';
-import { rateSchema } from './utils';
-import { eq, SQL } from 'drizzle-orm';
-import { technician } from '../../db/schemas/technician';
-import { user } from '../../db/schemas/user';
+import { RateQuery, RateQueryBuilder, rateSchema } from './utils';
 
 export class RateController {
   rateModel : IRateModel;
@@ -19,18 +16,6 @@ export class RateController {
 
     if (!result.success) {
       res.status(400).json({ message: JSON.parse(result.error.message) });
-      return;
-    }
-
-    const { id_technician, id_user } = result.data;
-    const keys : SQL[] = [];
-    keys.push(eq(technician.id_user, id_technician));
-    keys.push(eq(user.id, id_user));
-
-    // Check if the rate already exists
-    const existingRate = await this.rateModel.getById(keys);
-    if (existingRate) {
-      res.status(400).json({ message: 'Rate already exists for this technician and user' });
       return;
     }
 
@@ -52,63 +37,59 @@ export class RateController {
 
   getById = async (req: Request, res: Response) => {
   try {
-    const { id_technician, id_user } = req.params;
-    const keys: SQL [] = [];
-    keys.push(eq(technician.id_user, id_technician));
-    keys.push(eq(user.id, id_user));
-    const rate = await this.rateModel.getById(keys);
-    if (rate) {
-      res.status(200).json(rate);
+    const { id_technician, id_user, date } = req.params;
+    const rateQuery : RateQuery = { id_technician: id_technician, id_user: id_user, date: date };
+    const filter = RateQueryBuilder(rateQuery);
+    const rateFound = await this.rateModel.getById(filter);
+
+    if (rateFound) {
+      res.status(200).json(rateFound);
     } else {
-      res.status(404).json({ 'Rate not found': { id_technician, id_user } });
+      res.status(400).json({ 'Rate not found': { id_technician, id_user } });
     }
   } catch (err) {
-    res.status(400).send({ 'An error has occurred': err });
+    res.status(400).send({ 'An error has occurred candela s': err });
   }
 };
 
   update = async (req: Request, res: Response) => {
     try {
-      const { id_technician, id_user } = req.params;
+      const { id_technician, id_user , date} = req.params;
       const result = validateUpdate(req.body, rateSchema);
 
       if (!result.success) {
         res.status(400).json({ message: JSON.parse(result.error.message) });
         return;
       }
-      const keys: SQL[] = [];
+      const rateQuery : RateQuery = { id_technician: id_technician, id_user: id_user , date : date};
+      const filter = RateQueryBuilder(rateQuery);
+      const rateFound = await this.rateModel.getById(filter);
 
-      keys.push(eq(technician.id_user, id_technician));
-      keys.push(eq(user.id, id_user));
-
-      const rate = await this.rateModel.getById(keys);
-
-      if(!rate){
+      if(!rateFound){
         res.status(404).json({ message: 'Rate not found' });
         return;
       }
-      const updatedRate = await this.rateModel.update(keys, result.data);
+      const updatedRate = await this.rateModel.update(filter, result.data);
 
       res.json(updatedRate);
-    } catch (err) {
-      res.status(400).send({ 'An error has occurred': err });
+    }
+    catch (err) {
+      res.status(400).send({ 'An error has occurred here': err });
     }
   }
 
   delete = async (req: Request, res: Response) => {
     try {
-      const { id_technician, id_user } = req.params;
-      const keys: SQL[] = [];
-      keys.push(eq(technician.id_user, id_technician));
-      keys.push(eq(user.id, id_user));
+      const { id_technician, id_user, date } = req.params;
+      const rateQuery : RateQuery = { id_technician: id_technician, id_user: id_user , date : date};
+      const filter = RateQueryBuilder(rateQuery);
+      const rateFound = await this.rateModel.getById(filter);
 
-      const rate = await this.rateModel.getById(keys);
-
-      if(!rate){
+      if(!rateFound){
         res.status(404).json({ message: 'Rate not found' });
         return;
       }
-      await this.rateModel.delete(keys);
+      await this.rateModel.delete(filter);
       res.status(200).json({ message: 'Rate deleted successfully' });
     } catch (err) {
       res.status(400).json({ 'An error has occurred': err });
