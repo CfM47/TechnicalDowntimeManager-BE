@@ -3,6 +3,7 @@ import { IUserModel } from './features/Interfaces/IUserModel';
 import { ITechnicianModel } from './features/Interfaces/ITechnicianModel';
 import { IEquipmentModel } from './features/Interfaces/IEquipmentModel';
 import { IRateModel } from './features/Interfaces/IRateModel';
+import { IRoleModel } from './features/Interfaces/IRoleModel';
 
 export const ErrorMessage = (e: any) => {
   return { message: e instanceof Error ? e.message : 'An unknown error occurred' };
@@ -20,5 +21,6 @@ export type Models = {
   userModel: IUserModel;
   technicianModel: ITechnicianModel;
   equipmentModel: IEquipmentModel;
-  rateModel: IRateModel
+  rateModel: IRateModel;
+  roleModel: IRoleModel;
 };

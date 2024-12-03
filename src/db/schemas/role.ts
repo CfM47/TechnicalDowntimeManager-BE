@@ -1,5 +1,4 @@
 import { pgTable, serial, varchar } from 'drizzle-orm/pg-core';
-import { rate } from './rate';
 
 export const role = pgTable('role', {
   id: serial('id').primaryKey(),
@@ -7,4 +6,4 @@ export const role = pgTable('role', {
 });
 
 export type Role = typeof role.$inferSelect;
-export type NewRole = typeof rate.$inferInsert;
+export type NewRole = typeof role.$inferInsert;
