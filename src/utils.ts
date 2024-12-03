@@ -5,6 +5,7 @@ import { IEquipmentModel } from './features/Interfaces/IEquipmentModel';
 import { IRateModel } from './features/Interfaces/IRateModel';
 import { IRoleModel } from './features/Interfaces/IRoleModel';
 import { ITransferModel } from './features/Interfaces/ITransferModel';
+import { IDepartmentModel } from './features/Interfaces/IDepartmentModel';
 
 export const ErrorMessage = (e: any) => {
   return { message: e instanceof Error ? e.message : 'An unknown error occurred' };
@@ -25,4 +26,5 @@ export type Models = {
   rateModel: IRateModel;
   roleModel: IRoleModel;
   transferModel : ITransferModel;
+  departmentModel : IDepartmentModel;
 };
