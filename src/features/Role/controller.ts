@@ -18,15 +18,6 @@ export class RoleController {
         return;
       }
 
-      const { id } = req.params;
-      const roleQuery : RoleQuery = { id: parseInt(id)};
-      const filter = RoleQueryBuilder(roleQuery);
-
-      const existRole = await this.roleModel.getById(filter);
-      if (!existRole) {
-        res.status(404).json({ message: 'Role not found' });
-        return;
-      }
       const roleData: NewRole = {
         ...result.data
       };
