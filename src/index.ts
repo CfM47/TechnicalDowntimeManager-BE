@@ -4,12 +4,14 @@ import { UserModel } from './features/User/model';
 import { TechnicianModel } from './features/Technician/model';
 import { EquipmentModel } from './features/Equipment/model';
 import { RateModel } from './features/Rate/model';
+import { RoleModel } from './features/Role/model';
 
 const appModels: Models = {
   userModel: new UserModel(),
   technicianModel: new TechnicianModel(),
   equipmentModel: new EquipmentModel(),
-  rateModel: new RateModel()
+  rateModel: new RateModel(),
+  roleModel: new RoleModel()
 };
 
 createApp(appModels);
