@@ -5,6 +5,7 @@ import { TechnicianModel } from './features/Technician/model';
 import { EquipmentModel } from './features/Equipment/model';
 import { RateModel } from './features/Rate/model';
 import { RoleModel } from './features/Role/model';
+import { DepartmentModel } from './features/Department/model';
 import { TransferModel } from './features/Transfer/model';
 
 const appModels: Models = {
@@ -13,7 +14,8 @@ const appModels: Models = {
   equipmentModel: new EquipmentModel(),
   rateModel: new RateModel(),
   roleModel: new RoleModel(),
-  transferModel: new TransferModel()
+  transferModel: new TransferModel(),
+  departmentModel: new DepartmentModel()
 };
 
 createApp(appModels);
