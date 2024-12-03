@@ -5,6 +5,7 @@ import { Models } from './utils';
 import { equipmentRouter } from './features/Equipment/router';
 import { rateRouter } from './features/Rate/router';
 import { roleRouter } from './features/Role/router';
+import { transferRouter } from './features/Transfer/router';
 
 export const appRouter = (appModels: Models) => {
   const router = Router();
@@ -13,5 +14,6 @@ export const appRouter = (appModels: Models) => {
   router.use('/equipment', equipmentRouter(appModels.equipmentModel));
   router.use('/rate', rateRouter(appModels.rateModel));
   router.use('/role',roleRouter(appModels.roleModel));
+  router.use('/transfer', transferRouter(appModels.transferModel));
   return router;
 };
