@@ -9,7 +9,7 @@ export const transfer = pgTable(
     id_sender: uuid('id_sender').references(() => user.id),
     id_receiver: uuid('id_receiver').references(() => user.id),
     id_equipment: uuid('id_equipment').references(() => equipment.id),
-    date: timestamp('date').defaultNow(),
+    date: timestamp('date',{mode : 'string'}).defaultNow(),
     id_origin_dep: uuid('id_origin_dep').references(() => department.id),
     id_receiver_dep: uuid('id_receiver_dep').references(() => department.id),
     downtime_status: varchar('downtime_status', { length: 255 }).notNull() //TODO Define as enum later

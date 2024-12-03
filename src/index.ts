@@ -5,13 +5,15 @@ import { TechnicianModel } from './features/Technician/model';
 import { EquipmentModel } from './features/Equipment/model';
 import { RateModel } from './features/Rate/model';
 import { RoleModel } from './features/Role/model';
+import { TransferModel } from './features/Transfer/model';
 
 const appModels: Models = {
   userModel: new UserModel(),
   technicianModel: new TechnicianModel(),
   equipmentModel: new EquipmentModel(),
   rateModel: new RateModel(),
-  roleModel: new RoleModel()
+  roleModel: new RoleModel(),
+  transferModel: new TransferModel()
 };
 
 createApp(appModels);
