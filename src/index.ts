@@ -7,6 +7,7 @@ import { RateModel } from './features/Rate/model';
 import { RoleModel } from './features/Role/model';
 import { DepartmentModel } from './features/Department/model';
 import { TransferModel } from './features/Transfer/model';
+import { DowntimeModel } from "./features/Downtime/model";
 
 const appModels: Models = {
   userModel: new UserModel(),
@@ -15,7 +16,8 @@ const appModels: Models = {
   rateModel: new RateModel(),
   roleModel: new RoleModel(),
   transferModel: new TransferModel(),
-  departmentModel: new DepartmentModel()
+  departmentModel: new DepartmentModel(),
+  downtimeModel: new DowntimeModel()
 };
 
 createApp(appModels);

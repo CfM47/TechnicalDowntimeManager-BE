@@ -9,7 +9,7 @@ export const downtime = pgTable(
     id_sender: uuid('id_sender').references(() => user.id),
     id_receiver: uuid('id_receiver').references(() => user.id),
     id_equipment: uuid('id_equipment').references(() => equipment.id),
-    date: timestamp('date').notNull(),
+    date: timestamp('date',{mode : 'string'}).defaultNow(),
     id_dep_receiver: uuid('id_dep_receiver').references(() => department.id),
     status: varchar('status', { length: 255 }).notNull(), // Define as enum later
     cause: varchar('cause', { length: 255 }).notNull()
