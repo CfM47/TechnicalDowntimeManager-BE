@@ -6,6 +6,7 @@ import { IRateModel } from './features/Interfaces/IRateModel';
 import { IRoleModel } from './features/Interfaces/IRoleModel';
 import { ITransferModel } from './features/Interfaces/ITransferModel';
 import { IDepartmentModel } from './features/Interfaces/IDepartmentModel';
+import { IDowntimeModel} from "./features/Interfaces/IDowntimeModel";
 
 export const ErrorMessage = (e: any) => {
   return { message: e instanceof Error ? e.message : 'An unknown error occurred' };
@@ -27,4 +28,5 @@ export type Models = {
   roleModel: IRoleModel;
   transferModel : ITransferModel;
   departmentModel : IDepartmentModel;
+  downtimeModel : IDowntimeModel;
 };

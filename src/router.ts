@@ -7,6 +7,7 @@ import { rateRouter } from './features/Rate/router';
 import { roleRouter } from './features/Role/router';
 import { transferRouter } from './features/Transfer/router';
 import { departmentRouter } from './features/Department/router';
+import { downtimeRouter } from './features/Downtime/router';
 
 export const appRouter = (appModels: Models) => {
   const router = Router();
@@ -17,5 +18,6 @@ export const appRouter = (appModels: Models) => {
   router.use('/role',roleRouter(appModels.roleModel));
   router.use('/department',departmentRouter(appModels.departmentModel));
   router.use('/transfer', transferRouter(appModels.transferModel));
+  router.use('/downtime', downtimeRouter(appModels.downtimeModel));
   return router;
 };
