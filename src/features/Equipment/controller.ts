@@ -1,7 +1,7 @@
 import { IEquipmentModel } from '../Interfaces/IEquipmentModel';
 import { Request, Response } from 'express';
 import { ErrorMessage, validate, validateUpdate } from '../../utils';
-import { equipmentSchema } from './utils';
+import { EquipmentQuery, EquipmentQueryBuilder, equipmentSchema } from './utils';
 import { Equipment, NewEquipment } from '../../db/schemas/equipment';
 import crypto from 'node:crypto';
 
@@ -20,7 +20,6 @@ export class EquipmentController {
       }
       //TODO Verify if equipment department exist before insert
       const equipmentData: NewEquipment = {
-        id: crypto.randomUUID(),
         ...result.data
       };
       const newEquipment = await this.equipmentModel.create(equipmentData);
@@ -42,7 +41,9 @@ export class EquipmentController {
   getById = async (req: Request, res: Response) => {
     try {
       const id = req.params.id;
-      const equipment = await this.equipmentModel.getById(id);
+      const equipmentQuery = { id: id };
+      const filter = EquipmentQueryBuilder(equipmentQuery);
+      const equipment = await this.equipmentModel.getById(filter);
       if (!equipment) {
         res.status(404).json({ message: 'Equipment not found' });
         return;
@@ -61,12 +62,14 @@ export class EquipmentController {
         return;
       }
       const equipmentData: Partial<Equipment> = { ...result.data };
-      const equipment = await this.equipmentModel.getById(id);
+      const equipmentQuery : EquipmentQuery = { id: id };
+      const filter = EquipmentQueryBuilder(equipmentQuery);
+      const equipment = await this.equipmentModel.getById(filter);
       if (!equipment) {
         res.status(404).json({ message: 'Equipment not found' });
         return;
       }
-      const updatedEquipment = await this.equipmentModel.update(id, equipmentData);
+      const updatedEquipment = await this.equipmentModel.update(filter, equipmentData);
       res.status(200).json(updatedEquipment);
     } catch (e) {
       res.status(500).json(ErrorMessage(e));
@@ -76,12 +79,14 @@ export class EquipmentController {
   delete = async (req: Request, res: Response) => {
     try {
       const id = req.params.id;
-      const equipment = await this.equipmentModel.getById(id);
+      const equipmentQuery : EquipmentQuery = { id: id };
+      const filter = EquipmentQueryBuilder(equipmentQuery);
+      const equipment = await this.equipmentModel.getById(filter);
       if (!equipment) {
         res.status(404).json({ message: 'Equipment not found' });
         return;
       }
-      await this.equipmentModel.delete(id);
+      await this.equipmentModel.delete(filter);
       res.status(200).json({ message: 'Equipment deleted successfully' });
     } catch (e) {
       res.status(500).json(ErrorMessage(e));

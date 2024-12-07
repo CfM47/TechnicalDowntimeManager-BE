@@ -7,7 +7,7 @@ export const equipment = pgTable('equipment', {
   type: varchar('type', { length: 255 }).notNull(),
   state: varchar('state', { length: 255 }).notNull(),
   id_department: uuid('id_department').references(() => department.id),
-  acquisition_date: timestamp('acquisition_date').defaultNow().notNull()
+  acquisition_date: timestamp('acquisition_date' , {mode:'string'}).defaultNow().notNull()
 });
 
 export type Equipment = typeof equipment.$inferSelect;
