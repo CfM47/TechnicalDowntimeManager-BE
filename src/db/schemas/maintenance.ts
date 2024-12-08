@@ -7,7 +7,7 @@ export const maintenance = pgTable(
   {
     id_technician: uuid('id_technician').references(() => technician.id_user),
     id_equipment: uuid('id_equipment').references(() => equipment.id),
-    date: timestamp('date').notNull(),
+    date: timestamp('date',{mode : 'string'}).defaultNow(),
     type: varchar('type', { length: 255 }).notNull(),
     cost: real('cost').notNull()
   },
