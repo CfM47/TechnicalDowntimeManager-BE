@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { IRoleModel } from '../Interfaces/IRoleModel';
+import { IRoleModel } from '../../Interfaces/IRoleModel';
 import { RoleController } from './controller';
 
 export const roleRouter = (roleModel: IRoleModel) => {

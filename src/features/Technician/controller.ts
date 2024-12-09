@@ -1,12 +1,11 @@
 import { Request, Response } from 'express';
-import { TechnicianQuery, TechnicianQueryBuilder, technicianSchema } from './utils';
+import { TechnicianQuery, technicianSchema } from './utils';
 import { ErrorMessage, validate, validateUpdate } from '../../utils';
-import { NewTechnician, Technician } from '../../db/schemas/technician';
-import { IUserModel } from '../Interfaces/IUserModel';
-import { ITechnicianModel } from '../Interfaces/ITechnicianModel';
-import { eq, SQL } from 'drizzle-orm';
-import { user } from '../../db/schemas/user';
-import { UserQuery, UserQueryBuilder } from '../User/utils';
+import { NewTechnician, Technician } from './schema';
+import { IUserModel } from '../../Interfaces/IUserModel';
+import { ITechnicianModel } from '../../Interfaces/ITechnicianModel';
+import { UserQuery } from '../User/utils';
+
 export class TechnicianController {
   userModel: IUserModel;
   technicianModel: ITechnicianModel;
@@ -21,9 +20,9 @@ export class TechnicianController {
         res.status(400).json({ message: JSON.parse(result.error.message) });
         return;
       }
-      const userQuery : UserQuery = { id: result.data.id_user };
-      const userFilter = UserQueryBuilder(userQuery);
-      const userFound = await this.userModel.getById(userFilter);
+      const userQuery: UserQuery = { id: result.data.id_user };
+
+      const userFound = await this.userModel.getById(userQuery);
       if (!userFound) {
         res.status(404).json({ message: 'User not found' });
         return;
@@ -50,9 +49,9 @@ export class TechnicianController {
   getById = async (req: Request, res: Response) => {
     try {
       const id = req.params.id;
-      const technicianQuery : TechnicianQuery = {id_user: id};
-      const filter = TechnicianQueryBuilder(technicianQuery);
-      const technician = await this.technicianModel.getById(filter);
+      const technicianQuery: TechnicianQuery = { id_user: id };
+
+      const technician = await this.technicianModel.getById(technicianQuery);
       if (!technician) {
         res.status(404).json({ message: 'Technician not found' });
         return;
@@ -72,14 +71,13 @@ export class TechnicianController {
       }
       const technicianData: Partial<Technician> = { ...result.data };
       //check if technician exist before update
-      const technicianQuery : TechnicianQuery = {id_user: id};
-      const filter = TechnicianQueryBuilder(technicianQuery);
-      const technician = await this.technicianModel.getById(filter);
+      const technicianQuery: TechnicianQuery = { id_user: id };
+      const technician = await this.technicianModel.getById(technicianQuery);
       if (!technician) {
         res.status(404).json({ message: 'Technician not found' });
         return;
       }
-      const updatedTechnician = await this.technicianModel.update(filter, technicianData);
+      const updatedTechnician = await this.technicianModel.update(technicianQuery, technicianData);
       res.status(200).json(updatedTechnician);
     } catch (e) {
       res.status(500).json(ErrorMessage(e));
@@ -89,14 +87,13 @@ export class TechnicianController {
   delete = async (req: Request, res: Response) => {
     try {
       const id = req.params.id;
-      const technicianQuery : TechnicianQuery = {id_user: id};
-      const filter = TechnicianQueryBuilder(technicianQuery);
-      const technician = await this.technicianModel.getById(filter);
+      const technicianQuery: TechnicianQuery = { id_user: id };
+      const technician = await this.technicianModel.getById(technicianQuery);
       if (!technician) {
         res.status(404).json({ message: 'Technician not found' });
         return;
       }
-      await this.technicianModel.delete(filter);
+      await this.technicianModel.delete(technicianQuery);
       res.status(200).json({ message: 'Technician deleted successfully' });
     } catch (e) {
       res.status(500).json(ErrorMessage(e));

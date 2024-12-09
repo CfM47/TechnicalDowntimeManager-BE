@@ -1,7 +1,8 @@
-import { IEquipmentModel } from '../Interfaces/IEquipmentModel';
-import { equipment, Equipment, NewEquipment } from '../../db/schemas/equipment';
+import { IEquipmentModel } from '../../Interfaces/IEquipmentModel';
+import { equipment, Equipment, NewEquipment } from './schema';
 import { db } from '../../db/config/db_connect';
-import { and, eq, SQL } from 'drizzle-orm';
+import { and } from 'drizzle-orm';
+import { EquipmentQuery, EquipmentQueryBuilder } from './utils';
 
 export class EquipmentModel implements IEquipmentModel {
   async create(newEquipment: NewEquipment): Promise<Equipment> {
@@ -9,24 +10,31 @@ export class EquipmentModel implements IEquipmentModel {
     return createdEquipment[0];
   }
 
-  async delete(keys : SQL[]): Promise<void> {
-    await db.delete(equipment).where(and(...keys));
+  async delete(keys: EquipmentQuery): Promise<void> {
+    const filter = EquipmentQueryBuilder(keys);
+    await db.delete(equipment).where(and(...filter));
   }
 
   async getAll(): Promise<Equipment[]> {
     return db.select().from(equipment);
   }
 
-  async getById(keys : SQL[]): Promise<Equipment | null> {
-    const resultEquipment = await db.select().from(equipment).where(and(...keys)).limit(1);
+  async getById(keys: EquipmentQuery): Promise<Equipment | null> {
+    const filter = EquipmentQueryBuilder(keys);
+    const resultEquipment = await db
+      .select()
+      .from(equipment)
+      .where(and(...filter))
+      .limit(1);
     return resultEquipment[0];
   }
 
-  async update(keys : SQL[], equipmentData: Partial<Equipment>): Promise<Equipment | null> {
+  async update(keys: EquipmentQuery, equipmentData: Partial<Equipment>): Promise<Equipment | null> {
+    const filter = EquipmentQueryBuilder(keys);
     const updatedEquipment = await db
       .update(equipment)
       .set(equipmentData)
-      .where(and(...keys))
+      .where(and(...filter))
       .returning();
     return updatedEquipment[0];
   }

@@ -1,6 +1,6 @@
-import z from "zod";
-import {eq, SQL} from "drizzle-orm";
-import {downtime} from "../../db/schemas/downtime";
+import z from 'zod';
+import { eq, SQL } from 'drizzle-orm';
+import { downtime } from './schema';
 
 export const downtimeSchema = z.object({
   id_sender: z.string().uuid(),
@@ -19,9 +19,9 @@ export type DowntimeQuery = {
   id_dep_receiver?: string;
   status?: string;
   cause?: string;
-}
+};
 
-export function DowntimeQueryBuilder(query: DowntimeQuery) : SQL[] {
+export function DowntimeQueryBuilder(query: DowntimeQuery): SQL[] {
   const filters: SQL[] = [];
   if (query.id_sender) filters.push(eq(downtime.id_sender, query.id_sender));
   if (query.id_receiver) filters.push(eq(downtime.id_receiver, query.id_receiver));

@@ -1,7 +1,6 @@
 import { Router } from 'express';
-import { IRateModel } from '../Interfaces/IRateModel';
+import { IRateModel } from '../../Interfaces/IRateModel';
 import { RateController } from './controller';
-
 
 export const rateRouter = (rateModel: IRateModel) => {
   const router = Router();

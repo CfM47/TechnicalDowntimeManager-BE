@@ -1,7 +1,8 @@
-import {NewMaintenance, maintenance, Maintenance} from "../../db/schemas/maintenance";
-import {db} from "../../db/config/db_connect";
-import {IMaintenanceModel} from "../Interfaces/IMaintenanceModel";
-import {and, SQL} from "drizzle-orm";
+import { NewMaintenance, maintenance, Maintenance } from './schema';
+import { db } from '../../db/config/db_connect';
+import { IMaintenanceModel } from '../../Interfaces/IMaintenanceModel';
+import { and } from 'drizzle-orm';
+import { MaintenanceQuery, MaintenanceQueryBuilder } from './utils';
 
 export class MaintenanceModel implements IMaintenanceModel {
   async create(newMaintenance: NewMaintenance): Promise<Maintenance> {
@@ -9,21 +10,35 @@ export class MaintenanceModel implements IMaintenanceModel {
     return createdMaintenance[0];
   }
 
-  async delete(keys: SQL[]): Promise<void> {
-    await db.delete(maintenance).where(and(...keys));
+  async delete(keys: MaintenanceQuery): Promise<void> {
+    const filter = MaintenanceQueryBuilder(keys);
+    await db.delete(maintenance).where(and(...filter));
   }
 
   async getAll(): Promise<Maintenance[]> {
     return db.select().from(maintenance);
   }
 
-  async getById(keys: SQL[]): Promise<Maintenance | null> {
-    const resultMaintenance = await db.select().from(maintenance).where(and(...keys)).limit(1);
+  async getById(keys: MaintenanceQuery): Promise<Maintenance | null> {
+    const filter = MaintenanceQueryBuilder(keys);
+    const resultMaintenance = await db
+      .select()
+      .from(maintenance)
+      .where(and(...filter))
+      .limit(1);
     return resultMaintenance[0];
   }
 
-  async update(keys: SQL[], maintenanceData: Partial<Maintenance>): Promise<Maintenance | null> {
-    const updatedMaintenance = await db.update(maintenance).set(maintenanceData).where(and(...keys)).returning();
+  async update(
+    keys: MaintenanceQuery,
+    maintenanceData: Partial<Maintenance>
+  ): Promise<Maintenance | null> {
+    const filter = MaintenanceQueryBuilder(keys);
+    const updatedMaintenance = await db
+      .update(maintenance)
+      .set(maintenanceData)
+      .where(and(...filter))
+      .returning();
     return updatedMaintenance[0];
   }
 }

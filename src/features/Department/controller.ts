@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
-import { DepartmentQuery, DepartmentQueryBuilder, departmentSchema } from './utils';
+import { DepartmentQuery, departmentSchema } from './utils';
 import { ErrorMessage, validate, validateUpdate } from '../../utils';
-import { IDepartmentModel } from '../Interfaces/IDepartmentModel';
-import { NewDepartment, Department } from '../../db/schemas/department';
+import { IDepartmentModel } from '../../Interfaces/IDepartmentModel';
+import { NewDepartment, Department } from './schema';
 
 export class DepartmentController {
   departmentModel: IDepartmentModel;
@@ -40,10 +40,8 @@ export class DepartmentController {
   getById = async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
-      const departmentQuery : DepartmentQuery = { id: id};
-      const filter = DepartmentQueryBuilder(departmentQuery);
-
-      const existDepartment = await this.departmentModel.getById(filter);
+      const departmentQuery: DepartmentQuery = { id: id };
+      const existDepartment = await this.departmentModel.getById(departmentQuery);
       if (!existDepartment) {
         res.status(404).json({ message: 'Department not found' });
         return;
@@ -56,8 +54,7 @@ export class DepartmentController {
   update = async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
-      const departmentQuery : DepartmentQuery = { id: id};
-      const filter = DepartmentQueryBuilder(departmentQuery);
+      const departmentQuery: DepartmentQuery = { id: id };
 
       const result = validateUpdate(req.body, departmentSchema);
 
@@ -68,12 +65,12 @@ export class DepartmentController {
 
       const departmentData: Partial<Department> = { ...result.data };
 
-      const existDepartment = await this.departmentModel.getById(filter);
+      const existDepartment = await this.departmentModel.getById(departmentQuery);
       if (!existDepartment) {
         res.status(404).json({ message: 'Department not found' });
         return;
       }
-      const updatedDepartment = await this.departmentModel.update(filter, departmentData);
+      const updatedDepartment = await this.departmentModel.update(departmentQuery, departmentData);
       res.status(200).json(updatedDepartment);
     } catch (e) {
       res.status(500).json(ErrorMessage(e));
@@ -83,15 +80,14 @@ export class DepartmentController {
   delete = async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
-      const departmentQuery : DepartmentQuery = { id: id};
-      const filter = DepartmentQueryBuilder(departmentQuery);
+      const departmentQuery: DepartmentQuery = { id: id };
 
-      const existDepartment = await this.departmentModel.getById(filter);
+      const existDepartment = await this.departmentModel.getById(departmentQuery);
       if (!existDepartment) {
         res.status(404).json({ message: 'Department not found' });
         return;
       }
-      await this.departmentModel.delete(filter);
+      await this.departmentModel.delete(departmentQuery);
       res.status(200).json({ message: 'Department deleted successfully' });
     } catch (e) {
       res.status(500).json(ErrorMessage(e));

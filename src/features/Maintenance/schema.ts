@@ -1,13 +1,13 @@
 import { pgTable, uuid, timestamp, varchar, real, primaryKey } from 'drizzle-orm/pg-core';
-import { technician } from './technician';
-import { equipment } from './equipment';
+import { technician } from '../Technician/schema';
+import { equipment } from '../Equipment/schema';
 
 export const maintenance = pgTable(
   'maintenance',
   {
     id_technician: uuid('id_technician').references(() => technician.id_user),
     id_equipment: uuid('id_equipment').references(() => equipment.id),
-    date: timestamp('date',{mode : 'string'}).defaultNow(),
+    date: timestamp('date', { mode: 'string' }).defaultNow(),
     type: varchar('type', { length: 255 }).notNull(),
     cost: real('cost').notNull()
   },

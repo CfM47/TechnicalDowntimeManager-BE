@@ -1,5 +1,5 @@
 import { integer, pgTable, uuid, varchar } from 'drizzle-orm/pg-core';
-import { user } from './user';
+import { user } from '../User/schema';
 
 export const technician = pgTable('technician', {
   id_user: uuid('id_user')

@@ -1,6 +1,6 @@
-import z from "zod";
-import {eq, SQL} from "drizzle-orm";
-import {maintenance} from "../../db/schemas/maintenance";
+import z from 'zod';
+import { eq, SQL } from 'drizzle-orm';
+import { maintenance } from './schema';
 
 export const maintenanceSchema = z.object({
   id_technician: z.string().uuid(),
@@ -15,9 +15,9 @@ export type MaintenanceQuery = {
   date?: string;
   type?: string;
   cost?: number;
-}
+};
 
-export function MaintenanceQueryBuilder(query: MaintenanceQuery) : SQL[] {
+export function MaintenanceQueryBuilder(query: MaintenanceQuery): SQL[] {
   const filters: SQL[] = [];
   if (query.id_technician) filters.push(eq(maintenance.id_technician, query.id_technician));
   if (query.id_equipment) filters.push(eq(maintenance.id_equipment, query.id_equipment));

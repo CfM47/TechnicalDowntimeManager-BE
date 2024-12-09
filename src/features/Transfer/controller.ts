@@ -1,15 +1,15 @@
-import {ITransferModel} from "../Interfaces/ITransferModel";
+import { ITransferModel } from '../../Interfaces/ITransferModel';
 import { Request, Response } from 'express';
-import {TransferQuery, TransferQueryBuilder, transferSchema} from "./utils";
-import {NewTransfer, Transfer} from "../../db/schemas/transfer";
-import {ErrorMessage, validate, validateUpdate} from "../../utils";
+import { TransferQuery, transferSchema } from './utils';
+import { NewTransfer, Transfer } from './schema';
+import { ErrorMessage, validate, validateUpdate } from '../../utils';
 
-export class TransferController{
+export class TransferController {
   transferModel: ITransferModel;
   constructor(transferModel: ITransferModel) {
-    this.transferModel=transferModel;
+    this.transferModel = transferModel;
   }
-  create = async (req : Request, res: Response) => {
+  create = async (req: Request, res: Response) => {
     try {
       const result = validate(req.body, transferSchema);
       if (!result.success) {
@@ -21,7 +21,7 @@ export class TransferController{
       };
       const newTransfer = await this.transferModel.create(transferData);
       res.status(201).json(newTransfer);
-    } catch (e){
+    } catch (e) {
       res.status(500).json(ErrorMessage(e));
     }
   };
@@ -35,7 +35,7 @@ export class TransferController{
     }
   };
 
-  getById = async(req: Request, res: Response) => {
+  getById = async (req: Request, res: Response) => {
     try {
       const id_sender = req.params.id_sender;
       const id_receiver = req.params.id_receiver;
@@ -44,10 +44,16 @@ export class TransferController{
       const id_origin_dep = req.params.id_origin_dep;
       const id_receiver_dep = req.params.id_receiver_dep;
 
-      const transferQuery: TransferQuery = {id_sender: id_sender, id_receiver: id_receiver, id_equipment: id_equipment, date: date, id_origin_dep: id_origin_dep, id_receiver_dep: id_receiver_dep};
+      const transferQuery: TransferQuery = {
+        id_sender: id_sender,
+        id_receiver: id_receiver,
+        id_equipment: id_equipment,
+        date: date,
+        id_origin_dep: id_origin_dep,
+        id_receiver_dep: id_receiver_dep
+      };
 
-      const filter = TransferQueryBuilder(transferQuery);
-      const transferFound = await this.transferModel.getById(filter);
+      const transferFound = await this.transferModel.getById(transferQuery);
       if (!transferFound) {
         res.status(404).json({ message: 'Transfer not found' });
         return;
@@ -67,22 +73,29 @@ export class TransferController{
       const id_origin_dep = req.params.id_origin_dep;
       const id_receiver_dep = req.params.id_receiver_dep;
 
-      const transferQuery: TransferQuery = {id_sender: id_sender, id_receiver: id_receiver, id_equipment: id_equipment, date: date, id_origin_dep: id_origin_dep, id_receiver_dep: id_receiver_dep};
-      const filter = TransferQueryBuilder(transferQuery);
+      const transferQuery: TransferQuery = {
+        id_sender: id_sender,
+        id_receiver: id_receiver,
+        id_equipment: id_equipment,
+        date: date,
+        id_origin_dep: id_origin_dep,
+        id_receiver_dep: id_receiver_dep
+      };
+
       const result = validateUpdate(req.body, transferSchema);
       if (!result.success) {
         res.status(400).json({ message: JSON.parse(result.error.message) });
         return;
       }
       const transferData: Partial<Transfer> = { ...result.data };
-      const transferFound = await this.transferModel.getById(filter);
+      const transferFound = await this.transferModel.getById(transferQuery);
       if (!transferFound) {
         res.status(404).json({ message: 'Transfer not found' });
         return;
       }
-      const updatedTransfer = await this.transferModel.update(filter, transferData);
+      const updatedTransfer = await this.transferModel.update(transferQuery, transferData);
       res.status(200).json(updatedTransfer);
-    } catch (e){
+    } catch (e) {
       res.status(500).json(ErrorMessage(e));
     }
   };
@@ -96,14 +109,20 @@ export class TransferController{
       const id_origin_dep = req.params.id_origin_dep;
       const id_receiver_dep = req.params.id_receiver_dep;
 
-      const transferQuery: TransferQuery = {id_sender: id_sender, id_receiver: id_receiver, id_equipment: id_equipment, date: date, id_origin_dep: id_origin_dep, id_receiver_dep: id_receiver_dep};
-      const filter = TransferQueryBuilder(transferQuery);
-      const transferFound = await this.transferModel.getById(filter);
+      const transferQuery: TransferQuery = {
+        id_sender: id_sender,
+        id_receiver: id_receiver,
+        id_equipment: id_equipment,
+        date: date,
+        id_origin_dep: id_origin_dep,
+        id_receiver_dep: id_receiver_dep
+      };
+      const transferFound = await this.transferModel.getById(transferQuery);
       if (!transferFound) {
         res.status(404).json({ message: 'Transfer not found' });
         return;
       }
-      await this.transferModel.delete(filter);
+      await this.transferModel.delete(transferQuery);
       res.status(200).json({ message: 'Transfer deleted' });
     } catch (e) {
       res.status(500).json(ErrorMessage(e));

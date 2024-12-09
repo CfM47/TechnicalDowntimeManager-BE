@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
-import { RoleQuery, RoleQueryBuilder, roleSchema } from './utils';
+import { RoleQuery, roleSchema } from './utils';
 import { ErrorMessage, validate, validateUpdate } from '../../utils';
-import { IRoleModel } from '../Interfaces/IRoleModel';
-import { NewRole, Role } from '../../db/schemas/role';
+import { IRoleModel } from '../../Interfaces/IRoleModel';
+import { NewRole, Role } from './schema';
 
 export class RoleController {
   roleModel: IRoleModel;
@@ -40,10 +40,9 @@ export class RoleController {
   getById = async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
-      const roleQuery : RoleQuery = { id: parseInt(id)};
-      const filter = RoleQueryBuilder(roleQuery);
+      const roleQuery: RoleQuery = { id: parseInt(id) };
 
-      const existRole = await this.roleModel.getById(filter);
+      const existRole = await this.roleModel.getById(roleQuery);
       if (!existRole) {
         res.status(404).json({ message: 'Role not found' });
         return;
@@ -56,8 +55,7 @@ export class RoleController {
   update = async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
-      const roleQuery : RoleQuery = { id: parseInt(id)};
-      const filter = RoleQueryBuilder(roleQuery);
+      const roleQuery: RoleQuery = { id: parseInt(id) };
 
       const result = validateUpdate(req.body, roleSchema);
       if (!result.success) {
@@ -67,12 +65,12 @@ export class RoleController {
 
       const roleData: Partial<Role> = { ...result.data };
 
-      const existRole = await this.roleModel.getById(filter);
+      const existRole = await this.roleModel.getById(roleQuery);
       if (!existRole) {
         res.status(404).json({ message: 'Role not found' });
         return;
       }
-      const updatedRole = await this.roleModel.update(filter, roleData);
+      const updatedRole = await this.roleModel.update(roleQuery, roleData);
       res.status(200).json(updatedRole);
     } catch (e) {
       res.status(500).json(ErrorMessage(e));
@@ -82,15 +80,14 @@ export class RoleController {
   delete = async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
-      const roleQuery : RoleQuery = { id: parseInt(id)};
-      const filter = RoleQueryBuilder(roleQuery);
+      const roleQuery: RoleQuery = { id: parseInt(id) };
 
-      const existRole = await this.roleModel.getById(filter);
+      const existRole = await this.roleModel.getById(roleQuery);
       if (!existRole) {
         res.status(404).json({ message: 'Role not found' });
         return;
       }
-      await this.roleModel.delete(filter);
+      await this.roleModel.delete(roleQuery);
       res.status(200).json({ message: 'Role deleted successfully' });
     } catch (e) {
       res.status(500).json(ErrorMessage(e));
