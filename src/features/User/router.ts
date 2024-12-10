@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { IUserModel } from '../Interfaces/IUserModel';
+import { IUserModel } from '../../Interfaces/IUserModel';
 import { UserController } from './controller';
 
 export const userRouter = (userModel: IUserModel) => {

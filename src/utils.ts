@@ -1,13 +1,13 @@
 import { ZodObject, ZodRawShape, ZodSchema } from 'zod';
-import { IUserModel } from './features/Interfaces/IUserModel';
-import { ITechnicianModel } from './features/Interfaces/ITechnicianModel';
-import { IEquipmentModel } from './features/Interfaces/IEquipmentModel';
-import { IRateModel } from './features/Interfaces/IRateModel';
-import { IRoleModel } from './features/Interfaces/IRoleModel';
-import { ITransferModel } from './features/Interfaces/ITransferModel';
-import { IDepartmentModel } from './features/Interfaces/IDepartmentModel';
-import { IDowntimeModel} from "./features/Interfaces/IDowntimeModel";
-import { IMaintenanceModel} from './features/Interfaces/IMaintenanceModel';
+import { IUserModel } from './Interfaces/IUserModel';
+import { ITechnicianModel } from './Interfaces/ITechnicianModel';
+import { IEquipmentModel } from './Interfaces/IEquipmentModel';
+import { IRateModel } from './Interfaces/IRateModel';
+import { IRoleModel } from './Interfaces/IRoleModel';
+import { ITransferModel } from './Interfaces/ITransferModel';
+import { IDepartmentModel } from './Interfaces/IDepartmentModel';
+import { IDowntimeModel } from './Interfaces/IDowntimeModel';
+import { IMaintenanceModel } from './Interfaces/IMaintenanceModel';
 
 export const ErrorMessage = (e: any) => {
   return { message: e instanceof Error ? e.message : 'An unknown error occurred' };
@@ -27,8 +27,8 @@ export type Models = {
   equipmentModel: IEquipmentModel;
   rateModel: IRateModel;
   roleModel: IRoleModel;
-  transferModel : ITransferModel;
-  departmentModel : IDepartmentModel;
-  downtimeModel : IDowntimeModel;
-  maintenanceModel : IMaintenanceModel;
+  transferModel: ITransferModel;
+  departmentModel: IDepartmentModel;
+  downtimeModel: IDowntimeModel;
+  maintenanceModel: IMaintenanceModel;
 };

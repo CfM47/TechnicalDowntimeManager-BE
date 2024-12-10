@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { IDepartmentModel } from '../Interfaces/IDepartmentModel';
+import { IDepartmentModel } from '../../Interfaces/IDepartmentModel';
 import { DepartmentController } from './controller';
 
 export const departmentRouter = (departmentModel: IDepartmentModel) => {

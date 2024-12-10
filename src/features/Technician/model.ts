@@ -1,7 +1,8 @@
-import { ITechnicianModel } from '../Interfaces/ITechnicianModel';
-import { NewTechnician, technician, Technician } from '../../db/schemas/technician';
+import { ITechnicianModel } from '../../Interfaces/ITechnicianModel';
+import { NewTechnician, technician, Technician } from './schema';
 import { db } from '../../db/config/db_connect';
-import { and, eq, SQL } from 'drizzle-orm';
+import { and } from 'drizzle-orm';
+import { TechnicianQuery, TechnicianQueryBuilder } from './utils';
 
 export class TechnicianModel implements ITechnicianModel {
   async create(newTechnician: NewTechnician): Promise<Technician> {
@@ -9,28 +10,34 @@ export class TechnicianModel implements ITechnicianModel {
     return createdTechnician[0];
   }
 
-  async delete(keys: SQL[]): Promise<void> {
-    await db.delete(technician).where(and(...keys));
+  async delete(keys: TechnicianQuery): Promise<void> {
+    const filter = TechnicianQueryBuilder(keys);
+    await db.delete(technician).where(and(...filter));
   }
 
   async getAll(): Promise<Technician[]> {
     return db.select().from(technician);
   }
 
-  async getById(keys: SQL[]): Promise<Technician | null> {
+  async getById(keys: TechnicianQuery): Promise<Technician | null> {
+    const filter = TechnicianQueryBuilder(keys);
     const resultTechnician = await db
       .select()
       .from(technician)
-      .where(and(...keys))
+      .where(and(...filter))
       .limit(1);
     return resultTechnician[0];
   }
 
-  async update(keys : SQL[], technicianData: Partial<Technician>): Promise<Technician | null> {
+  async update(
+    keys: TechnicianQuery,
+    technicianData: Partial<Technician>
+  ): Promise<Technician | null> {
+    const filter = TechnicianQueryBuilder(keys);
     const updatedTechnician = await db
       .update(technician)
       .set(technicianData)
-      .where(and(...keys))
+      .where(and(...filter))
       .returning();
     return updatedTechnician[0];
   }

@@ -1,6 +1,6 @@
-import z from "zod";
-import {eq, SQL} from "drizzle-orm";
-import {transfer} from "../../db/schemas/transfer";
+import z from 'zod';
+import { eq, SQL } from 'drizzle-orm';
+import { transfer } from './schema';
 
 export const transferSchema = z.object({
   id_sender: z.string().uuid(),
@@ -19,9 +19,9 @@ export type TransferQuery = {
   id_origin_dep?: string;
   id_receiver_dep?: string;
   downtime_status?: string;
-}
+};
 
-export function TransferQueryBuilder(query: TransferQuery) : SQL[] {
+export function TransferQueryBuilder(query: TransferQuery): SQL[] {
   const filters: SQL[] = [];
   if (query.id_sender) filters.push(eq(transfer.id_sender, query.id_sender));
   if (query.id_receiver) filters.push(eq(transfer.id_receiver, query.id_receiver));

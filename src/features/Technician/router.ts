@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { IUserModel } from '../Interfaces/IUserModel';
-import { ITechnicianModel } from '../Interfaces/ITechnicianModel';
+import { IUserModel } from '../../Interfaces/IUserModel';
+import { ITechnicianModel } from '../../Interfaces/ITechnicianModel';
 import { TechnicianController } from './controller';
 
 export const technicianRouter = (technicianModel: ITechnicianModel, userModel: IUserModel) => {

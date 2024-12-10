@@ -1,15 +1,15 @@
-import {IDowntimeModel} from "../Interfaces/IDowntimeModel";
+import { IDowntimeModel } from '../../Interfaces/IDowntimeModel';
 import { Request, Response } from 'express';
-import {DowntimeQuery, DowntimeQueryBuilder, downtimeSchema} from "./utils";
-import {NewDowntime, Downtime} from "../../db/schemas/downtime";
-import {ErrorMessage, validate, validateUpdate} from "../../utils";
+import { DowntimeQuery, downtimeSchema } from './utils';
+import { NewDowntime, Downtime } from './schema';
+import { ErrorMessage, validate, validateUpdate } from '../../utils';
 
-export class DowntimeController{
+export class DowntimeController {
   downtimeModel: IDowntimeModel;
   constructor(downtimeModel: IDowntimeModel) {
-    this.downtimeModel=downtimeModel;
+    this.downtimeModel = downtimeModel;
   }
-  create = async (req : Request, res: Response) => {
+  create = async (req: Request, res: Response) => {
     try {
       const result = validate(req.body, downtimeSchema);
       if (!result.success) {
@@ -21,7 +21,7 @@ export class DowntimeController{
       };
       const newDowntime = await this.downtimeModel.create(downtimeData);
       res.status(201).json(newDowntime);
-    } catch (e){
+    } catch (e) {
       res.status(500).json(ErrorMessage(e));
     }
   };
@@ -35,7 +35,7 @@ export class DowntimeController{
     }
   };
 
-  getById = async(req: Request, res: Response) => {
+  getById = async (req: Request, res: Response) => {
     try {
       const id_sender = req.params.id_sender;
       const id_receiver = req.params.id_receiver;
@@ -43,10 +43,15 @@ export class DowntimeController{
       const date = req.params.date;
       const id_dep_receiver = req.params.id_dep_receiver;
 
-      const downtimeQuery: DowntimeQuery = {id_sender: id_sender, id_receiver: id_receiver, id_equipment: id_equipment, date: date, id_dep_receiver: id_dep_receiver};
+      const downtimeQuery: DowntimeQuery = {
+        id_sender: id_sender,
+        id_receiver: id_receiver,
+        id_equipment: id_equipment,
+        date: date,
+        id_dep_receiver: id_dep_receiver
+      };
 
-      const filter = DowntimeQueryBuilder(downtimeQuery);
-      const downtimeFound = await this.downtimeModel.getById(filter);
+      const downtimeFound = await this.downtimeModel.getById(downtimeQuery);
       if (!downtimeFound) {
         res.status(404).json({ message: 'Downtime not found' });
         return;
@@ -65,22 +70,27 @@ export class DowntimeController{
       const date = req.params.date;
       const id_dep_receiver = req.params.id_dep_receiver;
 
-      const downtimeQuery: DowntimeQuery = {id_sender: id_sender, id_receiver: id_receiver, id_equipment: id_equipment, date: date, id_dep_receiver: id_dep_receiver};
-      const filter = DowntimeQueryBuilder(downtimeQuery);
+      const downtimeQuery: DowntimeQuery = {
+        id_sender: id_sender,
+        id_receiver: id_receiver,
+        id_equipment: id_equipment,
+        date: date,
+        id_dep_receiver: id_dep_receiver
+      };
       const result = validateUpdate(req.body, downtimeSchema);
       if (!result.success) {
         res.status(400).json({ message: JSON.parse(result.error.message) });
         return;
       }
       const downtimeData: Partial<Downtime> = { ...result.data };
-      const downtimeFound = await this.downtimeModel.getById(filter);
+      const downtimeFound = await this.downtimeModel.getById(downtimeQuery);
       if (!downtimeFound) {
         res.status(404).json({ message: 'Downtime not found' });
         return;
       }
-      const updatedDowntime = await this.downtimeModel.update(filter, downtimeData);
+      const updatedDowntime = await this.downtimeModel.update(downtimeQuery, downtimeData);
       res.status(200).json(updatedDowntime);
-    } catch (e){
+    } catch (e) {
       res.status(500).json(ErrorMessage(e));
     }
   };
@@ -93,14 +103,19 @@ export class DowntimeController{
       const date = req.params.date;
       const id_dep_receiver = req.params.id_dep_receiver;
 
-      const downtimeQuery: DowntimeQuery = {id_sender: id_sender, id_receiver: id_receiver, id_equipment: id_equipment, date: date, id_dep_receiver: id_dep_receiver};
-      const filter = DowntimeQueryBuilder(downtimeQuery);
-      const downtimeFound = await this.downtimeModel.getById(filter);
+      const downtimeQuery: DowntimeQuery = {
+        id_sender: id_sender,
+        id_receiver: id_receiver,
+        id_equipment: id_equipment,
+        date: date,
+        id_dep_receiver: id_dep_receiver
+      };
+      const downtimeFound = await this.downtimeModel.getById(downtimeQuery);
       if (!downtimeFound) {
         res.status(404).json({ message: 'Downtime not found' });
         return;
       }
-      await this.downtimeModel.delete(filter);
+      await this.downtimeModel.delete(downtimeQuery);
       res.status(200).json({ message: 'Downtime deleted' });
     } catch (e) {
       res.status(500).json(ErrorMessage(e));

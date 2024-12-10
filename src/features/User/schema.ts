@@ -1,6 +1,6 @@
 import { pgTable, serial, uuid, varchar } from 'drizzle-orm/pg-core';
-import { department } from './department';
-import { role } from './role';
+import { department } from '../Department/schema';
+import { role } from '../Role/schema';
 
 export const user = pgTable('user', {
   id: uuid('id').primaryKey().defaultRandom(),

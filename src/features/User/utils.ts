@@ -1,6 +1,6 @@
 import z from 'zod';
 import { eq, SQL } from 'drizzle-orm';
-import { user } from '../../db/schemas/user';
+import { user } from './schema';
 
 export const userSchema = z.object({
   name: z.string(),
@@ -14,14 +14,12 @@ export type UserQuery = {
   name?: string;
   id_department?: string;
   id_role?: number;
-}
-export function UserQueryBuilder(query: UserQuery) : SQL[] {
+};
+export function UserQueryBuilder(query: UserQuery): SQL[] {
   const filters: SQL[] = [];
   if (query.id) filters.push(eq(user.id, query.id));
   if (query.name) filters.push(eq(user.name, query.name));
   if (query.id_department) filters.push(eq(user.id_department, query.id_department));
   if (query.id_role) filters.push(eq(user.id_role, query.id_role));
-  return filters
+  return filters;
 }
-
-

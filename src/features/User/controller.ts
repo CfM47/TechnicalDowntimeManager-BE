@@ -1,11 +1,10 @@
-import { IUserModel } from '../Interfaces/IUserModel';
+import { IUserModel } from '../../Interfaces/IUserModel';
 import { Request, Response } from 'express';
-import { UserQuery, UserQueryBuilder, userSchema } from './utils';
-import { NewUser, user, User } from '../../db/schemas/user';
+import { UserQuery, userSchema } from './utils';
+import { NewUser, User } from './schema';
 import * as crypto from 'node:crypto';
 import { ErrorMessage, validate, validateUpdate } from '../../utils';
 import bcrypt from 'bcrypt';
-import { eq, SQL } from 'drizzle-orm';
 
 export class UserController {
   userModel: IUserModel;
@@ -44,9 +43,9 @@ export class UserController {
   getById = async (req: Request, res: Response) => {
     try {
       const id = req.params.id;
-      const userQuery : UserQuery = { id: id };
-      const filter = UserQueryBuilder(userQuery);
-      const userFound = await this.userModel.getById(filter);
+      const userQuery: UserQuery = { id: id };
+
+      const userFound = await this.userModel.getById(userQuery);
       if (!userFound) {
         res.status(404).json({ message: 'User not found' });
         return;
@@ -60,20 +59,20 @@ export class UserController {
     try {
       const id = req.params.id;
       const result = validateUpdate(req.body, userSchema);
-      const userQuery : UserQuery = { id: id };
-      const filter = UserQueryBuilder(userQuery);
+      const userQuery: UserQuery = { id: id };
+
       if (!result.success) {
         res.status(400).json({ message: JSON.parse(result.error.message) });
         return;
       }
       const userData: Partial<User> = { ...result.data };
-      const userFound = await this.userModel.getById(filter);
+      const userFound = await this.userModel.getById(userQuery);
       if (!userFound) {
         res.status(404).json({ message: 'User not found' });
         return;
       }
       //TODO Verify if user department and user role exist before update
-      const updatedUser = await this.userModel.update(filter, userData);
+      const updatedUser = await this.userModel.update(userQuery, userData);
       res.status(200).json(updatedUser);
     } catch (e) {
       res.status(500).json(ErrorMessage(e));
@@ -83,14 +82,13 @@ export class UserController {
   delete = async (req: Request, res: Response) => {
     try {
       const id = req.params.id;
-      const userQuery : UserQuery = { id: id };
-      const filter = UserQueryBuilder(userQuery);
-      const userFound = await this.userModel.getById(filter);
+      const userQuery: UserQuery = { id: id };
+      const userFound = await this.userModel.getById(userQuery);
       if (!userFound) {
         res.status(404).json({ message: 'User not found' });
         return;
       }
-      await this.userModel.delete(filter);
+      await this.userModel.delete(userQuery);
       res.status(200).json({ message: 'User deleted successfully' });
     } catch (e) {
       res.status(500).json(ErrorMessage(e));

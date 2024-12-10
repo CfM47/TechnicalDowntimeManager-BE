@@ -1,28 +1,32 @@
-import { rate, Rate, NewRate } from "../../db/schemas/rate";
-import { IRateModel } from '../Interfaces/IRateModel';
+import { rate, Rate, NewRate } from './schema';
+import { IRateModel } from '../../Interfaces/IRateModel';
 import { db } from '../../db/config/db_connect';
-import { and, SQL } from 'drizzle-orm';
+import { and } from 'drizzle-orm';
+import { RateQuery, RateQueryBuilder } from './utils';
 
 export class RateModel implements IRateModel {
-
-  async getById(keys : SQL[]): Promise<Rate | null> {
+  async getById(keys: RateQuery): Promise<Rate | null> {
+    const filter = RateQueryBuilder(keys);
     const [foundRate] = await db
       .select()
       .from(rate)
-      .where(and(...keys)).limit(1);
+      .where(and(...filter))
+      .limit(1);
     return foundRate || null;
   }
 
-  async update(keys: SQL[], rateData: Partial<Rate>): Promise<Rate | null> {
+  async update(keys: RateQuery, rateData: Partial<Rate>): Promise<Rate | null> {
+    const filter = RateQueryBuilder(keys);
     const [updatedRate] = await db
       .update(rate)
       .set(rateData)
-      .where(and(...keys))
+      .where(and(...filter))
       .returning();
     return updatedRate || null;
   }
-  async delete(keys: SQL[]): Promise<void> {
-    await db.delete(rate).where(and(...keys));
+  async delete(keys: RateQuery): Promise<void> {
+    const filter = RateQueryBuilder(keys);
+    await db.delete(rate).where(and(...filter));
   }
 
   async getAll(): Promise<Rate[]> {
@@ -30,10 +34,7 @@ export class RateModel implements IRateModel {
   }
 
   async create(newRate: NewRate): Promise<Rate> {
-    const [createdRate] = await db
-      .insert(rate)
-      .values(newRate)
-      .returning();
-      return createdRate;
+    const [createdRate] = await db.insert(rate).values(newRate).returning();
+    return createdRate;
   }
 }

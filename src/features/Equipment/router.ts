@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { IEquipmentModel } from '../Interfaces/IEquipmentModel';
+import { IEquipmentModel } from '../../Interfaces/IEquipmentModel';
 import { EquipmentController } from './controller';
 
 export const equipmentRouter = (equipmentModel: IEquipmentModel) => {
