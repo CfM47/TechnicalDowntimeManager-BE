@@ -22,4 +22,4 @@ const appModels: Models = {
   maintenanceModel: new MaintenanceModel()
 };
 
-createApp(appModels);
+export const app = createApp(appModels);
