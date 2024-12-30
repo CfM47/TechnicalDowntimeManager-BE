@@ -13,10 +13,11 @@ export const createApp = (appModels: Models) => {
   app.disable('x-powered-by');
 
   const port = process.env.PORT || 3000;
+  const host_url = process.env.HOST_URL;
 
   app.use('/api', appRouter(appModels));
 
   app.listen(port, () => {
-    console.log(`Server is running on port http://localhost:${port}`);
+    console.log(`Server is running on port ${host_url}:${port}`);
   });
 };

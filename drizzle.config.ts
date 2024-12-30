@@ -29,6 +29,6 @@ export default defineConfig({
     user: process.env.DB_USER || 'user',
     password: process.env.DB_PASSWORD || 'password',
     database: process.env.DB_NAME || 'dbname',
-    ssl: false
+    ssl: { rejectUnauthorized: false }
   }
 });
