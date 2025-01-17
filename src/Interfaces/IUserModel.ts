@@ -1,14 +1,5 @@
-import { User, NewUser } from '../features/User/schema';
 import { UserQuery } from '../features/User/utils';
+import { IRepository } from './IRepository';
 
-export interface IUserModel {
-  create(newUser: NewUser): Promise<User>;
-
-  getAll(): Promise<User[]>;
-
-  getById(keys: UserQuery): Promise<User | null>;
-
-  update(keys: UserQuery, userData: Partial<User>): Promise<User | null>;
-
-  delete(keys: UserQuery): Promise<void>;
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface IUserModel extends IRepository<UserQuery> {}
