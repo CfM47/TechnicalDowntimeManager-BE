@@ -1,5 +1,7 @@
 import { UserQuery } from '../features/User/utils';
 import { IRepository } from './IRepository';
+import { Role } from '../features/Role/types';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface IUserModel extends IRepository<UserQuery> {}
+export interface IUserModel extends IRepository<UserQuery> {
+  getRoleByUserId(userId: string): Promise<Role | null>;
+}

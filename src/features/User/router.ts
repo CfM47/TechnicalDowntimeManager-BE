@@ -207,5 +207,7 @@ export const userRouter = (userModel: IUserModel) => {
     .get(userController.getById)
     .put(userController.update)
     .delete(userController.delete);
+
+  router.route('/:id/role').get(userController.getUserRoleById);
   return router;
 };

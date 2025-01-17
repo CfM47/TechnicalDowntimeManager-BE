@@ -94,4 +94,20 @@ export class UserController {
       res.status(500).json(ErrorMessage(e));
     }
   };
+
+  getUserRoleById = async (req: Request, res: Response) => {
+    try {
+      const userId = req.params.id;
+
+      const userRole = await this.userModel.getRoleByUserId(userId);
+      if (!userRole) {
+        res.status(404).json({ message: 'Role not found for this user' });
+        return;
+      }
+
+      res.status(200).json(userRole);
+    } catch (e) {
+      res.status(500).json(ErrorMessage(e));
+    }
+  };
 }
