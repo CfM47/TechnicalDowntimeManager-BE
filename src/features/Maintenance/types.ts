@@ -1,7 +1,10 @@
+import { EquipmentInfo } from '../Equipment/types';
+import { TechnicianInfo } from '../Technician/types';
+
 export interface Maintenance {
-  id_technician?: string;
-  id_equipment?: string;
-  date?: string;
-  type?: string;
-  cost?: number;
+  technician: TechnicianInfo;
+  equipment: EquipmentInfo;
+  date: string;
+  type: string;
+  cost: number;
 }
