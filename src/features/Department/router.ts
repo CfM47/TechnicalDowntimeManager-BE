@@ -11,7 +11,7 @@ import { DepartmentController } from './controller';
 
 /**
  * @swagger
- * /departments:
+ * /api/department:
  *   post:
  *     tags: [Department]
  *     summary: Create a new department
@@ -52,7 +52,7 @@ import { DepartmentController } from './controller';
  *         $ref: '#/components/responses/Unauthorized'
  *       500:
  *         $ref: '#/components/responses/ServerError'
- * /departments/{id}:
+ * /api/department/{id}:
  *   get:
  *     tags: [Department]
  *     summary: Get a department by ID
