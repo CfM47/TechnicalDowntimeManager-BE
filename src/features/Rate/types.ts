@@ -1,7 +1,10 @@
+import { UserInfo } from '../User/types';
+import { TechnicianInfo } from '../Technician/types';
+
 export interface Rate {
-  id_technician?: string;
-  id_user?: string;
-  date?: string;
-  comment?: string;
-  score?: number;
+  technician: TechnicianInfo;
+  user: UserInfo;
+  date: string;
+  comment: string;
+  score: number;
 }
