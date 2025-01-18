@@ -1,5 +1,14 @@
+import { Rate, NewRate } from '../features/Rate/schema';
 import { RateQuery } from '../features/Rate/utils';
-import { IRepository } from './IRepository';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface IRateModel extends IRepository<RateQuery> {}
+export interface IRateModel {
+  create(newRate: NewRate): Promise<Rate>;
+
+  getAll(): Promise<Rate[]>;
+
+  getById(keys: RateQuery): Promise<Rate | null>;
+
+  update(keys: RateQuery, rateData: Partial<Rate>): Promise<Rate | null>;
+
+  delete(keys: RateQuery): Promise<void>;
+}

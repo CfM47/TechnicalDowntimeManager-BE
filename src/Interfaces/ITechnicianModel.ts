@@ -1,5 +1,14 @@
+import { Technician, NewTechnician } from '../features/Technician/schema';
 import { TechnicianQuery } from '../features/Technician/utils';
-import { IRepository } from './IRepository';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface ITechnicianModel extends IRepository<TechnicianQuery> {}
+export interface ITechnicianModel {
+  create(newTechnician: NewTechnician): Promise<Technician>;
+
+  getAll(): Promise<Technician[]>;
+
+  getById(keys: TechnicianQuery): Promise<Technician | null>;
+
+  update(keys: TechnicianQuery, technicianData: Partial<Technician>): Promise<Technician | null>;
+
+  delete(keys: TechnicianQuery): Promise<void>;
+}
