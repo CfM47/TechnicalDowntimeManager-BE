@@ -1,5 +1,14 @@
+import { Equipment, NewEquipment } from '../features/Equipment/schema';
 import { EquipmentQuery } from '../features/Equipment/utils';
-import { IRepository } from './IRepository';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface IEquipmentModel extends IRepository<EquipmentQuery> {}
+export interface IEquipmentModel {
+  create(newEquipment: NewEquipment): Promise<Equipment>;
+
+  getAll(): Promise<Equipment[]>;
+
+  getById(keys: EquipmentQuery): Promise<Equipment | null>;
+
+  update(keys: EquipmentQuery, equipmentData: Partial<Equipment>): Promise<Equipment | null>;
+
+  delete(keys: EquipmentQuery): Promise<void>;
+}
