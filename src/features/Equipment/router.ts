@@ -144,9 +144,13 @@ import { EquipmentController } from './controller';
  *         type:
  *           type: string
  *           description: Type of the equipment.
- *         status:
+ *         state:
  *           type: string
  *           description: Status of the equipment.
+ *         id_department:
+ *           type: string
+ *           description: ID of the department.
+ *
  */
 export const equipmentRouter = (equipmentModel: IEquipmentModel) => {
   const router = Router();

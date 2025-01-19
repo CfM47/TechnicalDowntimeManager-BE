@@ -198,10 +198,10 @@ import { RateController } from './controller';
  *           type: string
  *           format: date
  *           description: Date of the rate.
- *         rating:
+ *         score:
  *           type: number
  *           description: Rating value.
- *         comments:
+ *         comment:
  *           type: string
  *           description: Comments about the rate.
  */

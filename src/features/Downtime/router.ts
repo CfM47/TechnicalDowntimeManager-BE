@@ -241,6 +241,12 @@ import { DowntimeController } from './controller';
  *         id_dep_receiver:
  *           type: string
  *           description: ID of the department receiver.
+ *         status:
+ *           type: string
+ *           description: Status of the downtime.
+ *         cause:
+ *          type: string
+ *          description: Cause of the downtime.
  */
 
 export const downtimeRouter = (downtimeModel: IDowntimeModel) => {
