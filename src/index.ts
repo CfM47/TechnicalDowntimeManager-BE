@@ -10,7 +10,7 @@ import { TransferModel } from './features/Transfer/model';
 import { DowntimeModel } from './features/Downtime/model';
 import { MaintenanceModel } from './features/Maintenance/model';
 
-const appModels: Models = {
+export const appModels: Models = {
   userModel: new UserModel(),
   technicianModel: new TechnicianModel(),
   equipmentModel: new EquipmentModel(),
