@@ -1,13 +1,20 @@
 import { ITechnicianModel } from '../../Interfaces/ITechnicianModel';
 import { NewTechnician, technician, Technician } from './schema';
 import { db } from '../../db/config/db_connect';
-import { and } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { TechnicianQuery, TechnicianQueryBuilder } from './utils';
+import { technicianSelection, TechnicianType } from './types';
+import { user } from '../User/schema';
+import { department } from '../Department/schema';
+import { role } from '../Role/schema';
 
 export class TechnicianModel implements ITechnicianModel {
-  async create(newTechnician: NewTechnician): Promise<Technician> {
-    const createdTechnician = await db.insert(technician).values(newTechnician).returning();
-    return createdTechnician[0];
+  async create(newTechnician: NewTechnician): Promise<TechnicianType | null> {
+    const [createdTechnician] = await db.insert(technician).values(newTechnician).returning();
+    const query: TechnicianQuery = {
+      id_user: createdTechnician.id_user
+    };
+    return await this.getById(query);
   }
 
   async delete(keys: TechnicianQuery): Promise<void> {
@@ -15,30 +22,41 @@ export class TechnicianModel implements ITechnicianModel {
     await db.delete(technician).where(and(...filter));
   }
 
-  async getAll(): Promise<Technician[]> {
-    return db.select().from(technician);
+  async getAll(): Promise<TechnicianType[]> {
+    return db
+      .select(technicianSelection)
+      .from(technician)
+      .innerJoin(user, eq(technician.id_user, user.id))
+      .innerJoin(department, eq(user.id_department, department.id))
+      .innerJoin(role, eq(user.id_role, role.id));
   }
 
-  async getById(keys: TechnicianQuery): Promise<Technician | null> {
+  async getById(keys: TechnicianQuery): Promise<TechnicianType | null> {
     const filter = TechnicianQueryBuilder(keys);
-    const resultTechnician = await db
-      .select()
+    const [resultTechnician] = await db
+      .select(technicianSelection)
       .from(technician)
+      .innerJoin(user, eq(technician.id_user, user.id))
+      .innerJoin(department, eq(user.id_department, department.id))
+      .innerJoin(role, eq(user.id_role, role.id))
       .where(and(...filter))
       .limit(1);
-    return resultTechnician[0];
+    return resultTechnician;
   }
 
   async update(
     keys: TechnicianQuery,
     technicianData: Partial<Technician>
-  ): Promise<Technician | null> {
+  ): Promise<TechnicianType | null> {
     const filter = TechnicianQueryBuilder(keys);
-    const updatedTechnician = await db
+    const [updatedTechnician] = await db
       .update(technician)
       .set(technicianData)
       .where(and(...filter))
       .returning();
-    return updatedTechnician[0];
+    const query: TechnicianQuery = {
+      id_user: updatedTechnician.id_user
+    };
+    return await this.getById(query);
   }
 }

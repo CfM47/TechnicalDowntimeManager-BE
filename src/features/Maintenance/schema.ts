@@ -5,9 +5,13 @@ import { equipment } from '../Equipment/schema';
 export const maintenance = pgTable(
   'maintenance',
   {
-    id_technician: uuid('id_technician').references(() => technician.id_user),
-    id_equipment: uuid('id_equipment').references(() => equipment.id),
-    date: timestamp('date', { mode: 'string' }).defaultNow(),
+    id_technician: uuid('id_technician')
+      .notNull()
+      .references(() => technician.id_user),
+    id_equipment: uuid('id_equipment')
+      .notNull()
+      .references(() => equipment.id),
+    date: timestamp('date', { mode: 'string' }).notNull().defaultNow(),
     type: varchar('type', { length: 255 }).notNull(),
     cost: real('cost').notNull()
   },

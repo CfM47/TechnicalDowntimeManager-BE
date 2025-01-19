@@ -6,7 +6,9 @@ export const equipment = pgTable('equipment', {
   name: varchar('name', { length: 255 }).notNull(),
   type: varchar('type', { length: 255 }).notNull(),
   state: varchar('state', { length: 255 }).notNull(),
-  id_department: uuid('id_department').references(() => department.id),
+  id_department: uuid('id_department')
+    .notNull()
+    .references(() => department.id),
   acquisition_date: timestamp('acquisition_date', { mode: 'string' }).defaultNow().notNull()
 });
 

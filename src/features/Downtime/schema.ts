@@ -6,11 +6,19 @@ import { department } from '../Department/schema';
 export const downtime = pgTable(
   'downtime',
   {
-    id_sender: uuid('id_sender').references(() => user.id),
-    id_receiver: uuid('id_receiver').references(() => user.id),
-    id_equipment: uuid('id_equipment').references(() => equipment.id),
-    date: timestamp('date', { mode: 'string' }).defaultNow(),
-    id_dep_receiver: uuid('id_dep_receiver').references(() => department.id),
+    id_sender: uuid('id_sender')
+      .notNull()
+      .references(() => user.id),
+    id_receiver: uuid('id_receiver')
+      .notNull()
+      .references(() => user.id),
+    id_equipment: uuid('id_equipment')
+      .notNull()
+      .references(() => equipment.id),
+    date: timestamp('date', { mode: 'string' }).notNull().defaultNow(),
+    id_dep_receiver: uuid('id_dep_receiver')
+      .notNull()
+      .references(() => department.id),
     status: varchar('status', { length: 255 }).notNull(), // Define as enum later
     cause: varchar('cause', { length: 255 }).notNull()
   },
