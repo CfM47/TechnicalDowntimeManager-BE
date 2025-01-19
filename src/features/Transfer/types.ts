@@ -1,9 +1,13 @@
+import { Department } from '../Department/types';
+import { EquipmentInfo } from '../Equipment/types';
+import { UserInfo } from '../User/types';
+
 export interface Transfer {
-  id_sender?: string;
-  id_receiver?: string;
-  id_equipment?: string;
-  date?: string;
-  id_origin_dep?: string;
-  id_receiver_dep?: string;
-  downtime_status?: string;
+  sender: UserInfo;
+  receiver: UserInfo;
+  equipment: EquipmentInfo;
+  date: string;
+  origin_dep: Department;
+  receiver_dep: Department;
+  status: string;
 }

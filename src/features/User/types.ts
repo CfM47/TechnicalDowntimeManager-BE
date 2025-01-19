@@ -1,6 +1,11 @@
+import { Department } from '../Department/types';
+import { Role } from '../Role/types';
+
 export interface User {
-  id?: string;
-  name?: string;
-  id_department?: string;
-  id_role?: number;
+  id: string;
+  name: string;
+  department: Department;
+  role: Role;
 }
+
+export type UserInfo = Pick<User, 'id' | 'name'>;
