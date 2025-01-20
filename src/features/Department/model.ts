@@ -3,9 +3,10 @@ import { and } from 'drizzle-orm';
 import { NewDepartment, Department, department } from './schema';
 import { IDepartmentModel } from '../../Interfaces/IDepartmentModel';
 import { DepartmentQuery, DepartmentQueryBuilder } from './utils';
+import { departmentSelection, DepartmentType } from './types';
 
 export class DepartmentModel implements IDepartmentModel {
-  async create(newDepartment: NewDepartment): Promise<Department> {
+  async create(newDepartment: NewDepartment): Promise<DepartmentType> {
     const [createdDepartment] = await db.insert(department).values(newDepartment).returning();
     return createdDepartment;
   }
@@ -14,30 +15,30 @@ export class DepartmentModel implements IDepartmentModel {
     await db.delete(department).where(and(...filter));
   }
 
-  async getAll(): Promise<Department[]> {
+  async getAll(): Promise<DepartmentType[]> {
     return db.select().from(department);
   }
 
-  async getById(keys: DepartmentQuery): Promise<Department | null> {
+  async getById(keys: DepartmentQuery): Promise<DepartmentType | null> {
     const filter = DepartmentQueryBuilder(keys);
-    const resultDepartment = await db
-      .select()
+    const [resultDepartment] = await db
+      .select(departmentSelection)
       .from(department)
       .where(and(...filter))
       .limit(1);
-    return resultDepartment[0];
+    return resultDepartment;
   }
 
   async update(
     keys: DepartmentQuery,
     departmentData: Partial<Department>
-  ): Promise<Department | null> {
+  ): Promise<DepartmentType | null> {
     const filter = DepartmentQueryBuilder(keys);
-    const updatedDepartment = await db
+    const [updatedDepartment] = await db
       .update(department)
       .set(departmentData)
       .where(and(...filter))
       .returning();
-    return updatedDepartment[0];
+    return updatedDepartment;
   }
 }

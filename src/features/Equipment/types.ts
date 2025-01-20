@@ -1,12 +1,31 @@
-import { Department } from '../Department/types';
+import { DepartmentType } from '../Department/types';
+import { equipment } from './schema';
+import { department } from '../Department/schema';
 
-export interface Equipment {
+export interface EquipmentType {
   id: string;
   name: string;
   type: string;
   state: string;
-  department: Department;
+  department: DepartmentType;
   acquisition_date: string;
 }
 
-export type EquipmentInfo = Pick<Equipment, 'id' | 'name'>;
+export const equipmentSelection = {
+  id: equipment.id,
+  name: equipment.name,
+  type: equipment.type,
+  state: equipment.state,
+  department: {
+    id: equipment.id_department,
+    name: department.name
+  },
+  acquisition_date: equipment.acquisition_date
+};
+
+export const equipmentInfoSelection = {
+  id: equipment.id,
+  name: equipment.name
+};
+
+export type EquipmentInfo = Pick<EquipmentType, 'id' | 'name'>;
