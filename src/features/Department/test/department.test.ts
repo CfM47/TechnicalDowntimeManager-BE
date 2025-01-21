@@ -14,9 +14,7 @@ describe('Department CRUD', () => {
   let departmentId = '';
 
   it('should create a new department', async () => {
-    const response = await request(app)
-      .post('/api/department')
-      .send({ name: 'Cardiology', description: 'Cardiology Department' });
+    const response = await request(app).post('/api/department').send({ name: 'Cardiology' });
     expect(response.status).toEqual(200);
     departmentId = response.body.id;
   });
