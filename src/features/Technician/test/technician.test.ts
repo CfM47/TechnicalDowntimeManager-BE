@@ -14,13 +14,11 @@ describe('Technician CRUD', () => {
   let id_user = '';
 
   it('should create a new technician', async () => {
-    const response = await request(app)
-      .post('/api/technician')
-      .send({
-        id_user: '41893260-aaf4-4339-ac97-39019b6c2343',
-        exp_years: 2,
-        specialty: 'panadero'
-      });
+    const response = await request(app).post('/api/technician').send({
+      id_user: '41893260-aaf4-4339-ac97-39019b6c2343',
+      exp_years: 2,
+      specialty: 'panadero'
+    });
     expect(response.status).toEqual(201);
     id_user = response.body.id;
   });
