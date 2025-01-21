@@ -6,7 +6,8 @@ export const userSchema = z.object({
   name: z.string(),
   password: z.string(),
   id_department: z.string().uuid(),
-  id_role: z.number().int().positive()
+  id_role: z.number().int().positive(),
+  token: z.string().optional()
 });
 
 export type UserQuery = {
@@ -14,6 +15,7 @@ export type UserQuery = {
   name?: string;
   id_department?: string;
   id_role?: number;
+  token?: string;
 };
 export function UserQueryBuilder(query: UserQuery): SQL[] {
   const filters: SQL[] = [];

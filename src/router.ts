@@ -22,6 +22,6 @@ export const appRouter = (appModels: Models) => {
   router.use('/transfer', transferRouter(appModels.transferModel));
   router.use('/downtime', downtimeRouter(appModels.downtimeModel));
   router.use('/maintenance', maintenanceRouter(appModels.maintenanceModel));
-  router.use('/auth', authRouter());
+  router.use('/auth', authRouter(appModels.userModel));
   return router;
 };

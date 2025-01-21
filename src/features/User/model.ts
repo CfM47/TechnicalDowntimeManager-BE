@@ -53,4 +53,9 @@ export class UserModel implements IUserModel {
     };
     return await this.getById(query);
   }
+
+  async getByName(name: string): Promise<User | null> {
+    const [userData] = await db.select().from(user).where(eq(user.name, name)).limit(1);
+    return userData;
+  }
 }
