@@ -151,15 +151,15 @@ import { TechnicianController } from './controller';
  *     Technician:
  *       type: object
  *       properties:
- *         id:
+ *         id_user:
  *           type: string
  *           description: ID of the technician.
- *         name:
+ *         exp_year:
  *           type: string
- *           description: Name of the technician.
- *         department:
+ *           description: Experience of the technician.
+ *         specialty:
  *           type: string
- *           description: Department of the technician.
+ *           description: Specialty of the technician.
  */
 export const technicianRouter = (technicianModel: ITechnicianModel, userModel: IUserModel) => {
   const router = Router();

@@ -16,14 +16,14 @@ describe('Rate CRUD', () => {
   let date = '';
   it('should create a new rate', async () => {
     const response = await request(app).post('/api/rate').send({
-      id_technician: '61860cce-cd6f-4e07-8db3-37527e32e671',
-      id_user: '0733d98f-63b0-405f-8775-26a870c1f434',
+      id_technician: 'add0921a-6979-46a3-a070-5f41a9ac08f7',
+      id_user: '84732729-8c92-4067-9912-9f6743920bb3',
       score: 5,
       comment: 'Excellent service'
     });
     expect(response.status).toEqual(200);
-    id_technician = response.body.id_technician;
-    id_user = response.body.id_user;
+    id_technician = response.body.technician.id;
+    id_user = response.body.user.id;
     date = response.body.date;
   });
 

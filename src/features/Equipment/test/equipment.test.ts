@@ -18,7 +18,7 @@ describe('Equipment CRUD', () => {
       name: 'High resolution X-Ray machine',
       type: 'X-ray Machine',
       state: 'active',
-      id_department: '1c5e96e4-f66b-4cdc-95ae-5c0c07a41340'
+      id_department: '24cc863c-2969-49a3-ac60-8db75a3d3b35'
     });
     expect(response.status).toEqual(201);
     equipmentId = response.body.id;

@@ -12,12 +12,17 @@ app.use('/api', appRouter(appModels));
 
 describe('Technician CRUD', () => {
   let id_user = '';
+
   it('should create a new technician', async () => {
     const response = await request(app)
       .post('/api/technician')
-      .send({ id_user: '57b6e269-9221-4474-a3cb-1576749a80a0', exp_years: 2, specialty: 'obrero' });
+      .send({
+        id_user: '41893260-aaf4-4339-ac97-39019b6c2343',
+        exp_years: 2,
+        specialty: 'panadero'
+      });
     expect(response.status).toEqual(201);
-    id_user = response.body.id_user;
+    id_user = response.body.id;
   });
 
   it('should get all technicians', async () => {

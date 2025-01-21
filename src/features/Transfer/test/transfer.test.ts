@@ -19,20 +19,20 @@ describe('Transfer CRUD', () => {
   let date = '';
   it('should create a new transfer', async () => {
     const response = await request(app).post('/api/transfer').send({
-      id_sender: '0733d98f-63b0-405f-8775-26a870c1f434',
-      id_receiver: '1ab7ef42-c6f4-45d6-b9e5-aa1f8fd39e3c',
-      id_equipment: '0a87207a-3486-445b-97eb-65d14fda2249',
-      id_origin_dep: '1c5e96e4-f66b-4cdc-95ae-5c0c07a41340',
-      id_receiver_dep: '76b53f41-c7fb-4048-a076-2cbb0ff60fc6',
+      id_sender: 'add0921a-6979-46a3-a070-5f41a9ac08f7',
+      id_receiver: 'e1eb14d6-0750-41f8-975b-316b9dbc1a4d',
+      id_equipment: 'a3739594-c850-4669-9c5f-5b43d1253507',
+      id_origin_dep: '95262fb4-44fb-46d3-bf08-540c0f16b9c7',
+      id_receiver_dep: '18412513-0ac2-41ef-b1bf-826d0acb4952',
       downtime_status: 'active'
     });
     expect(response.status).toEqual(201);
 
-    id_sender = response.body.id_sender;
-    id_receiver = response.body.id_receiver;
-    id_equipment = response.body.id_equipment;
-    id_origin_dep = response.body.id_origin_dep;
-    id_receiver_dep = response.body.id_receiver_dep;
+    id_sender = response.body.sender.id;
+    id_receiver = response.body.receiver.id;
+    id_equipment = response.body.equipment.id;
+    id_origin_dep = response.body.origin_dep.id;
+    id_receiver_dep = response.body.receiver_dep.id;
     date = response.body.date;
   });
 

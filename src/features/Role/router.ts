@@ -156,11 +156,6 @@ import { RoleController } from './controller';
  *         name:
  *           type: string
  *           description: Name of the role.
- *         permissions:
- *           type: array
- *           items:
- *             type: string
- *           description: List of permissions assigned to the role.
  */
 
 export const roleRouter = (roleModel: IRoleModel) => {

@@ -16,14 +16,14 @@ describe('Maintenance CRUD', () => {
   let date = '';
   it('should create a new maintenance', async () => {
     const response = await request(app).post('/api/maintenance').send({
-      id_technician: '61860cce-cd6f-4e07-8db3-37527e32e671',
+      id_technician: 'add0921a-6979-46a3-a070-5f41a9ac08f7',
       type: 'Scheduled',
       cost: 12,
-      id_equipment: '0a87207a-3486-445b-97eb-65d14fda2249'
+      id_equipment: 'a3739594-c850-4669-9c5f-5b43d1253507'
     });
     expect(response.status).toEqual(201);
-    id_equipment = response.body.id_equipment;
-    id_technician = response.body.id_technician;
+    id_equipment = response.body.equipment.id;
+    id_technician = response.body.technician.id;
     date = response.body.date;
   });
 
