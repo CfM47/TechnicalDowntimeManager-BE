@@ -9,6 +9,7 @@ import { transferRouter } from './features/Transfer/router';
 import { departmentRouter } from './features/Department/router';
 import { downtimeRouter } from './features/Downtime/router';
 import { maintenanceRouter } from './features/Maintenance/router';
+import { authRouter } from './features/Auth/router';
 
 export const appRouter = (appModels: Models) => {
   const router = Router();
@@ -21,5 +22,6 @@ export const appRouter = (appModels: Models) => {
   router.use('/transfer', transferRouter(appModels.transferModel));
   router.use('/downtime', downtimeRouter(appModels.downtimeModel));
   router.use('/maintenance', maintenanceRouter(appModels.maintenanceModel));
+  router.use('/auth', authRouter());
   return router;
 };
