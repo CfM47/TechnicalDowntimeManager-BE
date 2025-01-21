@@ -11,7 +11,8 @@ export const user = pgTable('user', {
     .notNull(),
   id_role: serial('id_role')
     .references(() => role.id)
-    .notNull()
+    .notNull(),
+  token: varchar('token')
 });
 
 export type User = typeof user.$inferSelect;
