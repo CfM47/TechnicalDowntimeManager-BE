@@ -145,9 +145,6 @@ import { DepartmentController } from './controller';
  *         name:
  *           type: string
  *           description: Name of the department.
- *         description:
- *           type: string
- *           description: Description of the department.
  */
 
 export const departmentRouter = (departmentModel: IDepartmentModel) => {

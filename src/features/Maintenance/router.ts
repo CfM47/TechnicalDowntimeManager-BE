@@ -199,9 +199,12 @@ import { MaintenanceController } from './controller';
  *           type: string
  *           format: date
  *           description: Date of the maintenance.
- *         details:
- *           type: string
- *           description: Details of the maintenance.
+ *         cost:
+ *           type: number
+ *           description: Cost of the maintenance.
+ *         type:
+ *            type: string
+ *            description: Type of maintenance.
  */
 export const maintenanceRouter = (maintenanceModel: IMaintenanceModel) => {
   const router = Router();

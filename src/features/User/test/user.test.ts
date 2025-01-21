@@ -16,10 +16,10 @@ describe('User CRUD', () => {
 
   it('should create a new user', async () => {
     const response = await request(app).post('/api/user').send({
-      name: 'Diego Doe',
-      password: 'Candela',
-      id_role: 1,
-      id_department: '1c5e96e4-f66b-4cdc-95ae-5c0c07a41340'
+      name: 'roberto',
+      password: 'revolucionario2025',
+      id_role: 2,
+      id_department: '24cc863c-2969-49a3-ac60-8db75a3d3b35'
     });
     expect(response.status).toEqual(201);
     userId = response.body.id;
