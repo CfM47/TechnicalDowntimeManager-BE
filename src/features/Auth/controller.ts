@@ -1,0 +1,38 @@
+import { Request, Response } from 'express';
+import { validate } from '../../utils';
+import { IUserModel } from '../../Interfaces/IUserModel';
+import { createToken, signinSchema } from './utils';
+import bcrypt from 'bcrypt';
+import { UserQuery } from '../User/utils';
+import { User } from '../User/schema';
+
+export class AuthController {
+  private userModel: IUserModel;
+  constructor(userModel: IUserModel) {
+    this.userModel = userModel;
+  }
+
+  signin = async (req: Request, res: Response) => {
+    const result = validate(req.body, signinSchema);
+    if (!result.success) {
+      res.status(400).json({ message: JSON.parse(result.error.message) });
+      return;
+    }
+    const data = result.data;
+    const userData = await this.userModel.getByName(data.name);
+    if (!userData) {
+      res.status(404).json({ message: 'User not found' });
+      return;
+    }
+    const correctPassword: boolean = await bcrypt.compare(data.password, userData.password);
+    if (!correctPassword) {
+      res.status(401).json({ message: 'Invalid password' });
+      return;
+    }
+    const token = createToken(data.name);
+    const query: UserQuery = { name: data.name };
+    const updateToken: Partial<User> = { token: token };
+    await this.userModel.update(query, updateToken);
+    res.status(200).json({ token: token });
+  };
+}
