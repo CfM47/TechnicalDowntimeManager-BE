@@ -135,3 +135,5 @@ build/
 .idea/
 
 drizzle/
+
+/src/test
