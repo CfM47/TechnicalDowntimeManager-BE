@@ -1,8 +1,9 @@
 import z from 'zod';
 import { eq, SQL } from 'drizzle-orm';
 import { transfer } from './schema';
+import { TransferStatuses } from '../../enums';
 
-const transferStatus = z.enum(['Pendiente', 'Completado', 'Aprobado', 'Cancelado']);
+const transferStatus = z.enum(TransferStatuses);
 
 export const transferSchema = z.object({
   id_sender: z.string().uuid(),
@@ -10,7 +11,7 @@ export const transferSchema = z.object({
   id_equipment: z.string().uuid(),
   id_origin_dep: z.string().uuid(),
   id_receiver_dep: z.string().uuid(),
-  downtime_status: transferStatus
+  status: transferStatus
 });
 
 export type TransferQuery = {
@@ -20,7 +21,7 @@ export type TransferQuery = {
   date?: string;
   id_origin_dep?: string;
   id_receiver_dep?: string;
-  downtime_status?: string;
+  status?: string;
 };
 
 export function TransferQueryBuilder(query: TransferQuery): SQL[] {
@@ -31,6 +32,6 @@ export function TransferQueryBuilder(query: TransferQuery): SQL[] {
   if (query.date) filters.push(eq(transfer.date, query.date));
   if (query.id_origin_dep) filters.push(eq(transfer.id_origin_dep, query.id_origin_dep));
   if (query.id_receiver_dep) filters.push(eq(transfer.id_receiver_dep, query.id_receiver_dep));
-  if (query.downtime_status) filters.push(eq(transfer.downtime_status, query.downtime_status));
+  if (query.status) filters.push(eq(transfer.status, query.status));
   return filters;
 }

@@ -1,8 +1,9 @@
 import z from 'zod';
 import { eq, SQL } from 'drizzle-orm';
 import { maintenance } from './schema';
+import { MaintenanceTypes } from '../../enums';
 
-const maintenanceType = z.enum(['Preventivo', 'Correctivo', 'Predictivo']);
+const maintenanceType = z.enum(MaintenanceTypes);
 
 export const maintenanceSchema = z.object({
   id_technician: z.string().uuid(),

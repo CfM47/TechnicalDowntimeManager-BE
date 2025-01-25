@@ -6,7 +6,7 @@ export interface EquipmentType {
   id: string;
   name: string;
   type: string;
-  state: string;
+  status: string;
   department: DepartmentType;
   acquisition_date: string;
 }
@@ -15,7 +15,7 @@ export const equipmentSelection = {
   id: equipment.id,
   name: equipment.name,
   type: equipment.type,
-  state: equipment.state,
+  status: equipment.status,
   department: {
     id: equipment.id_department,
     name: department.name
