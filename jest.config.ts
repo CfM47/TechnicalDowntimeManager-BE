@@ -179,7 +179,9 @@ const config: Config = {
 
   // Whether to use watchman for file crawling
   // watchman: true,
-  preset: 'ts-jest' // Usa ts-jest como transformador predeterminado
+  preset: 'ts-jest', // Usa ts-jest como transformador predeterminado
+
+  testTimeout: 30000
 };
 
 export default config;

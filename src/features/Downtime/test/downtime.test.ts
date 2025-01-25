@@ -17,23 +17,20 @@ describe('Downtime CRUD', () => {
   let id_dep_receiver = '';
   let date = '';
   it('should create a new downtime', async () => {
-    const response = await request(app)
-      .post('/api/downtime')
-      //envia diego recibe mauricio en BD
-      .send({
-        id_sender: '0733d98f-63b0-405f-8775-26a870c1f434',
-        id_receiver: '1ab7ef42-c6f4-45d6-b9e5-aa1f8fd39e3c',
-        id_equipment: '0a87207a-3486-445b-97eb-65d14fda2249',
-        id_dep_receiver: '76b53f41-c7fb-4048-a076-2cbb0ff60fc6',
-        status: 'active',
-        cause: 'Maintenance'
-      });
+    const response = await request(app).post('/api/downtime').send({
+      id_sender: 'add0921a-6979-46a3-a070-5f41a9ac08f7',
+      id_receiver: 'e1eb14d6-0750-41f8-975b-316b9dbc1a4d',
+      id_equipment: 'a3739594-c850-4669-9c5f-5b43d1253507',
+      id_dep_receiver: '18412513-0ac2-41ef-b1bf-826d0acb4952',
+      status: 'active',
+      cause: 'Maintenance'
+    });
     expect(response.status).toEqual(201);
 
-    id_sender = response.body.id_sender;
-    id_reciever = response.body.id_receiver;
-    id_equipment = response.body.id_equipment;
-    id_dep_receiver = response.body.id_dep_receiver;
+    id_sender = response.body.sender.id;
+    id_reciever = response.body.receiver.id;
+    id_equipment = response.body.equipment.id;
+    id_dep_receiver = response.body.dep_receiver.id;
     date = response.body.date;
   });
 

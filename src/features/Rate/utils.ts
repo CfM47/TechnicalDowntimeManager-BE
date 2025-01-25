@@ -6,7 +6,7 @@ export const rateSchema = z.object({
   id_technician: z.string().uuid(),
   id_user: z.string().uuid(),
   comment: z.string(),
-  score: z.number()
+  score: z.number().min(1).max(5)
 });
 
 export type RateQuery = {

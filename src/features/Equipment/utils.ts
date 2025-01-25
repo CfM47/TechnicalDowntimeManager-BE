@@ -2,10 +2,19 @@ import z from 'zod';
 import { eq, SQL } from 'drizzle-orm';
 import { equipment } from './schema';
 
+const equipmentState = z.enum(['Operativo', 'Mantenimiento', 'Baja']);
+const equipmentType = z.enum([
+  'Informático',
+  'Comunicaciones',
+  'Electrónico',
+  'Seguridad',
+  'Oficina'
+]);
+
 export const equipmentSchema = z.object({
   name: z.string().max(255),
-  type: z.string().max(255),
-  state: z.string().max(255),
+  type: equipmentType,
+  state: equipmentState,
   id_department: z.string().uuid()
 });
 

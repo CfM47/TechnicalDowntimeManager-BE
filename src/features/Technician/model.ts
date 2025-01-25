@@ -22,13 +22,14 @@ export class TechnicianModel implements ITechnicianModel {
     await db.delete(technician).where(and(...filter));
   }
 
-  async getAll(): Promise<TechnicianType[]> {
+  async getAll(filter: TechnicianQuery): Promise<TechnicianType[]> {
     return db
       .select(technicianSelection)
       .from(technician)
       .innerJoin(user, eq(technician.id_user, user.id))
       .innerJoin(department, eq(user.id_department, department.id))
-      .innerJoin(role, eq(user.id_role, role.id));
+      .innerJoin(role, eq(user.id_role, role.id))
+      .where(and(...TechnicianQueryBuilder(filter)));
   }
 
   async getById(keys: TechnicianQuery): Promise<TechnicianType | null> {

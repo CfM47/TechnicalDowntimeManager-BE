@@ -15,8 +15,11 @@ export class DepartmentModel implements IDepartmentModel {
     await db.delete(department).where(and(...filter));
   }
 
-  async getAll(): Promise<DepartmentType[]> {
-    return db.select().from(department);
+  async getAll(filter: DepartmentQuery): Promise<DepartmentType[]> {
+    return db
+      .select()
+      .from(department)
+      .where(and(...DepartmentQueryBuilder(filter)));
   }
 
   async getById(keys: DepartmentQuery): Promise<DepartmentType | null> {

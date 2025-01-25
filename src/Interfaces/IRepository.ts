@@ -1,7 +1,7 @@
 export interface IRepository<TQuery, TNew, TInsert, T> {
   create(newRate: TNew): Promise<T | null>;
 
-  getAll(): Promise<T[]>;
+  getAll(filter: TQuery): Promise<T[]>;
 
   getById(keys: TQuery): Promise<T | null>;
 

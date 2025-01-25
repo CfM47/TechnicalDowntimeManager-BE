@@ -27,14 +27,15 @@ export class DowntimeModel implements IDowntimeModel {
     await db.delete(downtime).where(and(...filter));
   }
 
-  async getAll(): Promise<DowntimeType[]> {
+  async getAll(filter: DowntimeQuery): Promise<DowntimeType[]> {
     return db
       .select(downtimeSelection)
       .from(downtime)
       .innerJoin(alias(user, 'sender'), eq(downtime.id_sender, alias(user, 'sender').id))
       .innerJoin(alias(user, 'receiver'), eq(downtime.id_receiver, alias(user, 'receiver').id))
       .innerJoin(equipment, eq(downtime.id_equipment, equipment.id))
-      .innerJoin(department, eq(downtime.id_dep_receiver, department.id));
+      .innerJoin(department, eq(downtime.id_dep_receiver, department.id))
+      .where(and(...DowntimeQueryBuilder(filter)));
   }
 
   async getById(keys: DowntimeQuery): Promise<DowntimeType | null> {

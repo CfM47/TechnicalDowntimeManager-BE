@@ -296,6 +296,9 @@ import { TransferController } from './controller';
  *         id_receiver_dep:
  *           type: string
  *           description: ID of the receiver department.
+ *         downtime_status:
+ *           type: string
+ *           description: Status of the downtime.
  */
 
 export const transferRouter = (transferModel: ITransferModel) => {

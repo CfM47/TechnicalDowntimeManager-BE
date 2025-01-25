@@ -33,6 +33,10 @@ export class AuthController {
     const query: UserQuery = { name: data.name };
     const updateToken: Partial<User> = { token: token };
     await this.userModel.update(query, updateToken);
-    res.status(200).json({ token: token });
+    res.status(200).json({
+      token: token,
+      name: userData.name,
+      id_role: userData.id_role
+    });
   };
 }

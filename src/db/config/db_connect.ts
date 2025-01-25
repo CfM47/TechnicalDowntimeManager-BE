@@ -4,15 +4,38 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const pool = new Pool({
-  host: process.env.DB_HOST || 'localhost',
-  port: parseInt(process.env.DB_PORT || '5432'),
-  user: process.env.DB_USER || 'user',
-  password: process.env.DB_PASSWORD || 'password',
-  database: process.env.DB_NAME || 'dbname',
-  ssl: process.env.NODE_ENV === 'development-local' ? false : { rejectUnauthorized: false }
-});
+class Database {
+  private static instance: Database;
+  private readonly pool: Pool;
+  public db: ReturnType<typeof drizzle>;
 
-export const db = drizzle(pool, {
-  logger: true
-});
+  private constructor() {
+    this.pool = new Pool({
+      host: process.env.DB_HOST || 'localhost',
+      port: parseInt(process.env.DB_PORT || '5432'),
+      user: process.env.DB_USER || 'user',
+      password: process.env.DB_PASSWORD || 'password',
+      database: process.env.DB_NAME || 'dbname',
+      ssl: process.env.NODE_ENV === 'development-local' ? false : { rejectUnauthorized: false }
+    });
+
+    this.db = drizzle(this.pool, {
+      logger: true
+    });
+  }
+
+  public static getInstance(): Database {
+    if (!Database.instance) {
+      Database.instance = new Database();
+    }
+    return Database.instance;
+  }
+
+  public async closeConnection() {
+    await this.pool.end();
+  }
+}
+
+const db = Database.getInstance().db;
+
+export { db };
