@@ -4,7 +4,6 @@ import { db } from '../../db/config/db_connect';
 import { and, eq } from 'drizzle-orm';
 import { UserQuery, UserQueryBuilder } from './utils';
 import { department } from '../Department/schema';
-import { role } from '../Role/schema';
 import { userSelection, UserType } from './types';
 
 export class UserModel implements IUserModel {
@@ -26,7 +25,6 @@ export class UserModel implements IUserModel {
       .select(userSelection)
       .from(user)
       .innerJoin(department, eq(user.id_department, department.id))
-      .innerJoin(role, eq(user.id_role, role.id))
       .where(and(...UserQueryBuilder(filter)));
   }
 
@@ -36,7 +34,6 @@ export class UserModel implements IUserModel {
       .select(userSelection)
       .from(user)
       .innerJoin(department, eq(user.id_department, department.id))
-      .innerJoin(role, eq(user.id_role, role.id))
       .where(and(...filter))
       .limit(1);
     return resultUser;

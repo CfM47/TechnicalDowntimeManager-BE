@@ -1,14 +1,12 @@
 import { DepartmentType } from '../Department/types';
-import { RoleType } from '../Role/types';
 import { user } from './schema';
 import { department } from '../Department/schema';
-import { role } from '../Role/schema';
 
 export interface UserType {
   id: string;
   name: string;
   department: DepartmentType;
-  role: RoleType;
+  role: string;
 }
 
 export const userSelection = {
@@ -18,10 +16,7 @@ export const userSelection = {
     id: department.id,
     name: department.name
   },
-  role: {
-    id: role.id,
-    name: role.name
-  }
+  role: user.role
 };
 
 export const userInfoSelection = {

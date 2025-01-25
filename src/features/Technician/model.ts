@@ -6,7 +6,6 @@ import { TechnicianQuery, TechnicianQueryBuilder } from './utils';
 import { technicianSelection, TechnicianType } from './types';
 import { user } from '../User/schema';
 import { department } from '../Department/schema';
-import { role } from '../Role/schema';
 
 export class TechnicianModel implements ITechnicianModel {
   async create(newTechnician: NewTechnician): Promise<TechnicianType | null> {
@@ -28,7 +27,6 @@ export class TechnicianModel implements ITechnicianModel {
       .from(technician)
       .innerJoin(user, eq(technician.id_user, user.id))
       .innerJoin(department, eq(user.id_department, department.id))
-      .innerJoin(role, eq(user.id_role, role.id))
       .where(and(...TechnicianQueryBuilder(filter)));
   }
 
@@ -39,7 +37,6 @@ export class TechnicianModel implements ITechnicianModel {
       .from(technician)
       .innerJoin(user, eq(technician.id_user, user.id))
       .innerJoin(department, eq(user.id_department, department.id))
-      .innerJoin(role, eq(user.id_role, role.id))
       .where(and(...filter))
       .limit(1);
     return resultTechnician;
