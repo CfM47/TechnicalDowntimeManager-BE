@@ -28,7 +28,8 @@ export class MaintenanceController {
 
   getAll = async (req: Request, res: Response) => {
     try {
-      const allMaintenances = await this.maintenanceModel.getAll();
+      const filter: MaintenanceQuery = req.query;
+      const allMaintenances = await this.maintenanceModel.getAll(filter);
       res.status(200).json(allMaintenances);
     } catch (e) {
       res.status(500).json(ErrorMessage(e));

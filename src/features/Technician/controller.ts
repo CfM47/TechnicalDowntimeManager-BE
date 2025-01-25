@@ -39,7 +39,8 @@ export class TechnicianController {
 
   getAll = async (req: Request, res: Response) => {
     try {
-      const allTechnicians = await this.technicianModel.getAll();
+      const filter: TechnicianQuery = req.query;
+      const allTechnicians = await this.technicianModel.getAll(filter);
       res.status(200).json(allTechnicians);
     } catch (e) {
       res.status(500).json(ErrorMessage(e));

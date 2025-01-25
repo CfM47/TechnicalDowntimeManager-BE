@@ -39,12 +39,13 @@ export class RateModel implements IRateModel {
     await db.delete(rate).where(and(...filter));
   }
 
-  async getAll(): Promise<RateType[]> {
+  async getAll(filter: RateQuery): Promise<RateType[]> {
     return db
       .select(rateSelection)
       .from(rate)
       .innerJoin(alias(user, 'technician'), eq(rate.id_technician, alias(user, 'technician').id))
-      .innerJoin(user, eq(rate.id_user, user.id));
+      .innerJoin(user, eq(rate.id_user, user.id))
+      .where(and(...RateQueryBuilder(filter)));
   }
 
   async create(newRate: NewRate): Promise<RateType | null> {

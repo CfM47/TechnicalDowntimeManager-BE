@@ -28,7 +28,7 @@ export class TransferModel implements ITransferModel {
     await db.delete(transfer).where(and(...filter));
   }
 
-  async getAll(): Promise<TransferType[]> {
+  async getAll(filter: TransferQuery): Promise<TransferType[]> {
     return db
       .select(transferSelection)
       .from(transfer)
@@ -42,7 +42,8 @@ export class TransferModel implements ITransferModel {
       .innerJoin(
         alias(department, 'receiver_dep'),
         eq(transfer.id_receiver_dep, alias(department, 'receiver_dep').id)
-      );
+      )
+      .where(and(...TransferQueryBuilder(filter)));
   }
 
   async getById(keys: TransferQuery): Promise<TransferType | null> {

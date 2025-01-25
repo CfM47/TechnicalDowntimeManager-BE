@@ -28,7 +28,8 @@ export class DowntimeController {
 
   getAll = async (req: Request, res: Response) => {
     try {
-      const allDowntimes = await this.downtimeModel.getAll();
+      const filter: DowntimeQuery = req.query;
+      const allDowntimes = await this.downtimeModel.getAll(filter);
       res.status(200).json(allDowntimes);
     } catch (e) {
       res.status(500).json(ErrorMessage(e));

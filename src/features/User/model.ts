@@ -21,12 +21,13 @@ export class UserModel implements IUserModel {
     await db.delete(user).where(and(...filter));
   }
 
-  async getAll(): Promise<UserType[]> {
+  async getAll(filter: UserQuery): Promise<UserType[]> {
     return db
       .select(userSelection)
       .from(user)
       .innerJoin(department, eq(user.id_department, department.id))
-      .innerJoin(role, eq(user.id_role, role.id));
+      .innerJoin(role, eq(user.id_role, role.id))
+      .where(and(...UserQueryBuilder(filter)));
   }
 
   async getById(keys: UserQuery): Promise<UserType | null> {
