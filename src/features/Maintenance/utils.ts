@@ -2,11 +2,13 @@ import z from 'zod';
 import { eq, SQL } from 'drizzle-orm';
 import { maintenance } from './schema';
 
+const maintenanceType = z.enum(['Preventivo', 'Correctivo', 'Predictivo']);
+
 export const maintenanceSchema = z.object({
   id_technician: z.string().uuid(),
   id_equipment: z.string().uuid(),
-  type: z.string(),
-  cost: z.number()
+  type: maintenanceType,
+  cost: z.number().positive()
 });
 
 export type MaintenanceQuery = {
