@@ -15,7 +15,6 @@ export default defineConfig({
     './src/features/User/schema.ts',
     './src/features/Department/schema.ts',
     './src/features/Transfer/schema.ts',
-    './src/features/Role/schema.ts',
     './src/features/Maintenance/schema.ts',
     './src/features/Rate/schema.ts',
     './src/features/Technician/schema.ts',

@@ -1,6 +1,8 @@
-import { pgTable, serial, uuid, varchar } from 'drizzle-orm/pg-core';
+import { pgTable, uuid, varchar, pgEnum } from 'drizzle-orm/pg-core';
 import { department } from '../Department/schema';
-import { role } from '../Role/schema';
+import { Roles } from '../../enums';
+
+const roles = pgEnum('roles', Roles);
 
 export const user = pgTable('user', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -9,9 +11,7 @@ export const user = pgTable('user', {
   id_department: uuid('id_department')
     .references(() => department.id)
     .notNull(),
-  id_role: serial('id_role')
-    .references(() => role.id)
-    .notNull(),
+  role: roles().notNull(),
   token: varchar('token')
 });
 

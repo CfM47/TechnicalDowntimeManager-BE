@@ -3,7 +3,6 @@ import { IUserModel } from './Interfaces/IUserModel';
 import { ITechnicianModel } from './Interfaces/ITechnicianModel';
 import { IEquipmentModel } from './Interfaces/IEquipmentModel';
 import { IRateModel } from './Interfaces/IRateModel';
-import { IRoleModel } from './Interfaces/IRoleModel';
 import { ITransferModel } from './Interfaces/ITransferModel';
 import { IDepartmentModel } from './Interfaces/IDepartmentModel';
 import { IDowntimeModel } from './Interfaces/IDowntimeModel';
@@ -26,7 +25,6 @@ export type Models = {
   technicianModel: ITechnicianModel;
   equipmentModel: IEquipmentModel;
   rateModel: IRateModel;
-  roleModel: IRoleModel;
   transferModel: ITransferModel;
   departmentModel: IDepartmentModel;
   downtimeModel: IDowntimeModel;
