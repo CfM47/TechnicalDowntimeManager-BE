@@ -1,7 +1,10 @@
-import { pgTable, uuid, timestamp, varchar, primaryKey } from 'drizzle-orm/pg-core';
+import { pgTable, uuid, timestamp, primaryKey, pgEnum } from 'drizzle-orm/pg-core';
 import { user } from '../User/schema';
 import { equipment } from '../Equipment/schema';
 import { department } from '../Department/schema';
+import { TransferStatuses } from '../../enums';
+
+const status = pgEnum('statuses', TransferStatuses);
 
 export const transfer = pgTable(
   'transfer',
@@ -22,7 +25,7 @@ export const transfer = pgTable(
     id_receiver_dep: uuid('id_receiver_dep')
       .notNull()
       .references(() => department.id),
-    downtime_status: varchar('downtime_status', { length: 255 }).notNull() //TODO Define as enum later
+    status: status().notNull()
   },
   (table) => {
     return {

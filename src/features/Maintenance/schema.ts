@@ -1,6 +1,9 @@
-import { pgTable, uuid, timestamp, varchar, real, primaryKey } from 'drizzle-orm/pg-core';
+import { pgTable, uuid, timestamp, real, primaryKey, pgEnum } from 'drizzle-orm/pg-core';
 import { technician } from '../Technician/schema';
 import { equipment } from '../Equipment/schema';
+import { MaintenanceTypes } from '../../enums';
+
+const type = pgEnum('maintenanceType', MaintenanceTypes);
 
 export const maintenance = pgTable(
   'maintenance',
@@ -12,7 +15,7 @@ export const maintenance = pgTable(
       .notNull()
       .references(() => equipment.id),
     date: timestamp('date', { mode: 'string' }).notNull().defaultNow(),
-    type: varchar('type', { length: 255 }).notNull(),
+    type: type().notNull(),
     cost: real('cost').notNull()
   },
   (table) => {

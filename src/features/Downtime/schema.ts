@@ -1,7 +1,10 @@
-import { pgTable, uuid, timestamp, varchar, primaryKey } from 'drizzle-orm/pg-core';
+import { pgTable, uuid, timestamp, varchar, primaryKey, pgEnum } from 'drizzle-orm/pg-core';
 import { user } from '../User/schema';
 import { equipment } from '../Equipment/schema';
 import { department } from '../Department/schema';
+import { DowntimeStatuses } from '../../enums';
+
+const status = pgEnum('downtimeStatus', DowntimeStatuses);
 
 export const downtime = pgTable(
   'downtime',
@@ -19,7 +22,7 @@ export const downtime = pgTable(
     id_dep_receiver: uuid('id_dep_receiver')
       .notNull()
       .references(() => department.id),
-    status: varchar('status', { length: 255 }).notNull(), // Define as enum later
+    status: status().notNull(),
     cause: varchar('cause', { length: 255 }).notNull()
   },
   (table) => {

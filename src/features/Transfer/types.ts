@@ -35,5 +35,5 @@ export const transferSelection = {
     id: alias(department, 'receiver_dep').id,
     name: alias(department, 'receiver_dep').name
   },
-  status: transfer.downtime_status
+  status: transfer.status
 };

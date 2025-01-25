@@ -1,13 +1,9 @@
 import z from 'zod';
 import { eq, SQL } from 'drizzle-orm';
 import { downtime } from './schema';
+import { DowntimeStatuses } from '../../enums';
 
-const downtimeStatus = z.enum([
-  'Pendiente de evaluación',
-  'Retirado del servicio',
-  'Reutilizado',
-  'Baja Definitiva'
-]);
+const downtimeStatus = z.enum(DowntimeStatuses);
 
 export const downtimeSchema = z.object({
   id_sender: z.string().uuid(),

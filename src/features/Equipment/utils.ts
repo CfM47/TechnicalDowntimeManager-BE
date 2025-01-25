@@ -1,20 +1,15 @@
 import z from 'zod';
 import { eq, SQL } from 'drizzle-orm';
 import { equipment } from './schema';
+import { EquipmentStatuses, EquipmentTypes } from '../../enums';
 
-const equipmentState = z.enum(['Operativo', 'Mantenimiento', 'Baja']);
-const equipmentType = z.enum([
-  'Informático',
-  'Comunicaciones',
-  'Electrónico',
-  'Seguridad',
-  'Oficina'
-]);
+const equipmentState = z.enum(EquipmentStatuses);
+const equipmentType = z.enum(EquipmentTypes);
 
 export const equipmentSchema = z.object({
   name: z.string().max(255),
   type: equipmentType,
-  state: equipmentState,
+  status: equipmentState,
   id_department: z.string().uuid()
 });
 
