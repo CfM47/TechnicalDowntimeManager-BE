@@ -28,7 +28,8 @@ export class TransferController {
 
   getAll = async (req: Request, res: Response) => {
     try {
-      const allTransfers = await this.transferModel.getAll();
+      const filter: TransferQuery = req.query;
+      const allTransfers = await this.transferModel.getAll(filter);
       res.status(200).json(allTransfers);
     } catch (e) {
       res.status(500).json(ErrorMessage(e));

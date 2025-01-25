@@ -15,8 +15,11 @@ export class RoleModel implements IRoleModel {
     await db.delete(role).where(and(...filter));
   }
 
-  async getAll(): Promise<RoleType[]> {
-    return db.select(roleSelection).from(role);
+  async getAll(filter: RoleQuery): Promise<RoleType[]> {
+    return db
+      .select(roleSelection)
+      .from(role)
+      .where(and(...RoleQueryBuilder(filter)));
   }
 
   async getById(keys: RoleQuery): Promise<RoleType | null> {

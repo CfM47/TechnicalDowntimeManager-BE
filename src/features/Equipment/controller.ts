@@ -30,7 +30,8 @@ export class EquipmentController {
 
   getAll = async (req: Request, res: Response) => {
     try {
-      const allEquipments = await this.equipmentModel.getAll();
+      const filter: EquipmentQuery = req.query;
+      const allEquipments = await this.equipmentModel.getAll(filter);
       res.status(200).json(allEquipments);
     } catch (e) {
       res.status(500).json(ErrorMessage(e));

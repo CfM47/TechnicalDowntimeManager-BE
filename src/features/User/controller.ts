@@ -33,7 +33,8 @@ export class UserController {
 
   getAll = async (req: Request, res: Response) => {
     try {
-      const allUsers = await this.userModel.getAll();
+      const filter: UserQuery = req.query;
+      const allUsers = await this.userModel.getAll(filter);
       res.status(200).json(allUsers);
     } catch (e) {
       res.status(500).json(ErrorMessage(e));

@@ -30,7 +30,8 @@ export class RoleController {
 
   getAll = async (req: Request, res: Response) => {
     try {
-      const allRoles = await this.roleModel.getAll();
+      const filter: RoleQuery = req.query;
+      const allRoles = await this.roleModel.getAll(filter);
       res.status(200).json(allRoles);
     } catch (e) {
       res.status(500).json(ErrorMessage(e));

@@ -30,7 +30,8 @@ export class DepartmentController {
 
   getAll = async (req: Request, res: Response) => {
     try {
-      const allDepartments = await this.departmentModel.getAll();
+      const filter: DepartmentQuery = req.query;
+      const allDepartments = await this.departmentModel.getAll(filter);
       res.status(200).json(allDepartments);
     } catch (e) {
       res.status(500).json(ErrorMessage(e));

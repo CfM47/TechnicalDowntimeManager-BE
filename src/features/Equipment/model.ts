@@ -18,11 +18,12 @@ export class EquipmentModel implements IEquipmentModel {
     await db.delete(equipment).where(and(...filter));
   }
 
-  async getAll(): Promise<EquipmentType[]> {
+  async getAll(filter: EquipmentQuery): Promise<EquipmentType[]> {
     return db
       .select(equipmentSelection)
       .from(equipment)
-      .innerJoin(department, eq(equipment.id_department, department.id));
+      .innerJoin(department, eq(equipment.id_department, department.id))
+      .where(and(...EquipmentQueryBuilder(filter)));
   }
 
   async getById(keys: EquipmentQuery): Promise<EquipmentType | null> {
