@@ -1,14 +1,18 @@
-import { Options } from 'swagger-jsdoc';
+import swaggerAutogen from 'swagger-autogen';
 
-const options: Options = {
-  definition: {
-    openapi: '3.0.0',
-    info: {
-      title: 'API Documentation',
-      version: '1.0.0'
-    }
+const doc = {
+  info: {
+    title: 'API de Gestion de Bajas',
+    description: 'Permite gestionar las bajas tecnicas de los equipos de la empresa'
   },
-  apis: ['./src/features/**/*.ts'] // Path to the API docs
+  host: 'localhost:8080',
+  schemes: ['http']
 };
 
-export default options;
+const outputFile = './swagger-output.json';
+const endpointsFiles = ['./src/app.ts','./src/features/User/schema.ts'];
+
+swaggerAutogen()(outputFile,endpointsFiles, doc);
+
+
+

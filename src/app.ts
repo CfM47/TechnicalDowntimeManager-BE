@@ -3,8 +3,7 @@ import { appRouter } from './router';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
-import swaggerJsdoc from 'swagger-jsdoc';
-import swaggerConfig from '../swaggerConfig';
+import swaggerDocument from '../swagger-output.json';
 import { Models } from './utils';
 
 dotenv.config();
@@ -17,9 +16,8 @@ export const createApp = (appModels: Models) => {
 
   const port = process.env.PORT || 3000;
 
-  const swaggerSpec = swaggerJsdoc(swaggerConfig);
-  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
   app.use('/api', appRouter(appModels));
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
   app.listen(port, () => {
     console.log(`Server is running on port http://localhost:${port}`);
