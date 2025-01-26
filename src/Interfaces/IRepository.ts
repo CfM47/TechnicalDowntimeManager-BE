@@ -10,7 +10,6 @@
 import { Pagination } from '../utils';
 
 export interface IRepository<TQuery, TNew, TInsert, T> {
-
   create(newRate: TNew): Promise<T | null>;
 
   getAll(filter: TQuery, pagination: Pagination): Promise<T[]>;

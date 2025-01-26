@@ -13,7 +13,6 @@ import { Pagination } from '../../utils';
  */
 
 export class UserModel implements IUserModel {
-
   /**
    * Creates a new user in the database.
    * @param newUser - The new user data to be inserted.

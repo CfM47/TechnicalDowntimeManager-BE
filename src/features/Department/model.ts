@@ -10,7 +10,6 @@ import { Pagination } from '../../utils';
  * Model class for handling CRUD operations on the Department entity.
  */
 export class DepartmentModel implements IDepartmentModel {
-
   /**
    * Creates a new department.
    *

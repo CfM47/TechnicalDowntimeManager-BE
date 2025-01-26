@@ -2,7 +2,6 @@ import { Router } from 'express';
 import { IEquipmentModel } from '../../Interfaces/IEquipmentModel';
 import { EquipmentController } from './controller';
 
-
 /**
  * Creates a router for equipment-related routes.
  *

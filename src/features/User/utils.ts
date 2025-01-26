@@ -39,7 +39,6 @@ export type UserQuery = {
   token?: string;
 };
 
-
 /**
  * Builds an array of SQL filters based on the provided user query parameters.
  *

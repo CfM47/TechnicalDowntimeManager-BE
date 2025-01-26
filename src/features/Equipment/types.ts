@@ -2,7 +2,6 @@ import { DepartmentType } from '../Department/types';
 import { equipment } from './schema';
 import { department } from '../Department/schema';
 
-
 /**
  * Interface representing the equipment type.
  */

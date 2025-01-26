@@ -4,7 +4,6 @@ import { alias } from 'drizzle-orm/pg-core';
 import { user } from '../User/schema';
 import { rate } from './schema';
 
-
 /**
  * Represents a rate given by a user to a technician.
  *

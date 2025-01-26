@@ -23,7 +23,6 @@ import { Pagination } from '../../utils';
  * - update(keys: TransferQuery, transferData: Partial<Transfer>): Updates a transfer record by its keys.
  */
 export class TransferModel implements ITransferModel {
-
   async create(newTransfer: NewTransfer): Promise<TransferType | null> {
     const [createdTransfer] = await db.insert(transfer).values(newTransfer).returning();
     const query: TransferQuery = {

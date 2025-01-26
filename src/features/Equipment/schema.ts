@@ -2,7 +2,6 @@ import { pgEnum, pgTable, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
 import { department } from '../Department/schema';
 import { EquipmentStatuses, EquipmentTypes } from '../../enums';
 
-
 /**
  * Defines the enums for equipment type and status.
  */

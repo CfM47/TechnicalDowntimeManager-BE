@@ -15,7 +15,6 @@ import { Pagination } from '../../utils';
  * Each method interacts with the database to perform the necessary operations.
  */
 export class RateModel implements IRateModel {
-
   /**
    * Retrieves a rate by its ID.
    *

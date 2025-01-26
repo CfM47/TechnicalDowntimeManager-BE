@@ -16,7 +16,6 @@ import { Pagination } from '../../utils';
  * provided queries.
  */
 export class EquipmentModel implements IEquipmentModel {
-
   /**
    * Creates a new equipment record.
    *

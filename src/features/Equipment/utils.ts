@@ -3,8 +3,6 @@ import { eq, SQL } from 'drizzle-orm';
 import { equipment } from './schema';
 import { EquipmentStatuses, EquipmentTypes } from '../../enums';
 
-
-
 /**
  * Zod schema for validating equipment state and type.
  */

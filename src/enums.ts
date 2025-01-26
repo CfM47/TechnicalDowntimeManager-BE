@@ -13,7 +13,6 @@ export const DowntimeStatuses: [string, ...string[]] = [
  */
 export const EquipmentStatuses: [string, ...string[]] = ['Operativo', 'Mantenimiento', 'Baja'];
 
-
 /**
  * Enum representing the various types of equipment.
  */
