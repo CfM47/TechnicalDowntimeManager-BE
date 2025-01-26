@@ -188,8 +188,8 @@ import { UserController } from './controller';
  *         name:
  *           type: string
  *           description: Nombre del usuario.
- *         id_role:
- *           type: number
+ *         role:
+ *           type: string
  *           description: Rol asociado al usuario.
  *         id_department:
  *           type: string

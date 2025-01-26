@@ -139,9 +139,6 @@ import { DepartmentController } from './controller';
  *     Department:
  *       type: object
  *       properties:
- *         id:
- *           type: string
- *           description: ID of the department.
  *         name:
  *           type: string
  *           description: Name of the department.
