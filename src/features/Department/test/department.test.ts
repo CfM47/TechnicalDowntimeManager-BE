@@ -10,6 +10,13 @@ app.use(cors());
 app.disable('x-powered-by');
 app.use('/api', appRouter(appModels));
 
+/**
+ * Test suite for CRUD operations on the Department entity.
+ *
+ * This suite includes tests for creating, retrieving, updating, and deleting
+ * department records. It uses the `supertest` library to make HTTP requests
+ * to the Express application and verifies the responses.
+ */
 describe('Department CRUD', () => {
   let departmentId = '';
 

@@ -11,6 +11,12 @@ import { department } from '../Department/schema';
 import { Pagination } from '../../utils';
 
 export class DowntimeModel implements IDowntimeModel {
+  /**
+   * Creates a new downtime record.
+   *
+   * @param newDowntime - The new downtime data to be created.
+   * @returns The created downtime record or null if creation failed.
+   */
   async create(newDowntime: NewDowntime): Promise<DowntimeType | null> {
     const [createdDowntime] = await db.insert(downtime).values(newDowntime).returning();
     const query: DowntimeQuery = {
@@ -23,12 +29,23 @@ export class DowntimeModel implements IDowntimeModel {
     return await this.getById(query);
   }
 
+  /**
+   * Deletes a downtime record based on the provided keys.
+   *
+   * @param keys - The composite key to identify the downtime record to be deleted.
+   */
   async delete(keys: DowntimeQuery): Promise<void> {
     const filter = DowntimeQueryBuilder(keys);
     await db.delete(downtime).where(and(...filter));
   }
 
   async getAll(filter: DowntimeQuery, pagination: Pagination): Promise<DowntimeType[]> {
+    /**
+     * Retrieves all downtime records based on the provided filter.
+     *
+     * @param filter - The filter criteria to retrieve downtime records.
+     * @returns An array of downtime records matching the filter criteria.
+     */
     return db
       .select(downtimeSelection)
       .from(downtime)
@@ -41,6 +58,12 @@ export class DowntimeModel implements IDowntimeModel {
       .offset(pagination.size * (pagination.page - 1));
   }
 
+  /**
+   * Retrieves a downtime record by its composite key.
+   *
+   * @param keys - The composite key to identify the downtime record.
+   * @returns The downtime record matching the composite key or null if not found.
+   */
   async getById(keys: DowntimeQuery): Promise<DowntimeType | null> {
     const filter = DowntimeQueryBuilder(keys);
     const [resultDowntime] = await db
@@ -55,6 +78,13 @@ export class DowntimeModel implements IDowntimeModel {
     return resultDowntime;
   }
 
+  /**
+   * Updates a downtime record by its composite key.
+   *
+   * @param keys - The composite key to identify the downtime record to be updated.
+   * @param downtimeData - The partial downtime data to update.
+   * @returns The updated downtime record or null if update failed.
+   */
   async update(keys: DowntimeQuery, downtimeData: Partial<Downtime>): Promise<DowntimeType | null> {
     const filter = DowntimeQueryBuilder(keys);
     const [updatedDowntime] = await db

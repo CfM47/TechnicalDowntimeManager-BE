@@ -10,6 +10,12 @@ import { downtimeRouter } from './features/Downtime/router';
 import { maintenanceRouter } from './features/Maintenance/router';
 import { authRouter } from './features/Auth/router';
 
+/**
+ * Configures and returns the main application router with all feature routes.
+ *
+ * @param {Models} appModels - The models used by the application.
+ * @returns {Router} The configured router.
+ */
 export const appRouter = (appModels: Models) => {
   const router = Router();
   router.use('/user', userRouter(appModels.userModel));

@@ -9,6 +9,9 @@ import { TransferModel } from './features/Transfer/model';
 import { DowntimeModel } from './features/Downtime/model';
 import { MaintenanceModel } from './features/Maintenance/model';
 
+/**
+ * Initializes the application models and starts the Express application.
+ */
 export const appModels: Models = {
   userModel: new UserModel(),
   technicianModel: new TechnicianModel(),

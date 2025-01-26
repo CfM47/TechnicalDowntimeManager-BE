@@ -10,9 +10,15 @@ app.use(cors());
 app.disable('x-powered-by');
 app.use('/api', appRouter(appModels));
 
+/**
+ * Test suite for Equipment CRUD operations.
+ */
 describe('Equipment CRUD', () => {
   let equipmentId = '';
 
+  /**
+   * Test case for creating a new equipment.
+   */
   it('should create a new equipment', async () => {
     const response = await request(app).post('/api/equipment').send({
       name: 'High resolution X-Ray machine',
@@ -24,16 +30,25 @@ describe('Equipment CRUD', () => {
     equipmentId = response.body.id;
   });
 
+  /**
+   * Test case for retrieving all equipment.
+   */
   it('should get all equipment', async () => {
     const response = await request(app).get('/api/equipment');
     expect(response.status).toEqual(200);
   });
 
+  /**
+   * Test case for retrieving equipment by ID.
+   */
   it('should get equipment by ID', async () => {
     const response = await request(app).get(`/api/equipment/${equipmentId}`);
     expect(response.status).toEqual(200);
   });
 
+  /**
+   * Test case for updating equipment by ID.
+   */
   it('should update equipment by ID', async () => {
     const response = await request(app)
       .put(`/api/equipment/${equipmentId}`)
@@ -41,6 +56,9 @@ describe('Equipment CRUD', () => {
     expect(response.status).toEqual(200);
   });
 
+  /**
+   * Test case for deleting equipment by ID.
+   */
   it('should delete equipment by ID', async () => {
     const response = await request(app).delete(`/api/equipment/${equipmentId}`);
     expect(response.status).toEqual(200);

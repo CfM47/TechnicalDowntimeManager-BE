@@ -3,6 +3,9 @@ import { TransferQuery } from '../features/Transfer/utils';
 import { IRepository } from './IRepository';
 import { TransferType } from '../features/Transfer/types';
 
+/**
+ * Interface for the Transfer model, extending the generic repository interface.
+ */
 // eslint-disable-next-line
 export interface ITransferModel
   extends IRepository<TransferQuery, NewTransfer, Transfer, TransferType> {}

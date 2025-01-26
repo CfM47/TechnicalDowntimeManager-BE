@@ -10,6 +10,13 @@ app.use(cors());
 app.disable('x-powered-by');
 app.use('/api', appRouter(appModels));
 
+/**
+ * Test suite for CRUD operations on the Downtime entity.
+ *
+ * This suite includes tests for creating, retrieving, updating, and deleting
+ * downtime records. It uses the `supertest` library to make HTTP requests
+ * to the Express application and verifies the responses.
+ */
 describe('Downtime CRUD', () => {
   let id_sender = '';
   let id_reciever = '';

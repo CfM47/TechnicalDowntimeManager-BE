@@ -13,7 +13,9 @@ export const downtimeSchema = z.object({
   status: downtimeStatus,
   cause: z.string()
 });
-
+/**
+ * Type for querying downtime records.
+ */
 export type DowntimeQuery = {
   id_sender?: string;
   id_receiver?: string;
@@ -24,6 +26,12 @@ export type DowntimeQuery = {
   cause?: string;
 };
 
+/**
+ * Builds an array of SQL filters based on the provided downtime query.
+ *
+ * @param query - The query object containing downtime filter criteria.
+ * @returns An array of SQL filter conditions.
+ */
 export function DowntimeQueryBuilder(query: DowntimeQuery): SQL[] {
   const filters: SQL[] = [];
   if (query.id_sender) filters.push(eq(downtime.id_sender, query.id_sender));

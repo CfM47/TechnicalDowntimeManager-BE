@@ -2,6 +2,10 @@ import { DepartmentType } from '../Department/types';
 import { equipment } from './schema';
 import { department } from '../Department/schema';
 
+
+/**
+ * Interface representing the equipment type.
+ */
 export interface EquipmentType {
   id: string;
   name: string;
@@ -11,6 +15,9 @@ export interface EquipmentType {
   acquisition_date: string;
 }
 
+/**
+ * Selection object for retrieving full equipment details.
+ */
 export const equipmentSelection = {
   id: equipment.id,
   name: equipment.name,
@@ -23,9 +30,15 @@ export const equipmentSelection = {
   acquisition_date: equipment.acquisition_date
 };
 
+/**
+ * Selection object for retrieving basic equipment information.
+ */
 export const equipmentInfoSelection = {
   id: equipment.id,
   name: equipment.name
 };
 
+/**
+ * Type representing basic equipment information.
+ */
 export type EquipmentInfo = Pick<EquipmentType, 'id' | 'name'>;

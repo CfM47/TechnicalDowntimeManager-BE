@@ -196,6 +196,11 @@ import { UserController } from './controller';
  *           description: Departamento del usuario.
  */
 
+/**
+ * Creates a router for user-related routes.
+ * @param userModel - The user model to interact with the database.
+ * @returns An Express router with user routes.
+ */
 export const userRouter = (userModel: IUserModel) => {
   const router = Router();
 
