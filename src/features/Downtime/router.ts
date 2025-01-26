@@ -249,6 +249,12 @@ import { DowntimeController } from './controller';
  *          description: Cause of the downtime.
  */
 
+/**
+ * Creates a router for downtime-related routes.
+ *
+ * @param downtimeModel - The model to be used by the downtime controller.
+ * @returns The configured router for downtime routes.
+ */
 export const downtimeRouter = (downtimeModel: IDowntimeModel) => {
   const router = Router();
 

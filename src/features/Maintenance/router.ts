@@ -206,6 +206,15 @@ import { MaintenanceController } from './controller';
  *            type: string
  *            description: Type of maintenance.
  */
+
+/**
+ * Creates a router for maintenance-related routes.
+ *
+ * This function sets up the routes for creating, retrieving, updating, and deleting maintenance records.
+ *
+ * @param maintenanceModel - The model used for maintenance operations.
+ * @returns The configured router.
+ */
 export const maintenanceRouter = (maintenanceModel: IMaintenanceModel) => {
   const router = Router();
 

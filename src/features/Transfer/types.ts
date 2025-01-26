@@ -6,6 +6,17 @@ import { alias } from 'drizzle-orm/pg-core';
 import { user } from '../User/schema';
 import { department } from '../Department/schema';
 
+/**
+ * Represents a transfer with detailed information.
+ *
+ * @property sender - Information about the sender.
+ * @property receiver - Information about the receiver.
+ * @property equipment - Information about the equipment being transferred.
+ * @property date - The date of the transfer.
+ * @property origin_dep - Information about the origin department.
+ * @property receiver_dep - Information about the receiver department.
+ * @property status - The status of the transfer.
+ */
 export interface TransferType {
   sender: UserInfo;
   receiver: UserInfo;

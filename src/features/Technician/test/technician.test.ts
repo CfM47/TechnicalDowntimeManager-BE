@@ -10,6 +10,16 @@ app.use(cors());
 app.disable('x-powered-by');
 app.use('/api', appRouter(appModels));
 
+/**
+ * Test suite for Technician CRUD operations.
+ *
+ * This suite tests the following operations:
+ * - Creating a new technician
+ * - Retrieving all technicians
+ * - Retrieving a technician by ID
+ * - Updating a technician by ID
+ * - Deleting a technician by ID
+ */
 describe('Technician CRUD', () => {
   let id_user = '';
 

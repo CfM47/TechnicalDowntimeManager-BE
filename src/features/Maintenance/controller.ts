@@ -4,11 +4,33 @@ import { MaintenanceQuery, maintenanceSchema } from './utils';
 import { NewMaintenance, Maintenance } from './schema';
 import { ErrorMessage, validate, validatePagination, validateUpdate } from '../../utils';
 
+/**
+ * Controller for handling CRUD operations on the `Maintenance` resource.
+ *
+ * This controller provides methods to create, retrieve, update, and delete maintenance records.
+ * Each method interacts with the `IMaintenanceModel` to perform the necessary database operations.
+ */
 export class MaintenanceController {
   maintenanceModel: IMaintenanceModel;
+
+  /**
+   * Constructs a new `MaintenanceController`.
+   *
+   * @param maintenanceModel - The model used to interact with the maintenance data.
+   */
   constructor(maintenanceModel: IMaintenanceModel) {
     this.maintenanceModel = maintenanceModel;
   }
+
+  /**
+   * Creates a new maintenance record.
+   *
+   * Validates the request body against the `maintenanceSchema` and creates a new maintenance record
+   * if the validation is successful. Responds with the created maintenance record or an error message.
+   *
+   * @param req - The request object.
+   * @param res - The response object.
+   */
   create = async (req: Request, res: Response) => {
     try {
       const result = validate(req.body, maintenanceSchema);
@@ -26,6 +48,15 @@ export class MaintenanceController {
     }
   };
 
+  /**
+   * Retrieves all maintenance records.
+   *
+   * Retrieves all maintenance records based on the provided query parameters.
+   * Responds with the list of maintenance records or an error message.
+   *
+   * @param req - The request object.
+   * @param res - The response object.
+   */
   getAll = async (req: Request, res: Response) => {
     try {
       const { page, size, ...query } = req.query;
@@ -38,16 +69,23 @@ export class MaintenanceController {
     }
   };
 
+  /**
+   * Retrieves a maintenance record by ID.
+   *
+   * Retrieves a maintenance record based on the technician ID, equipment ID, and date provided in the request parameters.
+   * Responds with the maintenance record or an error message if not found.
+   *
+   * @param req - The request object.
+   * @param res - The response object.
+   */
   getById = async (req: Request, res: Response) => {
     try {
-      const id_technician = req.params.id_technician;
-      const id_equipment = req.params.id_equipment;
-      const date = req.params.date;
+      const { id_technician, id_equipment, date } = req.params;
 
       const maintenanceQuery: MaintenanceQuery = {
-        id_technician: id_technician,
-        id_equipment: id_equipment,
-        date: date
+        id_technician,
+        id_equipment,
+        date
       };
 
       const maintenanceFound = await this.maintenanceModel.getById(maintenanceQuery);
@@ -61,16 +99,23 @@ export class MaintenanceController {
     }
   };
 
+  /**
+   * Updates a maintenance record by ID.
+   *
+   * Validates the request body against the `maintenanceSchema` and updates the maintenance record
+   * if the validation is successful. Responds with the updated maintenance record or an error message.
+   *
+   * @param req - The request object.
+   * @param res - The response object.
+   */
   update = async (req: Request, res: Response) => {
     try {
-      const id_technician = req.params.id_technician;
-      const id_equipment = req.params.id_equipment;
-      const date = req.params.date;
+      const { id_technician, id_equipment, date } = req.params;
 
       const maintenanceQuery: MaintenanceQuery = {
-        id_technician: id_technician,
-        id_equipment: id_equipment,
-        date: date
+        id_technician,
+        id_equipment,
+        date
       };
 
       const result = validateUpdate(req.body, maintenanceSchema);
@@ -94,16 +139,23 @@ export class MaintenanceController {
     }
   };
 
+  /**
+   * Deletes a maintenance record by ID.
+   *
+   * Deletes a maintenance record based on the technician ID, equipment ID, and date provided in the request parameters.
+   * Responds with a success message or an error message if not found.
+   *
+   * @param req - The request object.
+   * @param res - The response object.
+   */
   delete = async (req: Request, res: Response) => {
     try {
-      const id_technician = req.params.id_technician;
-      const id_equipment = req.params.id_equipment;
-      const date = req.params.date;
+      const { id_technician, id_equipment, date } = req.params;
 
       const maintenanceQuery: MaintenanceQuery = {
-        id_technician: id_technician,
-        id_equipment: id_equipment,
-        date: date
+        id_technician,
+        id_equipment,
+        date
       };
       const maintenanceFound = await this.maintenanceModel.getById(maintenanceQuery);
       if (!maintenanceFound) {

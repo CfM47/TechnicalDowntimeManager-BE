@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { IRateModel } from '../../Interfaces/IRateModel';
 import { RateController } from './controller';
+
 /**
  * @swagger
  * tags:
@@ -198,12 +199,19 @@ import { RateController } from './controller';
  *           type: string
  *           format: date
  *           description: Date of the rate.
- *         score:
- *           type: number
- *           description: Rating value.
  *         comment:
  *           type: string
  *           description: Comments about the rate.
+ *         score:
+ *           type: number
+ *           description: Rating value.
+ */
+
+/**
+ * Creates a router for handling rate-related routes.
+ *
+ * @param rateModel - The model instance for interacting with rate data.
+ * @returns An Express router configured with rate routes.
  */
 export const rateRouter = (rateModel: IRateModel) => {
   const router = Router();

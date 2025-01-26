@@ -4,8 +4,14 @@ import { equipment } from '../Equipment/schema';
 import { department } from '../Department/schema';
 import { DowntimeStatuses } from '../../enums';
 
+/**
+ * Enum for downtime statuses.
+ */
 export const status = pgEnum('downtimeStatus', DowntimeStatuses);
 
+/**
+ * Table schema for downtime records.
+ */
 export const downtime = pgTable(
   'downtime',
   {
@@ -40,5 +46,12 @@ export const downtime = pgTable(
   }
 );
 
+/**
+ * Type for selecting downtime records.
+ */
 export type Downtime = typeof downtime.$inferSelect;
+
+/**
+ * Type for inserting new downtime records.
+ */
 export type NewDowntime = typeof downtime.$inferInsert;

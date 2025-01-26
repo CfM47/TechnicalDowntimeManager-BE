@@ -261,6 +261,10 @@ import { TransferController } from './controller';
  *         id_receiver_dep:
  *           type: string
  *           description: ID of the receiver department.
+ *         status:
+ *            type: string
+ *            description: Status of the transfer.
+ *
  *     SuccessTransferPost:
  *       type: object
  *       properties:
@@ -268,16 +272,9 @@ import { TransferController } from './controller';
  *           type: integer
  *           enum: [1]
  *           description: Flag indicating if the service call was successful.
- *         id_transfer:
- *           type: string
- *           description: ID of the transfer.
- *           example: 123
  *     TransferByIdResponse:
  *       type: object
  *       properties:
- *         id_transfer:
- *           type: string
- *           description: Unique ID of the transfer.
  *         id_sender:
  *           type: string
  *           description: ID of the sender.
@@ -296,11 +293,17 @@ import { TransferController } from './controller';
  *         id_receiver_dep:
  *           type: string
  *           description: ID of the receiver department.
- *         downtime_status:
+ *         status:
  *           type: string
  *           description: Status of the downtime.
  */
 
+/**
+ * Creates a router for transfer-related routes.
+ *
+ * @param transferModel - The transfer model to be used by the controller.
+ * @returns The configured router.
+ */
 export const transferRouter = (transferModel: ITransferModel) => {
   const router = Router();
 

@@ -144,13 +144,27 @@ import { EquipmentController } from './controller';
  *         type:
  *           type: string
  *           description: Type of the equipment.
- *         state:
+ *         status:
  *           type: string
  *           description: Status of the equipment.
  *         id_department:
  *           type: string
  *           description: ID of the department.
+ *         acquisition_date:
+ *            type: string
+ *            description: Acquisition date of the equipment.
  *
+ */
+
+/**
+ * Creates a router for equipment-related routes.
+ *
+ * This function sets up the routes for creating, retrieving, updating, and deleting
+ * equipment records. It uses the provided equipment model to instantiate the controller
+ * and define the route handlers.
+ *
+ * @param equipmentModel - The equipment model to be used by the controller.
+ * @returns The configured router.
  */
 export const equipmentRouter = (equipmentModel: IEquipmentModel) => {
   const router = Router();

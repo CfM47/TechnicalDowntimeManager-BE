@@ -7,9 +7,16 @@ import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerConfig from '../swaggerConfig';
 import { Models } from './utils';
 
+/**
+ * Creates and configures an Express application.
+ *
+ * @param {Models} appModels - The models to be used in the application.
+ * @returns {express.Application} The configured Express application.
+ */
+
 dotenv.config();
 
-export const createApp = (appModels: Models) => {
+export const createApp = (appModels: Models): express.Application => {
   const app = express();
   app.use(express.json());
   app.use(cors());
@@ -25,4 +32,6 @@ export const createApp = (appModels: Models) => {
     console.log(`Server is running on port http://localhost:${port}`);
     console.log(`Swagger docs are available at http://localhost:${port}/api-docs`);
   });
+
+  return app;
 };

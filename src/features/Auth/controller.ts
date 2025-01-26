@@ -6,12 +6,27 @@ import bcrypt from 'bcrypt';
 import { UserQuery } from '../User/utils';
 import { User } from '../User/schema';
 
+/**
+ * Controller for handling authentication-related operations.
+ *
+ * This controller provides methods for signing in users.
+ */
 export class AuthController {
   private userModel: IUserModel;
   constructor(userModel: IUserModel) {
     this.userModel = userModel;
   }
 
+  /**
+   * Signs in a user.
+   *
+   * Validates the request body against the signin schema, checks the user's
+   * credentials, generates a token, updates the user's token in the database,
+   * and returns the token along with the user's name and role.
+   *
+   * @param req - The request object.
+   * @param res - The response object.
+   */
   signin = async (req: Request, res: Response) => {
     const result = validate(req.body, signinSchema);
     if (!result.success) {

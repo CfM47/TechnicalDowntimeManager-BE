@@ -139,14 +139,17 @@ import { DepartmentController } from './controller';
  *     Department:
  *       type: object
  *       properties:
- *         id:
- *           type: string
- *           description: ID of the department.
  *         name:
  *           type: string
  *           description: Name of the department.
  */
 
+/**
+ * Sets up the router for department-related routes.
+ *
+ * @param departmentModel - The model instance for department operations.
+ * @returns The configured router.
+ */
 export const departmentRouter = (departmentModel: IDepartmentModel) => {
   const router = Router();
 

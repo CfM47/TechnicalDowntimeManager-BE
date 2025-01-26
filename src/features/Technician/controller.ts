@@ -6,13 +6,37 @@ import { IUserModel } from '../../Interfaces/IUserModel';
 import { ITechnicianModel } from '../../Interfaces/ITechnicianModel';
 import { UserQuery } from '../User/utils';
 
+/**
+ * Controller for managing technicians.
+ *
+ * This controller provides the following functionalities:
+ * - Creating a new technician
+ * - Retrieving all technicians
+ * - Retrieving a technician by ID
+ * - Updating a technician by ID
+ * - Deleting a technician by ID
+ */
 export class TechnicianController {
   userModel: IUserModel;
   technicianModel: ITechnicianModel;
+
+  /**
+   * Constructs a new TechnicianController.
+   *
+   * @param userModel - The user model interface.
+   * @param technicianModel - The technician model interface.
+   */
   constructor(userModel: IUserModel, technicianModel: ITechnicianModel) {
     this.userModel = userModel;
     this.technicianModel = technicianModel;
   }
+
+  /**
+   * Creates a new technician.
+   *
+   * @param req - The request object.
+   * @param res - The response object.
+   */
   create = async (req: Request, res: Response) => {
     try {
       const result = validate(req.body, technicianSchema);
@@ -37,6 +61,12 @@ export class TechnicianController {
     }
   };
 
+  /**
+   * Retrieves all technicians.
+   *
+   * @param req - The request object.
+   * @param res - The response object.
+   */
   getAll = async (req: Request, res: Response) => {
     try {
       const { page, size, ...query } = req.query;
@@ -49,6 +79,12 @@ export class TechnicianController {
     }
   };
 
+  /**
+   * Retrieves a technician by ID.
+   *
+   * @param req - The request object.
+   * @param res - The response object.
+   */
   getById = async (req: Request, res: Response) => {
     try {
       const id = req.params.id;
@@ -64,6 +100,13 @@ export class TechnicianController {
       res.status(500).json(ErrorMessage(e));
     }
   };
+
+  /**
+   * Updates a technician by ID.
+   *
+   * @param req - The request object.
+   * @param res - The response object.
+   */
   update = async (req: Request, res: Response) => {
     try {
       const id = req.params.id;
@@ -73,7 +116,7 @@ export class TechnicianController {
         return;
       }
       const technicianData: Partial<Technician> = { ...result.data };
-      //check if technician exist before update
+      // Check if technician exists before update
       const technicianQuery: TechnicianQuery = { id_user: id };
       const technician = await this.technicianModel.getById(technicianQuery);
       if (!technician) {
@@ -87,6 +130,12 @@ export class TechnicianController {
     }
   };
 
+  /**
+   * Deletes a technician by ID.
+   *
+   * @param req - The request object.
+   * @param res - The response object.
+   */
   delete = async (req: Request, res: Response) => {
     try {
       const id = req.params.id;

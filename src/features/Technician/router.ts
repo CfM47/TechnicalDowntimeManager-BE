@@ -154,12 +154,20 @@ import { TechnicianController } from './controller';
  *         id_user:
  *           type: string
  *           description: ID of the technician.
- *         exp_year:
- *           type: string
+ *         exp_years:
+ *           type: number
  *           description: Experience of the technician.
  *         specialty:
  *           type: string
  *           description: Specialty of the technician.
+ */
+
+/**
+ * Creates and configures the technician router.
+ *
+ * @param technicianModel - The technician model to interact with the database.
+ * @param userModel - The user model to interact with the database.
+ * @returns The configured router for technician routes.
  */
 export const technicianRouter = (technicianModel: ITechnicianModel, userModel: IUserModel) => {
   const router = Router();

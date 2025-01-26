@@ -10,6 +10,18 @@ import { department } from '../Department/schema';
 import { alias } from 'drizzle-orm/pg-core';
 import { Pagination } from '../../utils';
 
+/**
+ * Class representing the Transfer model.
+ * This class implements the ITransferModel interface and provides methods
+ * for creating, retrieving, updating, and deleting transfer records in the database.
+ *
+ * Methods:
+ * - create(newTransfer: NewTransfer): Creates a new transfer record.
+ * - delete(keys: TransferQuery): Deletes a transfer record by its keys.
+ * - getAll(filter: TransferQuery): Retrieves all transfer records matching the filter.
+ * - getById(keys: TransferQuery): Retrieves a transfer record by its keys.
+ * - update(keys: TransferQuery, transferData: Partial<Transfer>): Updates a transfer record by its keys.
+ */
 export class TransferModel implements ITransferModel {
   async create(newTransfer: NewTransfer): Promise<TransferType | null> {
     const [createdTransfer] = await db.insert(transfer).values(newTransfer).returning();

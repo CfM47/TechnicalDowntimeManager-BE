@@ -6,11 +6,26 @@ import * as crypto from 'node:crypto';
 import { ErrorMessage, validate, validatePagination, validateUpdate } from '../../utils';
 import bcrypt from 'bcrypt';
 
+/**
+ * Controller class for handling User-related operations.
+ * This class provides methods for creating, retrieving, updating, and deleting users.
+ */
 export class UserController {
   userModel: IUserModel;
+
+  /**
+   * Constructor for UserController.
+   * @param userModel - The user model to interact with the database.
+   */
   constructor(userModel: IUserModel) {
     this.userModel = userModel;
   }
+
+  /**
+   * Creates a new user.
+   * @param req - The request object.
+   * @param res - The response object.
+   */
   create = async (req: Request, res: Response) => {
     try {
       const result = validate(req.body, userSchema);
@@ -31,6 +46,11 @@ export class UserController {
     }
   };
 
+  /**
+   * Retrieves all users.
+   * @param req - The request object.
+   * @param res - The response object.
+   */
   getAll = async (req: Request, res: Response) => {
     try {
       const { page, size, ...query } = req.query;
@@ -43,6 +63,11 @@ export class UserController {
     }
   };
 
+  /**
+   * Retrieves a user by ID.
+   * @param req - The request object.
+   * @param res - The response object.
+   */
   getById = async (req: Request, res: Response) => {
     try {
       const id = req.params.id;
@@ -58,6 +83,12 @@ export class UserController {
       res.status(500).json(ErrorMessage(e));
     }
   };
+
+  /**
+   * Updates a user by ID.
+   * @param req - The request object.
+   * @param res - The response object.
+   */
   update = async (req: Request, res: Response) => {
     try {
       const id = req.params.id;
@@ -82,6 +113,11 @@ export class UserController {
     }
   };
 
+  /**
+   * Deletes a user by ID.
+   * @param req - The request object.
+   * @param res - The response object.
+   */
   delete = async (req: Request, res: Response) => {
     try {
       const id = req.params.id;
