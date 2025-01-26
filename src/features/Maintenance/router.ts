@@ -2,7 +2,6 @@ import { Router } from 'express';
 import { IMaintenanceModel } from '../../Interfaces/IMaintenanceModel';
 import { MaintenanceController } from './controller';
 
-
 /**
  * @swagger
  * tags:

@@ -249,7 +249,6 @@ import { DowntimeController } from './controller';
  *          description: Cause of the downtime.
  */
 
-
 /**
  * Creates a router for downtime-related routes.
  *

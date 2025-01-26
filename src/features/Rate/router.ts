@@ -2,7 +2,6 @@ import { Router } from 'express';
 import { IRateModel } from '../../Interfaces/IRateModel';
 import { RateController } from './controller';
 
-
 /**
  * @swagger
  * tags:

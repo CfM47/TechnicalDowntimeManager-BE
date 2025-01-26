@@ -2,7 +2,6 @@ import { Router } from 'express';
 import { IDepartmentModel } from '../../Interfaces/IDepartmentModel';
 import { DepartmentController } from './controller';
 
-
 /**
  * @swagger
  * tags:
