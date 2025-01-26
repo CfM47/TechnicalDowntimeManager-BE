@@ -2,6 +2,12 @@ import { Router } from 'express';
 import { IDowntimeModel } from '../../Interfaces/IDowntimeModel';
 import { DowntimeController } from './controller';
 
+/**
+ * Creates a router for downtime-related routes.
+ *
+ * @param downtimeModel - The model to be used by the downtime controller.
+ * @returns The configured router for downtime routes.
+ */
 export const downtimeRouter = (downtimeModel: IDowntimeModel) => {
   const router = Router();
 

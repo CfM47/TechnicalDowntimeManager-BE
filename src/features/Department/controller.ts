@@ -4,12 +4,22 @@ import { ErrorMessage, validate, validateUpdate } from '../../utils';
 import { IDepartmentModel } from '../../Interfaces/IDepartmentModel';
 import { NewDepartment, Department } from './schema';
 
+/**
+ * Controller class for handling CRUD operations on the Department entity.
+ */
 export class DepartmentController {
   departmentModel: IDepartmentModel;
 
   constructor(departmentModel: IDepartmentModel) {
     this.departmentModel = departmentModel;
   }
+
+  /**
+   * Creates a new department.
+   *
+   * @param req - The request object.
+   * @param res - The response object.
+   */
   create = async (req: Request, res: Response) => {
     try {
       const result = validate(req.body, departmentSchema);
@@ -28,6 +38,12 @@ export class DepartmentController {
     }
   };
 
+  /**
+   * Retrieves all departments based on the provided filter.
+   *
+   * @param req - The request object.
+   * @param res - The response object.
+   */
   getAll = async (req: Request, res: Response) => {
     try {
       const filter: DepartmentQuery = req.query;
@@ -38,6 +54,12 @@ export class DepartmentController {
     }
   };
 
+  /**
+   * Retrieves a department by its ID.
+   *
+   * @param req - The request object.
+   * @param res - The response object.
+   */
   getById = async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
@@ -52,6 +74,13 @@ export class DepartmentController {
       res.status(500).json(ErrorMessage(e));
     }
   };
+
+  /**
+   * Updates a department by its ID.
+   *
+   * @param req - The request object.
+   * @param res - The response object.
+   */
   update = async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
@@ -78,6 +107,12 @@ export class DepartmentController {
     }
   };
 
+  /**
+   * Deletes a department by its ID.
+   *
+   * @param req - The request object.
+   * @param res - The response object.
+   */
   delete = async (req: Request, res: Response) => {
     try {
       const { id } = req.params;

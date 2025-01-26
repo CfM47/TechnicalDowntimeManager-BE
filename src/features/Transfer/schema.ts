@@ -4,6 +4,21 @@ import { equipment } from '../Equipment/schema';
 import { department } from '../Department/schema';
 import { TransferStatuses } from '../../enums';
 
+/**
+ * Defines the schema for the transfer table.
+ *
+ * Fields:
+ * - id_sender: UUID of the sender, references the user table.
+ * - id_receiver: UUID of the receiver, references the user table.
+ * - id_equipment: UUID of the equipment, references the equipment table.
+ * - date: Timestamp of the transfer, defaults to the current time.
+ * - id_origin_dep: UUID of the origin department, references the department table.
+ * - id_receiver_dep: UUID of the receiver department, references the department table.
+ * - status: Enum representing the status of the transfer.
+ *
+ * Primary Key:
+ * - Composite key consisting of id_sender, id_receiver, id_equipment, date, id_origin_dep, and id_receiver_dep.
+ */
 export const status = pgEnum('statuses', TransferStatuses);
 
 export const transfer = pgTable(

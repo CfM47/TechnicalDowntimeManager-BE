@@ -4,6 +4,12 @@ import { TransferController } from './controller';
 
 
 
+/**
+ * Creates a router for transfer-related routes.
+ *
+ * @param transferModel - The transfer model to be used by the controller.
+ * @returns The configured router.
+ */
 export const transferRouter = (transferModel: ITransferModel) => {
   const router = Router();
 

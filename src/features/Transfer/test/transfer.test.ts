@@ -10,6 +10,16 @@ app.use(cors());
 app.disable('x-powered-by');
 app.use('/api', appRouter(appModels));
 
+/**
+ * Test suite for Transfer CRUD operations.
+ *
+ * This suite tests the following functionalities:
+ * - Creating a new transfer
+ * - Retrieving all transfers
+ * - Retrieving a transfer by ID
+ * - Updating a transfer by ID
+ * - Deleting a transfer by ID
+ */
 describe('Transfer CRUD', () => {
   let id_sender = '';
   let id_receiver = '';

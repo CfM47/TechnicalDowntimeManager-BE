@@ -7,6 +7,9 @@ import { user } from '../User/schema';
 import { equipment } from '../Equipment/schema';
 import { department } from '../Department/schema';
 
+/**
+ * Interface representing a downtime record.
+ */
 export interface DowntimeType {
   sender: UserInfo;
   receiver: UserInfo;
@@ -17,6 +20,12 @@ export interface DowntimeType {
   cause: string;
 }
 
+/**
+ * Selection object for downtime records.
+ *
+ * This object defines the fields to be selected from the downtime table,
+ * including related user, equipment, and department information.
+ */
 export const downtimeSelection = {
   sender: {
     id: downtime.id_sender,

@@ -2,6 +2,17 @@ import { pgTable, uuid, varchar, pgEnum } from 'drizzle-orm/pg-core';
 import { department } from '../Department/schema';
 import { Roles } from '../../enums';
 
+/**
+ * Defines the roles enum and the user table schema.
+ *
+ * The `roles` enum represents the possible roles a user can have.
+ * The `user` table schema includes fields for user ID, name, password,
+ * department ID, role, and token.
+ *
+ * Types:
+ * - `User`: Represents a selected user record.
+ * - `NewUser`: Represents a new user record to be inserted.
+ */
 export const roles = pgEnum('userRole', Roles);
 
 export const user = pgTable('user', {

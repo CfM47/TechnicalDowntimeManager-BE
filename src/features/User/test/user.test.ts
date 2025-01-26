@@ -4,12 +4,21 @@ import cors from 'cors';
 import { appRouter } from '../../../router';
 import { appModels } from '../../../index';
 
+/**
+ * Sets up the Express application with necessary middleware and routes.
+ */
 const app = express();
 app.use(express.json());
 app.use(cors());
 app.disable('x-powered-by');
 
 app.use('/api', appRouter(appModels));
+
+/**
+ * Test suite for User CRUD operations.
+ * This suite includes tests for creating, retrieving, updating, and deleting users.
+ * Each test case sends HTTP requests to the API endpoints and verifies the responses.
+ */
 
 describe('User CRUD', () => {
   let userId = '';

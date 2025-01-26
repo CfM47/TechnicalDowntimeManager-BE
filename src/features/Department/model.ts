@@ -5,16 +5,38 @@ import { IDepartmentModel } from '../../Interfaces/IDepartmentModel';
 import { DepartmentQuery, DepartmentQueryBuilder } from './utils';
 import { departmentSelection, DepartmentType } from './types';
 
+/**
+ * Model class for handling CRUD operations on the Department entity.
+ */
 export class DepartmentModel implements IDepartmentModel {
+
+  /**
+   * Creates a new department.
+   *
+   * @param newDepartment - The data for the new department.
+   * @returns The created department.
+   */
   async create(newDepartment: NewDepartment): Promise<DepartmentType> {
     const [createdDepartment] = await db.insert(department).values(newDepartment).returning();
     return createdDepartment;
   }
+
+  /**
+   * Deletes a department based on the provided keys.
+   *
+   * @param keys - The query object containing the keys to identify the department.
+   */
   async delete(keys: DepartmentQuery): Promise<void> {
     const filter = DepartmentQueryBuilder(keys);
     await db.delete(department).where(and(...filter));
   }
 
+  /**
+   * Retrieves all departments based on the provided filter.
+   *
+   * @param filter - The query object containing filter criteria.
+   * @returns An array of departments matching the filter criteria.
+   */
   async getAll(filter: DepartmentQuery): Promise<DepartmentType[]> {
     return db
       .select()
@@ -22,6 +44,12 @@ export class DepartmentModel implements IDepartmentModel {
       .where(and(...DepartmentQueryBuilder(filter)));
   }
 
+  /**
+   * Retrieves a department by its ID.
+   *
+   * @param keys - The query object containing the ID of the department.
+   * @returns The department matching the ID or null if not found.
+   */
   async getById(keys: DepartmentQuery): Promise<DepartmentType | null> {
     const filter = DepartmentQueryBuilder(keys);
     const [resultDepartment] = await db
@@ -32,6 +60,13 @@ export class DepartmentModel implements IDepartmentModel {
     return resultDepartment;
   }
 
+  /**
+   * Updates a department based on the provided keys and data.
+   *
+   * @param keys - The query object containing the keys to identify the department.
+   * @param departmentData - The data to update the department with.
+   * @returns The updated department or null if not found.
+   */
   async update(
     keys: DepartmentQuery,
     departmentData: Partial<Department>

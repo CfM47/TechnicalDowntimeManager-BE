@@ -4,11 +4,26 @@ import { DowntimeQuery, downtimeSchema } from './utils';
 import { NewDowntime, Downtime } from './schema';
 import { ErrorMessage, validate, validateUpdate } from '../../utils';
 
+/**
+ * Controller class for handling downtime-related operations.
+ *
+ * This class provides methods for creating, retrieving, updating, and deleting
+ * downtime records. It interacts with the downtime model to perform these operations
+ * and sends appropriate HTTP responses based on the outcome.
+ */
 export class DowntimeController {
   downtimeModel: IDowntimeModel;
+
   constructor(downtimeModel: IDowntimeModel) {
     this.downtimeModel = downtimeModel;
   }
+
+  /**
+   * Creates a new downtime record.
+   *
+   * @param req - The HTTP request object.
+   * @param res - The HTTP response object.
+   */
   create = async (req: Request, res: Response) => {
     try {
       const result = validate(req.body, downtimeSchema);
@@ -26,6 +41,12 @@ export class DowntimeController {
     }
   };
 
+  /**
+   * Retrieves all downtime records based on the provided filter.
+   *
+   * @param req - The HTTP request object.
+   * @param res - The HTTP response object.
+   */
   getAll = async (req: Request, res: Response) => {
     try {
       const filter: DowntimeQuery = req.query;
@@ -36,6 +57,12 @@ export class DowntimeController {
     }
   };
 
+  /**
+   * Retrieves a downtime record by its composite key.
+   *
+   * @param req - The HTTP request object.
+   * @param res - The HTTP response object.
+   */
   getById = async (req: Request, res: Response) => {
     try {
       const id_sender = req.params.id_sender;
@@ -63,6 +90,12 @@ export class DowntimeController {
     }
   };
 
+  /**
+   * Updates a downtime record by its composite key.
+   *
+   * @param req - The HTTP request object.
+   * @param res - The HTTP response object.
+   */
   update = async (req: Request, res: Response) => {
     try {
       const id_sender = req.params.id_sender;
@@ -96,6 +129,12 @@ export class DowntimeController {
     }
   };
 
+  /**
+   * Deletes a downtime record by its composite key.
+   *
+   * @param req - The HTTP request object.
+   * @param res - The HTTP response object.
+   */
   delete = async (req: Request, res: Response) => {
     try {
       const id_sender = req.params.id_sender;

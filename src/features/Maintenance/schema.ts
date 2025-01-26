@@ -3,6 +3,14 @@ import { technician } from '../Technician/schema';
 import { equipment } from '../Equipment/schema';
 import { MaintenanceTypes } from '../../enums';
 
+/**
+ * Defines the schema for the `maintenance` table.
+ *
+ * The `maintenance` table stores records of maintenance activities performed by technicians on equipment.
+ * Each record includes the technician ID, equipment ID, date of maintenance, type of maintenance, and cost.
+ * The primary key is a composite key consisting of `id_technician`, `id_equipment`, and `date`.
+ */
+
 export const type = pgEnum('maintenanceType', MaintenanceTypes);
 
 export const maintenance = pgTable(
@@ -27,5 +35,12 @@ export const maintenance = pgTable(
   }
 );
 
+/**
+ * Type representing a selected maintenance record.
+ */
 export type Maintenance = typeof maintenance.$inferSelect;
+
+/**
+ * Type representing a new maintenance record to be inserted.
+ */
 export type NewMaintenance = typeof maintenance.$inferInsert;

@@ -4,11 +4,20 @@ import { TransferQuery, transferSchema } from './utils';
 import { NewTransfer, Transfer } from './schema';
 import { ErrorMessage, validate, validateUpdate } from '../../utils';
 
+/**
+ * Controller class for handling Transfer-related operations.
+ * This class provides methods for creating, retrieving, updating, and deleting transfers.
+ */
 export class TransferController {
   transferModel: ITransferModel;
   constructor(transferModel: ITransferModel) {
     this.transferModel = transferModel;
   }
+  /**
+   * Creates a new transfer.
+   * @param req - The request object.
+   * @param res - The response object.
+   */
   create = async (req: Request, res: Response) => {
     try {
       const result = validate(req.body, transferSchema);
@@ -26,6 +35,11 @@ export class TransferController {
     }
   };
 
+  /**
+   * Retrieves all transfers.
+   * @param req - The request object.
+   * @param res - The response object.
+   */
   getAll = async (req: Request, res: Response) => {
     try {
       const filter: TransferQuery = req.query;
@@ -36,6 +50,11 @@ export class TransferController {
     }
   };
 
+  /**
+   * Retrieves a transfer by ID.
+   * @param req - The request object.
+   * @param res - The response object.
+   */
   getById = async (req: Request, res: Response) => {
     try {
       const id_sender = req.params.id_sender;
@@ -65,6 +84,11 @@ export class TransferController {
     }
   };
 
+  /**
+   * Updates a transfer by ID.
+   * @param req - The request object.
+   * @param res - The response object.
+   */
   update = async (req: Request, res: Response) => {
     try {
       const id_sender = req.params.id_sender;
@@ -100,6 +124,12 @@ export class TransferController {
       res.status(500).json(ErrorMessage(e));
     }
   };
+
+  /**
+   * Deletes a transfer by ID.
+   * @param req - The request object.
+   * @param res - The response object.
+   */
 
   delete = async (req: Request, res: Response) => {
     try {

@@ -3,8 +3,14 @@ import { eq, SQL } from 'drizzle-orm';
 import { transfer } from './schema';
 import { TransferStatuses } from '../../enums';
 
+/**
+ * Enum for transfer statuses.
+ */
 const transferStatus = z.enum(TransferStatuses);
 
+/**
+ * Schema for validating transfer objects.
+ */
 export const transferSchema = z.object({
   id_sender: z.string().uuid(),
   id_receiver: z.string().uuid(),
@@ -14,6 +20,9 @@ export const transferSchema = z.object({
   status: transferStatus
 });
 
+/**
+ * Type definition for transfer query parameters.
+ */
 export type TransferQuery = {
   id_sender?: string;
   id_receiver?: string;
@@ -24,6 +33,12 @@ export type TransferQuery = {
   status?: string;
 };
 
+/**
+ * Builds an array of SQL filters based on the provided transfer query parameters.
+ *
+ * @param query - The transfer query parameters.
+ * @returns An array of SQL filters.
+ */
 export function TransferQueryBuilder(query: TransferQuery): SQL[] {
   const filters: SQL[] = [];
   if (query.id_sender) filters.push(eq(transfer.id_sender, query.id_sender));
