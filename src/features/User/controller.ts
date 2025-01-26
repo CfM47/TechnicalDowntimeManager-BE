@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import { UserQuery, userSchema } from './utils';
 import { NewUser, User } from './schema';
 import * as crypto from 'node:crypto';
-import { ErrorMessage, validate, validateUpdate } from '../../utils';
+import { ErrorMessage, validate, validatePagination, validateUpdate } from '../../utils';
 import bcrypt from 'bcrypt';
 
 export class UserController {
@@ -33,8 +33,10 @@ export class UserController {
 
   getAll = async (req: Request, res: Response) => {
     try {
-      const filter: UserQuery = req.query;
-      const allUsers = await this.userModel.getAll(filter);
+      const { page, size, ...query } = req.query;
+      const filter: UserQuery = query;
+      const pagination = validatePagination(page, size);
+      const allUsers = await this.userModel.getAll(filter, pagination);
       res.status(200).json(allUsers);
     } catch (e) {
       res.status(500).json(ErrorMessage(e));

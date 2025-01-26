@@ -8,6 +8,7 @@ import { user } from '../User/schema';
 import { equipment } from '../Equipment/schema';
 import { department } from '../Department/schema';
 import { alias } from 'drizzle-orm/pg-core';
+import { Pagination } from '../../utils';
 
 export class TransferModel implements ITransferModel {
   async create(newTransfer: NewTransfer): Promise<TransferType | null> {
@@ -28,7 +29,7 @@ export class TransferModel implements ITransferModel {
     await db.delete(transfer).where(and(...filter));
   }
 
-  async getAll(filter: TransferQuery): Promise<TransferType[]> {
+  async getAll(filter: TransferQuery, pagination: Pagination): Promise<TransferType[]> {
     return db
       .select(transferSelection)
       .from(transfer)
@@ -43,7 +44,9 @@ export class TransferModel implements ITransferModel {
         alias(department, 'receiver_dep'),
         eq(transfer.id_receiver_dep, alias(department, 'receiver_dep').id)
       )
-      .where(and(...TransferQueryBuilder(filter)));
+      .where(and(...TransferQueryBuilder(filter)))
+      .limit(pagination.size)
+      .offset(pagination.size * (pagination.page - 1));
   }
 
   async getById(keys: TransferQuery): Promise<TransferType | null> {

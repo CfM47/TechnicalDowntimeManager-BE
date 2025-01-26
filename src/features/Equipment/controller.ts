@@ -1,6 +1,12 @@
 import { IEquipmentModel } from '../../Interfaces/IEquipmentModel';
 import { Request, Response } from 'express';
-import { ErrorMessage, validate, validateUpdate } from '../../utils';
+import {
+  ErrorMessage,
+  Pagination,
+  validate,
+  validatePagination,
+  validateUpdate
+} from '../../utils';
 import { EquipmentQuery, equipmentSchema } from './utils';
 import { Equipment, NewEquipment } from './schema';
 
@@ -30,8 +36,10 @@ export class EquipmentController {
 
   getAll = async (req: Request, res: Response) => {
     try {
-      const filter: EquipmentQuery = req.query;
-      const allEquipments = await this.equipmentModel.getAll(filter);
+      const { page, size, ...query } = req.query;
+      const filter: EquipmentQuery = query;
+      const pagination: Pagination = validatePagination(page, size);
+      const allEquipments = await this.equipmentModel.getAll(filter, pagination);
       res.status(200).json(allEquipments);
     } catch (e) {
       res.status(500).json(ErrorMessage(e));

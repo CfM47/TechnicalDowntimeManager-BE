@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { TechnicianQuery, technicianSchema } from './utils';
-import { ErrorMessage, validate, validateUpdate } from '../../utils';
+import { ErrorMessage, validate, validatePagination, validateUpdate } from '../../utils';
 import { NewTechnician, Technician } from './schema';
 import { IUserModel } from '../../Interfaces/IUserModel';
 import { ITechnicianModel } from '../../Interfaces/ITechnicianModel';
@@ -39,8 +39,10 @@ export class TechnicianController {
 
   getAll = async (req: Request, res: Response) => {
     try {
-      const filter: TechnicianQuery = req.query;
-      const allTechnicians = await this.technicianModel.getAll(filter);
+      const { page, size, ...query } = req.query;
+      const filter: TechnicianQuery = query;
+      const pagination = validatePagination(page, size);
+      const allTechnicians = await this.technicianModel.getAll(filter, pagination);
       res.status(200).json(allTechnicians);
     } catch (e) {
       res.status(500).json(ErrorMessage(e));

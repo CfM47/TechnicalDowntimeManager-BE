@@ -1,6 +1,6 @@
 import { IRateModel } from '../../Interfaces/IRateModel';
 import { Request, Response } from 'express';
-import { validate, validateUpdate } from '../../utils';
+import { validate, validatePagination, validateUpdate } from '../../utils';
 import { RateQuery, rateSchema } from './utils';
 
 export class RateController {
@@ -28,8 +28,10 @@ export class RateController {
 
   getAll = async (req: Request, res: Response) => {
     try {
-      const filter: RateQuery = req.query;
-      const allRates = await this.rateModel.getAll(filter);
+      const { page, size, ...query } = req.query;
+      const filter: RateQuery = query;
+      const pagination = validatePagination(page, size);
+      const allRates = await this.rateModel.getAll(filter, pagination);
       res.json(allRates);
     } catch (err) {
       res.status(400).send({ 'An error has occurred': err });

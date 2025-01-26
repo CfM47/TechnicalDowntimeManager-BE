@@ -5,6 +5,7 @@ import { and, eq } from 'drizzle-orm';
 import { EquipmentQuery, EquipmentQueryBuilder } from './utils';
 import { equipmentSelection, EquipmentType } from './types';
 import { department } from '../Department/schema';
+import { Pagination } from '../../utils';
 
 export class EquipmentModel implements IEquipmentModel {
   async create(newEquipment: NewEquipment): Promise<EquipmentType | null> {
@@ -18,12 +19,14 @@ export class EquipmentModel implements IEquipmentModel {
     await db.delete(equipment).where(and(...filter));
   }
 
-  async getAll(filter: EquipmentQuery): Promise<EquipmentType[]> {
+  async getAll(filter: EquipmentQuery, pagination: Pagination): Promise<EquipmentType[]> {
     return db
       .select(equipmentSelection)
       .from(equipment)
       .innerJoin(department, eq(equipment.id_department, department.id))
-      .where(and(...EquipmentQueryBuilder(filter)));
+      .where(and(...EquipmentQueryBuilder(filter)))
+      .limit(pagination.size)
+      .offset(pagination.size * (pagination.page - 1));
   }
 
   async getById(keys: EquipmentQuery): Promise<EquipmentType | null> {

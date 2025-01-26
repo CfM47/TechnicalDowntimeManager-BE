@@ -5,6 +5,7 @@ import { and, eq } from 'drizzle-orm';
 import { UserQuery, UserQueryBuilder } from './utils';
 import { department } from '../Department/schema';
 import { userSelection, UserType } from './types';
+import { Pagination } from '../../utils';
 
 export class UserModel implements IUserModel {
   async create(newUser: NewUser): Promise<UserType | null> {
@@ -20,12 +21,14 @@ export class UserModel implements IUserModel {
     await db.delete(user).where(and(...filter));
   }
 
-  async getAll(filter: UserQuery): Promise<UserType[]> {
+  async getAll(filter: UserQuery, pagination: Pagination): Promise<UserType[]> {
     return db
       .select(userSelection)
       .from(user)
       .innerJoin(department, eq(user.id_department, department.id))
-      .where(and(...UserQueryBuilder(filter)));
+      .where(and(...UserQueryBuilder(filter)))
+      .limit(pagination.size)
+      .offset(pagination.size * (pagination.page - 1));
   }
 
   async getById(keys: UserQuery): Promise<UserType | null> {

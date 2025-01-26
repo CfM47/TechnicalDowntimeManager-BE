@@ -4,6 +4,7 @@ import { NewDepartment, Department, department } from './schema';
 import { IDepartmentModel } from '../../Interfaces/IDepartmentModel';
 import { DepartmentQuery, DepartmentQueryBuilder } from './utils';
 import { departmentSelection, DepartmentType } from './types';
+import { Pagination } from '../../utils';
 
 export class DepartmentModel implements IDepartmentModel {
   async create(newDepartment: NewDepartment): Promise<DepartmentType> {
@@ -15,11 +16,13 @@ export class DepartmentModel implements IDepartmentModel {
     await db.delete(department).where(and(...filter));
   }
 
-  async getAll(filter: DepartmentQuery): Promise<DepartmentType[]> {
+  async getAll(filter: DepartmentQuery, pagination: Pagination): Promise<DepartmentType[]> {
     return db
       .select()
       .from(department)
-      .where(and(...DepartmentQueryBuilder(filter)));
+      .where(and(...DepartmentQueryBuilder(filter)))
+      .limit(pagination.size)
+      .offset(pagination.size * (pagination.page - 1));
   }
 
   async getById(keys: DepartmentQuery): Promise<DepartmentType | null> {

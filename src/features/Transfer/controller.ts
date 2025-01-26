@@ -2,7 +2,7 @@ import { ITransferModel } from '../../Interfaces/ITransferModel';
 import { Request, Response } from 'express';
 import { TransferQuery, transferSchema } from './utils';
 import { NewTransfer, Transfer } from './schema';
-import { ErrorMessage, validate, validateUpdate } from '../../utils';
+import { ErrorMessage, validate, validatePagination, validateUpdate } from '../../utils';
 
 export class TransferController {
   transferModel: ITransferModel;
@@ -28,8 +28,10 @@ export class TransferController {
 
   getAll = async (req: Request, res: Response) => {
     try {
-      const filter: TransferQuery = req.query;
-      const allTransfers = await this.transferModel.getAll(filter);
+      const { page, size, ...query } = req.query;
+      const filter: TransferQuery = query;
+      const pagination = validatePagination(page, size);
+      const allTransfers = await this.transferModel.getAll(filter, pagination);
       res.status(200).json(allTransfers);
     } catch (e) {
       res.status(500).json(ErrorMessage(e));

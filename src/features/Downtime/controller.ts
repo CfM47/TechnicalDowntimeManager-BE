@@ -2,7 +2,13 @@ import { IDowntimeModel } from '../../Interfaces/IDowntimeModel';
 import { Request, Response } from 'express';
 import { DowntimeQuery, downtimeSchema } from './utils';
 import { NewDowntime, Downtime } from './schema';
-import { ErrorMessage, validate, validateUpdate } from '../../utils';
+import {
+  ErrorMessage,
+  Pagination,
+  validate,
+  validatePagination,
+  validateUpdate
+} from '../../utils';
 
 export class DowntimeController {
   downtimeModel: IDowntimeModel;
@@ -28,8 +34,10 @@ export class DowntimeController {
 
   getAll = async (req: Request, res: Response) => {
     try {
-      const filter: DowntimeQuery = req.query;
-      const allDowntimes = await this.downtimeModel.getAll(filter);
+      const { page, size, ...query } = req.query;
+      const filter: DowntimeQuery = query;
+      const pagination: Pagination = validatePagination(page, size);
+      const allDowntimes = await this.downtimeModel.getAll(filter, pagination);
       res.status(200).json(allDowntimes);
     } catch (e) {
       res.status(500).json(ErrorMessage(e));
