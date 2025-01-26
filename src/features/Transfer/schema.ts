@@ -4,7 +4,7 @@ import { equipment } from '../Equipment/schema';
 import { department } from '../Department/schema';
 import { TransferStatuses } from '../../enums';
 
-const status = pgEnum('statuses', TransferStatuses);
+export const status = pgEnum('statuses', TransferStatuses);
 
 export const transfer = pgTable(
   'transfer',

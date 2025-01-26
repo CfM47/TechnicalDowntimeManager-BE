@@ -3,7 +3,7 @@ import { technician } from '../Technician/schema';
 import { equipment } from '../Equipment/schema';
 import { MaintenanceTypes } from '../../enums';
 
-const type = pgEnum('maintenanceType', MaintenanceTypes);
+export const type = pgEnum('maintenanceType', MaintenanceTypes);
 
 export const maintenance = pgTable(
   'maintenance',

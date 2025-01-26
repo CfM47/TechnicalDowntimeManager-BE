@@ -2,8 +2,8 @@ import { pgEnum, pgTable, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
 import { department } from '../Department/schema';
 import { EquipmentStatuses, EquipmentTypes } from '../../enums';
 
-const type = pgEnum('equipmentType', EquipmentTypes);
-const status = pgEnum('equipmentState', EquipmentStatuses);
+export const type = pgEnum('equipmentType', EquipmentTypes);
+export const status = pgEnum('equipmentState', EquipmentStatuses);
 
 export const equipment = pgTable('equipment', {
   id: uuid('id').primaryKey().defaultRandom(),
