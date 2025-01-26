@@ -2,7 +2,7 @@ import { IMaintenanceModel } from '../../Interfaces/IMaintenanceModel';
 import { Request, Response } from 'express';
 import { MaintenanceQuery, maintenanceSchema } from './utils';
 import { NewMaintenance, Maintenance } from './schema';
-import { ErrorMessage, validate, validateUpdate } from '../../utils';
+import { ErrorMessage, validate, validatePagination, validateUpdate } from '../../utils';
 
 export class MaintenanceController {
   maintenanceModel: IMaintenanceModel;
@@ -28,8 +28,10 @@ export class MaintenanceController {
 
   getAll = async (req: Request, res: Response) => {
     try {
-      const filter: MaintenanceQuery = req.query;
-      const allMaintenances = await this.maintenanceModel.getAll(filter);
+      const { page, size, ...query } = req.query;
+      const filter: MaintenanceQuery = query;
+      const pagination = validatePagination(page, size);
+      const allMaintenances = await this.maintenanceModel.getAll(filter, pagination);
       res.status(200).json(allMaintenances);
     } catch (e) {
       res.status(500).json(ErrorMessage(e));

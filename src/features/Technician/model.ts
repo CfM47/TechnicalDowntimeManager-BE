@@ -6,6 +6,7 @@ import { TechnicianQuery, TechnicianQueryBuilder } from './utils';
 import { technicianSelection, TechnicianType } from './types';
 import { user } from '../User/schema';
 import { department } from '../Department/schema';
+import { Pagination } from '../../utils';
 
 export class TechnicianModel implements ITechnicianModel {
   async create(newTechnician: NewTechnician): Promise<TechnicianType | null> {
@@ -21,13 +22,15 @@ export class TechnicianModel implements ITechnicianModel {
     await db.delete(technician).where(and(...filter));
   }
 
-  async getAll(filter: TechnicianQuery): Promise<TechnicianType[]> {
+  async getAll(filter: TechnicianQuery, pagination: Pagination): Promise<TechnicianType[]> {
     return db
       .select(technicianSelection)
       .from(technician)
       .innerJoin(user, eq(technician.id_user, user.id))
       .innerJoin(department, eq(user.id_department, department.id))
-      .where(and(...TechnicianQueryBuilder(filter)));
+      .where(and(...TechnicianQueryBuilder(filter)))
+      .limit(pagination.size)
+      .offset(pagination.size * (pagination.page - 1));
   }
 
   async getById(keys: TechnicianQuery): Promise<TechnicianType | null> {

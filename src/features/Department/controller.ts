@@ -1,6 +1,12 @@
 import { Request, Response } from 'express';
 import { DepartmentQuery, departmentSchema } from './utils';
-import { ErrorMessage, validate, validateUpdate } from '../../utils';
+import {
+  ErrorMessage,
+  Pagination,
+  validate,
+  validatePagination,
+  validateUpdate
+} from '../../utils';
 import { IDepartmentModel } from '../../Interfaces/IDepartmentModel';
 import { NewDepartment, Department } from './schema';
 
@@ -30,8 +36,10 @@ export class DepartmentController {
 
   getAll = async (req: Request, res: Response) => {
     try {
-      const filter: DepartmentQuery = req.query;
-      const allDepartments = await this.departmentModel.getAll(filter);
+      const { page, size, ...query } = req.query;
+      const pagination: Pagination = validatePagination(page, size);
+      const filter: DepartmentQuery = query;
+      const allDepartments = await this.departmentModel.getAll(filter, pagination);
       res.status(200).json(allDepartments);
     } catch (e) {
       res.status(500).json(ErrorMessage(e));

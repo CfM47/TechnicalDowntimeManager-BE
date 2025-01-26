@@ -6,6 +6,7 @@ import { MaintenanceQuery, MaintenanceQueryBuilder } from './utils';
 import { maintenanceSelection, MaintenanceType } from './types';
 import { user } from '../User/schema';
 import { equipment } from '../Equipment/schema';
+import { Pagination } from '../../utils';
 
 export class MaintenanceModel implements IMaintenanceModel {
   async create(newMaintenance: NewMaintenance): Promise<MaintenanceType | null> {
@@ -23,13 +24,15 @@ export class MaintenanceModel implements IMaintenanceModel {
     await db.delete(maintenance).where(and(...filter));
   }
 
-  async getAll(filter: MaintenanceQuery): Promise<MaintenanceType[]> {
+  async getAll(filter: MaintenanceQuery, pagination: Pagination): Promise<MaintenanceType[]> {
     return db
       .select(maintenanceSelection)
       .from(maintenance)
       .innerJoin(user, eq(maintenance.id_technician, user.id))
       .innerJoin(equipment, eq(maintenance.id_equipment, equipment.id))
-      .where(and(...MaintenanceQueryBuilder(filter)));
+      .where(and(...MaintenanceQueryBuilder(filter)))
+      .limit(pagination.size)
+      .offset(pagination.size * (pagination.page - 1));
   }
 
   async getById(keys: MaintenanceQuery): Promise<MaintenanceType | null> {

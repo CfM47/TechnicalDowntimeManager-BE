@@ -8,6 +8,7 @@ import { alias } from 'drizzle-orm/pg-core';
 import { user } from '../User/schema';
 import { equipment } from '../Equipment/schema';
 import { department } from '../Department/schema';
+import { Pagination } from '../../utils';
 
 export class DowntimeModel implements IDowntimeModel {
   async create(newDowntime: NewDowntime): Promise<DowntimeType | null> {
@@ -27,7 +28,7 @@ export class DowntimeModel implements IDowntimeModel {
     await db.delete(downtime).where(and(...filter));
   }
 
-  async getAll(filter: DowntimeQuery): Promise<DowntimeType[]> {
+  async getAll(filter: DowntimeQuery, pagination: Pagination): Promise<DowntimeType[]> {
     return db
       .select(downtimeSelection)
       .from(downtime)
@@ -35,7 +36,9 @@ export class DowntimeModel implements IDowntimeModel {
       .innerJoin(alias(user, 'receiver'), eq(downtime.id_receiver, alias(user, 'receiver').id))
       .innerJoin(equipment, eq(downtime.id_equipment, equipment.id))
       .innerJoin(department, eq(downtime.id_dep_receiver, department.id))
-      .where(and(...DowntimeQueryBuilder(filter)));
+      .where(and(...DowntimeQueryBuilder(filter)))
+      .limit(pagination.size)
+      .offset(pagination.size * (pagination.page - 1));
   }
 
   async getById(keys: DowntimeQuery): Promise<DowntimeType | null> {

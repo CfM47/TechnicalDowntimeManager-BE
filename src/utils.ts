@@ -20,6 +20,22 @@ export function validateUpdate<T extends ZodRawShape>(object: any, schema: ZodOb
   return schema.partial().safeParse(object);
 }
 
+export interface Pagination {
+  page: number;
+  size: number;
+}
+
+export const defaultPagination: Pagination = {
+  page: 1,
+  size: 6
+};
+
+export const validatePagination = (page: any, size: any): Pagination => {
+  const resultPage: number = page ? parseInt(page) : defaultPagination.page;
+  const resultSize: number = size ? parseInt(size) : defaultPagination.size;
+  return { page: resultPage, size: resultSize };
+};
+
 export type Models = {
   userModel: IUserModel;
   technicianModel: ITechnicianModel;
