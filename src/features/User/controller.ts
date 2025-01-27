@@ -2,9 +2,12 @@ import { IUserModel } from '../../Interfaces/IUserModel';
 import { Request, Response } from 'express';
 import { UserQuery, userSchema } from './utils';
 import { NewUser, User } from './schema';
-import * as crypto from 'node:crypto';
 import { ErrorMessage, validate, validatePagination, validateUpdate } from '../../utils';
 import bcrypt from 'bcrypt';
+import { ITechnicianModel } from '../../Interfaces/ITechnicianModel';
+import { NewTechnician } from '../Technician/schema';
+import { IDepartmentModel } from '../../Interfaces/IDepartmentModel';
+import { DepartmentQuery } from '../Department/utils';
 
 /**
  * Controller class for handling User-related operations.
@@ -12,13 +15,22 @@ import bcrypt from 'bcrypt';
  */
 export class UserController {
   userModel: IUserModel;
-
+  technicianModel: ITechnicianModel;
+  departmentModel: IDepartmentModel;
   /**
    * Constructor for UserController.
    * @param userModel - The user model to interact with the database.
+   * @param technicianModel - The technician model to interact with the database.
+   * @param departmentModel - The department model to interact with the database.
    */
-  constructor(userModel: IUserModel) {
+  constructor(
+    userModel: IUserModel,
+    technicianModel: ITechnicianModel,
+    departmentModel: IDepartmentModel
+  ) {
     this.userModel = userModel;
+    this.technicianModel = technicianModel;
+    this.departmentModel = departmentModel;
   }
 
   /**
@@ -33,13 +45,42 @@ export class UserController {
         res.status(400).json({ message: JSON.parse(result.error.message) });
         return;
       }
+
+      const data = result.data;
+
+      const department = await this.departmentModel.getById({
+        id: data.id_department
+      } as DepartmentQuery);
+      if (!department) {
+        res.status(400).json({ message: 'Department not found' });
+        return;
+      }
+
+      if (data.isTechnician && (!data.exp_years || !data.specialty)) {
+        res.status(400).json({ message: 'Missing technician data' });
+        return;
+      }
+
+      const userPassword = await bcrypt.hash(data.password, 10);
+
       const userData: NewUser = {
-        id: crypto.randomUUID(),
-        ...result.data
+        name: result.data.name,
+        password: userPassword,
+        id_department: data.id_department,
+        role: data.isTechnician ? 'Técnico' : data.role
       };
-      //TODO Verify if user department and user role exist before insert
-      userData.password = await bcrypt.hash(userData.password, 10);
+
       const newUser = await this.userModel.create(userData);
+
+      if (data.isTechnician && newUser) {
+        const technicianData: NewTechnician = {
+          id_user: newUser.id,
+          exp_years: data.exp_years as number,
+          specialty: data.specialty as string
+        };
+        await this.technicianModel.create(technicianData);
+      }
+
       res.status(201).json(newUser);
     } catch (e) {
       res.status(500).json(ErrorMessage(e));
@@ -99,13 +140,30 @@ export class UserController {
         res.status(400).json({ message: JSON.parse(result.error.message) });
         return;
       }
-      const userData: Partial<User> = { ...result.data };
+      const data = result.data;
+
       const userFound = await this.userModel.getById(userQuery);
       if (!userFound) {
         res.status(404).json({ message: 'User not found' });
         return;
       }
-      //TODO Verify if user department and user role exist before update
+
+      if (data.id_department) {
+        const department = await this.departmentModel.getById({
+          id: data.id_department
+        } as DepartmentQuery);
+        if (!department) {
+          res.status(400).json({ message: 'Department not found' });
+          return;
+        }
+      }
+
+      if (data.password) {
+        data.password = await bcrypt.hash(data.password, 10);
+      }
+
+      const userData: Partial<User> = { ...data };
+
       const updatedUser = await this.userModel.update(userQuery, userData);
       res.status(200).json(updatedUser);
     } catch (e) {

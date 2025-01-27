@@ -1,6 +1,8 @@
 import { Router } from 'express';
 import { IUserModel } from '../../Interfaces/IUserModel';
 import { UserController } from './controller';
+import { ITechnicianModel } from '../../Interfaces/ITechnicianModel';
+import { IDepartmentModel } from '../../Interfaces/IDepartmentModel';
 
 /**
  * @swagger
@@ -199,12 +201,18 @@ import { UserController } from './controller';
 /**
  * Creates a router for user-related routes.
  * @param userModel - The user model to interact with the database.
+ * @param technicianModel - The technician model to interact with the database.
+ * @param departmentModel - The department model to interact with the database.
  * @returns An Express router with user routes.
  */
-export const userRouter = (userModel: IUserModel) => {
+export const userRouter = (
+  userModel: IUserModel,
+  technicianModel: ITechnicianModel,
+  departmentModel: IDepartmentModel
+) => {
   const router = Router();
 
-  const userController = new UserController(userModel);
+  const userController = new UserController(userModel, technicianModel, departmentModel);
 
   router.route('/').post(userController.create).get(userController.getAll);
   router

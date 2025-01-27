@@ -18,7 +18,10 @@ import { authRouter } from './features/Auth/router';
  */
 export const appRouter = (appModels: Models) => {
   const router = Router();
-  router.use('/user', userRouter(appModels.userModel));
+  router.use(
+    '/user',
+    userRouter(appModels.userModel, appModels.technicianModel, appModels.departmentModel)
+  );
   router.use('/technician', technicianRouter(appModels.technicianModel, appModels.userModel));
   router.use('/equipment', equipmentRouter(appModels.equipmentModel));
   router.use('/rate', rateRouter(appModels.rateModel));
