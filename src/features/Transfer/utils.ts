@@ -16,7 +16,6 @@ export const transferSchema = z.object({
   id_sender: z.string().uuid(),
   id_receiver: z.string().uuid(),
   id_equipment: z.string().uuid(),
-  id_origin_dep: z.string().uuid(),
   id_receiver_dep: z.string().uuid(),
   status: transferStatus
 });
