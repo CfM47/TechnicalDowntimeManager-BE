@@ -2,6 +2,7 @@ import { IRateModel } from '../../Interfaces/IRateModel';
 import { Request, Response } from 'express';
 import { validate, validatePagination, validateUpdate } from '../../utils';
 import { RateQuery, rateSchema } from './utils';
+import { IUserModel } from '../../Interfaces/IUserModel';
 
 /**
  * Controller class for handling CRUD operations on Rate entities.
@@ -11,9 +12,11 @@ import { RateQuery, rateSchema } from './utils';
  */
 export class RateController {
   rateModel: IRateModel;
+  userModel: IUserModel;
 
-  constructor(rateModel: IRateModel) {
+  constructor(rateModel: IRateModel, userModel: IUserModel) {
     this.rateModel = rateModel;
+    this.userModel = userModel;
   }
 
   /**
@@ -28,6 +31,29 @@ export class RateController {
 
       if (!result.success) {
         res.status(400).json({ message: JSON.parse(result.error.message) });
+        return;
+      }
+
+      const data = result.data;
+
+      if (data.id_technician == data.id_user) {
+        res.status(400).json({ message: 'The technician and user id are the same' });
+        return;
+      }
+
+      const technician = await this.userModel.getById({ id: data.id_technician });
+      if (!technician) {
+        res.status(404).json({ message: 'Technician not found' });
+        return;
+      }
+      if (technician.role !== 'Técnico') {
+        res.status(400).json({ message: 'The technician user is not a technician' });
+        return;
+      }
+
+      const user = await this.userModel.getById({ id: data.id_user });
+      if (!user) {
+        res.status(404).json({ message: 'User not found' });
         return;
       }
 
@@ -101,6 +127,37 @@ export class RateController {
         res.status(404).json({ message: 'Rate not found' });
         return;
       }
+
+      const data = result.data;
+
+      if (data.id_technician) {
+        const technician = await this.userModel.getById({ id: data.id_technician });
+        if (!technician) {
+          res.status(404).json({ message: 'Technician not found' });
+          return;
+        }
+        if (technician.role !== 'Técnico') {
+          res.status(400).json({ message: 'The technician user is not a technician' });
+          return;
+        }
+      }
+
+      if (data.id_user) {
+        const user = await this.userModel.getById({ id: data.id_user });
+        if (!user) {
+          res.status(404).json({ message: 'User not found' });
+          return;
+        }
+      }
+
+      const id_1 = data.id_technician ? data.id_technician : id_technician;
+      const id_2 = data.id_user ? data.id_user : id_user;
+
+      if (id_1 == id_2) {
+        res.status(400).json({ message: 'The technician and user id are the same' });
+        return;
+      }
+
       const updatedRate = await this.rateModel.update(rateQuery, result.data);
 
       res.json(updatedRate);

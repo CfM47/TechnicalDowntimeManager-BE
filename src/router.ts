@@ -16,7 +16,7 @@ import { authRouter } from './features/Auth/router';
  * @param {Models} appModels - The models used by the application.
  * @returns {Router} The configured router.
  */
-export const appRouter = (appModels: Models) => {
+export const appRouter = (appModels: Models): Router => {
   const router = Router();
   router.use(
     '/user',
@@ -24,7 +24,7 @@ export const appRouter = (appModels: Models) => {
   );
   router.use('/technician', technicianRouter(appModels.technicianModel, appModels.userModel));
   router.use('/equipment', equipmentRouter(appModels.equipmentModel));
-  router.use('/rate', rateRouter(appModels.rateModel));
+  router.use('/rate', rateRouter(appModels.rateModel, appModels.userModel));
   router.use('/department', departmentRouter(appModels.departmentModel));
   router.use(
     '/transfer',
