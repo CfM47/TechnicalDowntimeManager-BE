@@ -7,6 +7,7 @@ import { NewTransfer, transfer } from './features/Transfer/schema';
 import { maintenance, NewMaintenance } from './features/Maintenance/schema';
 import { downtime, NewDowntime } from './features/Downtime/schema';
 import { db } from './db/config/db_connect';
+import bcrypt from 'bcrypt';
 
 /**
  * Seeds the database with initial data for departments, users, technicians, equipments, rates, transfers, maintenances, and downtimes.
@@ -126,65 +127,65 @@ const seed = async () => {
     {
       id: 'af4685e7-87ef-4a82-9e88-7155be87f899',
       name: 'Diego Manuel Viera Martínez',
-      password: '1111',
+      password: await bcrypt.hash('1111', 10),
       role: 'Técnico',
       id_department: '614ce720-78e3-43f2-9c19-93cff24b77ac'
     },
     {
       id: '500e408b-681e-418a-b51a-76d86d5feec6',
       name: 'Pablo Gómez Vidal',
-      password: '1111',
+      password: await bcrypt.hash('1111', 10),
       role: 'Técnico',
       id_department: '614ce720-78e3-43f2-9c19-93cff24b77ac'
     },
     {
       id: '247e10c9-f555-461c-a783-a0af0201c92c',
       name: 'Luis Alejandro Arteaga Morales',
-      password: '1111',
+      password: await bcrypt.hash('1111', 10),
       role: 'Administrador',
       id_department: '614ce720-78e3-43f2-9c19-93cff24b77ac'
     },
     {
       id: '4456449c-808d-4f3d-b390-9767207a9de4',
       name: 'Mauricio Sunde Jiménez',
-      password: '1111',
+      password: await bcrypt.hash('1111', 10),
       role: 'Administrador',
       id_department: '614ce720-78e3-43f2-9c19-93cff24b77ac'
     },
     {
       id: '9f6dbbd9-3a80-4138-8f06-c467aec3f946',
       name: 'Jossué Arteche Muñoz',
-      password: '1111',
+      password: await bcrypt.hash('1111', 10),
       role: 'Jefe de sección',
       id_department: '4bef9dc3-6584-41f8-9415-a9bd8726f646'
     },
     {
       name: 'Ana María López',
-      password: '1111',
+      password: await bcrypt.hash('1111', 10),
       role: 'Jefe de sección',
       id_department: '2a67444c-734e-416e-a9c0-17dbdac4819c'
     },
     {
       name: 'Carlos Pérez Gonzáles',
-      password: '1111',
+      password: await bcrypt.hash('1111', 10),
       role: 'Jefe de sección',
       id_department: 'cd53346b-b237-46f4-9ea8-222be05e7e72'
     },
     {
       name: 'María García Montes de Oca',
-      password: '1111',
+      password: await bcrypt.hash('1111', 10),
       role: 'Administrador',
       id_department: '08f6e7f5-0649-47b4-81bc-05c3734ecd1f'
     },
     {
       name: 'Juan Rodríguez García',
-      password: '1111',
+      password: await bcrypt.hash('1111', 10),
       role: 'Jefe de sección',
       id_department: '4bef9dc3-6584-41f8-9415-a9bd8726f646'
     },
     {
       name: 'Laura Fernández Martínez',
-      password: '1111',
+      password: await bcrypt.hash('1111', 10),
       role: 'Jefe de sección',
       id_department: '2a67444c-734e-416e-a9c0-17dbdac4819c'
     }
