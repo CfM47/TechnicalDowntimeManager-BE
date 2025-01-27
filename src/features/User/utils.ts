@@ -18,7 +18,10 @@ export const userSchema = z.object({
   password: z.string(),
   id_department: z.string().uuid(),
   role: z.enum(Roles),
-  token: z.string().optional()
+  token: z.string().optional(),
+  isTechnician: z.boolean(),
+  exp_years: z.number().int().positive().optional(),
+  specialty: z.string().optional()
 });
 
 /**
