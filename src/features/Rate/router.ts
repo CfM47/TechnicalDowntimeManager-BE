@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { IRateModel } from '../../Interfaces/IRateModel';
 import { RateController } from './controller';
+import { IUserModel } from '../../Interfaces/IUserModel';
 
 /**
  * @swagger
@@ -211,11 +212,12 @@ import { RateController } from './controller';
  * Creates a router for handling rate-related routes.
  *
  * @param rateModel - The model instance for interacting with rate data.
+ * @param userModel - The model instance for interacting with user data.
  * @returns An Express router configured with rate routes.
  */
-export const rateRouter = (rateModel: IRateModel) => {
+export const rateRouter = (rateModel: IRateModel, userModel: IUserModel) => {
   const router = Router();
-  const rateController = new RateController(rateModel);
+  const rateController = new RateController(rateModel, userModel);
   router.route('/').post(rateController.create).get(rateController.getAll);
   router
     .route('/:id_technician/:id_user/:date')
