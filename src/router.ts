@@ -26,7 +26,15 @@ export const appRouter = (appModels: Models): Router => {
   router.use('/equipment', equipmentRouter(appModels.equipmentModel));
   router.use('/rate', rateRouter(appModels.rateModel, appModels.userModel));
   router.use('/department', departmentRouter(appModels.departmentModel));
-  router.use('/transfer', transferRouter(appModels.transferModel));
+  router.use(
+    '/transfer',
+    transferRouter(
+      appModels.transferModel,
+      appModels.userModel,
+      appModels.equipmentModel,
+      appModels.departmentModel
+    )
+  );
   router.use('/downtime', downtimeRouter(appModels.downtimeModel));
   router.use('/maintenance', maintenanceRouter(appModels.maintenanceModel));
   router.use('/auth', authRouter(appModels.userModel));

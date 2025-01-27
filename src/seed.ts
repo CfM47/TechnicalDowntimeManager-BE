@@ -315,7 +315,7 @@ const seed = async () => {
       id_equipment: 'cb911356-501b-4a78-bbce-7fee12326946',
       id_origin_dep: '2a67444c-734e-416e-a9c0-17dbdac4819c',
       id_receiver_dep: '614ce720-78e3-43f2-9c19-93cff24b77ac',
-      status: 'Pendiente'
+      status: 'Completado'
     }
   ];
 
