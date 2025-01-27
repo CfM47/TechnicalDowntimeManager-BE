@@ -1,6 +1,9 @@
 import { Router } from 'express';
 import { ITransferModel } from '../../Interfaces/ITransferModel';
 import { TransferController } from './controller';
+import { IUserModel } from '../../Interfaces/IUserModel';
+import { IEquipmentModel } from '../../Interfaces/IEquipmentModel';
+import { IDepartmentModel } from '../../Interfaces/IDepartmentModel';
 
 /**
  * @swagger
@@ -302,12 +305,25 @@ import { TransferController } from './controller';
  * Creates a router for transfer-related routes.
  *
  * @param transferModel - The transfer model to be used by the controller.
+ * @param userModel - The user model to be used by the controller.
+ * @param equipmentModel - The equipment model to be used by the controller.
+ * @param departmentModel - The department model to be used by the controller.
  * @returns The configured router.
  */
-export const transferRouter = (transferModel: ITransferModel) => {
+export const transferRouter = (
+  transferModel: ITransferModel,
+  userModel: IUserModel,
+  equipmentModel: IEquipmentModel,
+  departmentModel: IDepartmentModel
+) => {
   const router = Router();
 
-  const transferController = new TransferController(transferModel);
+  const transferController = new TransferController(
+    transferModel,
+    userModel,
+    equipmentModel,
+    departmentModel
+  );
 
   router.route('/').post(transferController.create).get(transferController.getAll);
 
