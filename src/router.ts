@@ -36,7 +36,7 @@ export const appRouter = (appModels: Models): Router => {
       appModels.departmentModel
     )
   );
-  router.use('/downtime', downtimeRouter(appModels.downtimeModel));
+  router.use('/downtime', downtimeRouter(appModels.downtimeModel,appModels.departmentModel,appModels.equipmentModel,appModels.userModel));
   router.use('/maintenance', maintenanceRouter(appModels.maintenanceModel));
   router.use('/auth', authRouter(appModels.userModel));
   router.use('/report', downtimeReportRouter());
