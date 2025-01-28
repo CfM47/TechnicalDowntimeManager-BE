@@ -57,7 +57,6 @@ export class EquipmentController {
         return;
       }
 
-
       const equipmentData: NewEquipment = {
         ...result.data
       };
