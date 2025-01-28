@@ -1,7 +1,7 @@
 import { NewDowntime, downtime, Downtime } from './schema';
 import { db } from '../../db/config/db_connect';
 import { IDowntimeModel } from '../../Interfaces/IDowntimeModel';
-import { and, eq } from 'drizzle-orm';
+import { and, desc, eq } from 'drizzle-orm';
 import { DowntimeQuery, DowntimeQueryBuilder } from './utils';
 import { downtimeSelection, DowntimeType } from './types';
 import { alias } from 'drizzle-orm/pg-core';
@@ -39,13 +39,14 @@ export class DowntimeModel implements IDowntimeModel {
     await db.delete(downtime).where(and(...filter));
   }
 
+  /**
+   * Retrieves all downtime records based on the provided filter.
+   *
+   * @param filter - The filter criteria to retrieve downtime records.
+   * @param pagination
+   * @returns An array of downtime records matching the filter criteria.
+   */
   async getAll(filter: DowntimeQuery, pagination: Pagination): Promise<DowntimeType[]> {
-    /**
-     * Retrieves all downtime records based on the provided filter.
-     *
-     * @param filter - The filter criteria to retrieve downtime records.
-     * @returns An array of downtime records matching the filter criteria.
-     */
     return db
       .select(downtimeSelection)
       .from(downtime)
@@ -54,6 +55,7 @@ export class DowntimeModel implements IDowntimeModel {
       .innerJoin(equipment, eq(downtime.id_equipment, equipment.id))
       .innerJoin(department, eq(downtime.id_dep_receiver, department.id))
       .where(and(...DowntimeQueryBuilder(filter)))
+      .orderBy(desc(downtime.date))
       .limit(pagination.size)
       .offset(pagination.size * (pagination.page - 1));
   }

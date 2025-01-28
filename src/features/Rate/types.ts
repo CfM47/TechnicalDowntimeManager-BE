@@ -21,6 +21,11 @@ export interface RateType {
   score: number;
 }
 
+export const RateOrderBy = {
+  score: rate.score,
+  date: rate.date
+};
+
 /**
  * Defines the selection fields for the `rate` table.
  *

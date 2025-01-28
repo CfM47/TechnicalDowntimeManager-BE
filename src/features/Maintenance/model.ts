@@ -1,7 +1,7 @@
 import { NewMaintenance, maintenance, Maintenance } from './schema';
 import { db } from '../../db/config/db_connect';
 import { IMaintenanceModel } from '../../Interfaces/IMaintenanceModel';
-import { and, eq } from 'drizzle-orm';
+import { and, desc, eq } from 'drizzle-orm';
 import { MaintenanceQuery, MaintenanceQueryBuilder } from './utils';
 import { maintenanceSelection, MaintenanceType } from './types';
 import { user } from '../User/schema';
@@ -54,6 +54,7 @@ export class MaintenanceModel implements IMaintenanceModel {
       .innerJoin(user, eq(maintenance.id_technician, user.id))
       .innerJoin(equipment, eq(maintenance.id_equipment, equipment.id))
       .where(and(...MaintenanceQueryBuilder(filter)))
+      .orderBy(desc(maintenance.date))
       .limit(pagination.size)
       .offset(pagination.size * (pagination.page - 1));
   }

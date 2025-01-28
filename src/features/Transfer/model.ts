@@ -1,7 +1,7 @@
 import { NewTransfer, transfer, Transfer } from './schema';
 import { db } from '../../db/config/db_connect';
 import { ITransferModel } from '../../Interfaces/ITransferModel';
-import { and, eq } from 'drizzle-orm';
+import { and, desc, eq } from 'drizzle-orm';
 import { TransferQuery, TransferQueryBuilder } from './utils';
 import { transferSelection, TransferType } from './types';
 import { user } from '../User/schema';
@@ -57,6 +57,7 @@ export class TransferModel implements ITransferModel {
         eq(transfer.id_receiver_dep, alias(department, 'receiver_dep').id)
       )
       .where(and(...TransferQueryBuilder(filter)))
+      .orderBy(desc(transfer.date))
       .limit(pagination.size)
       .offset(pagination.size * (pagination.page - 1));
   }

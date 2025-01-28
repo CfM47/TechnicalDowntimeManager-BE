@@ -1,7 +1,7 @@
 import { ITechnicianModel } from '../../Interfaces/ITechnicianModel';
 import { NewTechnician, technician, Technician } from './schema';
 import { db } from '../../db/config/db_connect';
-import { and, eq } from 'drizzle-orm';
+import { and, asc, eq } from 'drizzle-orm';
 import { TechnicianQuery, TechnicianQueryBuilder } from './utils';
 import { technicianSelection, TechnicianType } from './types';
 import { user } from '../User/schema';
@@ -56,6 +56,7 @@ export class TechnicianModel implements ITechnicianModel {
       .innerJoin(user, eq(technician.id_user, user.id))
       .innerJoin(department, eq(user.id_department, department.id))
       .where(and(...TechnicianQueryBuilder(filter)))
+      .orderBy(asc(user.name))
       .limit(pagination.size)
       .offset(pagination.size * (pagination.page - 1));
   }

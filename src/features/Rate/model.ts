@@ -1,9 +1,9 @@
 import { rate, Rate, NewRate } from './schema';
 import { IRateModel } from '../../Interfaces/IRateModel';
 import { db } from '../../db/config/db_connect';
-import { and, eq } from 'drizzle-orm';
+import { and, desc, eq } from 'drizzle-orm';
 import { RateQuery, RateQueryBuilder } from './utils';
-import { rateSelection, RateType } from './types';
+import { RateOrderBy, rateSelection, RateType } from './types';
 import { alias } from 'drizzle-orm/pg-core';
 import { user } from '../User/schema';
 import { Pagination } from '../../utils';
@@ -66,19 +66,23 @@ export class RateModel implements IRateModel {
     await db.delete(rate).where(and(...filter));
   }
 
-  async getAll(filter: RateQuery, pagination: Pagination): Promise<RateType[]> {
-    /**
-     * Retrieves all rates based on the provided filter.
-     *
-     * @param filter - The query parameters to filter the rates.
-     * @returns A promise that resolves to an array of rates.
-     */
+  /**
+   * Retrieves all rates based on the provided filter.
+   *
+   * @param filter - The query parameters to filter the rates.
+   * @param pagination
+   * @param orderBy
+   * @returns A promise that resolves to an array of rates.
+   */
+  async getAll(filter: RateQuery, pagination: Pagination, orderBy?: string): Promise<RateType[]> {
+    const orderParam = RateOrderBy[orderBy as keyof typeof RateOrderBy] ?? rate.date;
     return db
       .select(rateSelection)
       .from(rate)
       .innerJoin(alias(user, 'technician'), eq(rate.id_technician, alias(user, 'technician').id))
       .innerJoin(user, eq(rate.id_user, user.id))
       .where(and(...RateQueryBuilder(filter)))
+      .orderBy(desc(orderParam))
       .limit(pagination.size)
       .offset(pagination.size * (pagination.page - 1));
   }

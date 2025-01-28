@@ -14,6 +14,11 @@ export interface EquipmentType {
   acquisition_date: string;
 }
 
+export const EquipmentOrderBy = {
+  name: equipment.name,
+  date: equipment.acquisition_date
+};
+
 /**
  * Selection object for retrieving full equipment details.
  */
