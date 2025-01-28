@@ -27,7 +27,12 @@ export class DowntimeController {
   departmentModel: IDepartmentModel;
   userModel: IUserModel;
 
-  constructor(downtimeModel: IDowntimeModel, equipmentModel: IEquipmentModel, departmentModel: IDepartmentModel, userModel: IUserModel) {
+  constructor(
+    downtimeModel: IDowntimeModel,
+    equipmentModel: IEquipmentModel,
+    departmentModel: IDepartmentModel,
+    userModel: IUserModel
+  ) {
     this.downtimeModel = downtimeModel;
     this.equipmentModel = equipmentModel;
     this.departmentModel = departmentModel;
@@ -51,41 +56,43 @@ export class DowntimeController {
         ...result.data
       };
 
-      const firstUserQuery = {id: downtimeData.id_sender}
-      const secondUserQuery = {id: downtimeData.id_receiver}
+      const firstUserQuery = { id: downtimeData.id_sender };
+      const secondUserQuery = { id: downtimeData.id_receiver };
 
       const firstUser = await this.userModel.getById(firstUserQuery);
       const secondUser = await this.userModel.getById(secondUserQuery);
 
-      if(!firstUser || !secondUser) {
+      if (!firstUser || !secondUser) {
         res.status(400).json({ message: 'User not found' });
         return;
       }
 
-      if(downtimeData.id_receiver === downtimeData.id_sender)
-      {
+      if (downtimeData.id_receiver === downtimeData.id_sender) {
         res.status(400).json({ message: 'Sender and receiver cannot be the same user' });
         return;
       }
 
-      const departmentQuery = {id: downtimeData.id_dep_receiver}
+      const departmentQuery = { id: downtimeData.id_dep_receiver };
       const department = await this.departmentModel.getById(departmentQuery);
 
-      if(!department) {
+      if (!department) {
         res.status(400).json({ message: 'Department not found' });
         return;
       }
 
-      const equipmentQuery : EquipmentQuery = {id: downtimeData.id_equipment}
+      const equipmentQuery: EquipmentQuery = { id: downtimeData.id_equipment };
       const equipment = await this.equipmentModel.getById(equipmentQuery);
 
-      if(!equipment) {
+      if (!equipment) {
         res.status(400).json({ message: 'Equipment not found' });
         return;
       }
 
       const newDowntime = await this.downtimeModel.create(downtimeData);
-      await this.equipmentModel.update(equipmentQuery, { status: 'Baja', id_department: downtimeData.id_dep_receiver });
+      await this.equipmentModel.update(equipmentQuery, {
+        status: 'Baja',
+        id_department: downtimeData.id_dep_receiver
+      });
       // cb911356-501b-4a78-bbce-7fee12326946 id de computadora desaparecida
       res.status(201).json(newDowntime);
     } catch (e) {
@@ -216,6 +223,3 @@ export class DowntimeController {
     }
   };
 }
-
-
-

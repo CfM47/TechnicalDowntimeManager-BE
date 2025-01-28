@@ -257,12 +257,20 @@ import { IUserModel } from '../../Interfaces/IUserModel';
  * @param userModel
  * @returns The configured router for downtime routes.
  */
-export const downtimeRouter = (downtimeModel: IDowntimeModel,
-                               departmentModel: IDepartmentModel, equipmentModel: IEquipmentModel, userModel: IUserModel) => {
-
+export const downtimeRouter = (
+  downtimeModel: IDowntimeModel,
+  departmentModel: IDepartmentModel,
+  equipmentModel: IEquipmentModel,
+  userModel: IUserModel
+) => {
   const router = Router();
 
-  const downtimeController = new DowntimeController(downtimeModel,equipmentModel,departmentModel,userModel);
+  const downtimeController = new DowntimeController(
+    downtimeModel,
+    equipmentModel,
+    departmentModel,
+    userModel
+  );
 
   router.route('/').post(downtimeController.create).get(downtimeController.getAll);
 
