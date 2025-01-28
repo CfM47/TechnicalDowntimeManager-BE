@@ -1,9 +1,9 @@
 import { IEquipmentModel } from '../../Interfaces/IEquipmentModel';
 import { equipment, Equipment, NewEquipment } from './schema';
 import { db } from '../../db/config/db_connect';
-import { and, eq } from 'drizzle-orm';
+import { and, desc, eq } from 'drizzle-orm';
 import { EquipmentQuery, EquipmentQueryBuilder } from './utils';
-import { equipmentSelection, EquipmentType } from './types';
+import { EquipmentOrderBy, equipmentSelection, EquipmentType } from './types';
 import { department } from '../Department/schema';
 import { Pagination } from '../../utils';
 
@@ -48,14 +48,23 @@ export class EquipmentModel implements IEquipmentModel {
    * Fetches all equipment records from the database based on the provided filter.
    *
    * @param filter - The query filter to apply.
+   * @param pagination
+   * @param orderBy
    * @returns An array of equipment records.
    */
-  async getAll(filter: EquipmentQuery, pagination: Pagination): Promise<EquipmentType[]> {
+  async getAll(
+    filter: EquipmentQuery,
+    pagination: Pagination,
+    orderBy?: string
+  ): Promise<EquipmentType[]> {
+    const orderParam =
+      EquipmentOrderBy[orderBy as keyof typeof EquipmentOrderBy] ?? equipment.acquisition_date;
     return db
       .select(equipmentSelection)
       .from(equipment)
       .innerJoin(department, eq(equipment.id_department, department.id))
       .where(and(...EquipmentQueryBuilder(filter)))
+      .orderBy(desc(orderParam))
       .limit(pagination.size)
       .offset(pagination.size * (pagination.page - 1));
   }

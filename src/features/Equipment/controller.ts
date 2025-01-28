@@ -77,10 +77,10 @@ export class EquipmentController {
    */
   getAll = async (req: Request, res: Response) => {
     try {
-      const { page, size, ...query } = req.query;
+      const { page, size, orderBy, ...query } = req.query;
       const filter: EquipmentQuery = query;
       const pagination: Pagination = validatePagination(page, size);
-      const allEquipments = await this.equipmentModel.getAll(filter, pagination);
+      const allEquipments = await this.equipmentModel.getAll(filter, pagination, orderBy as string);
       res.status(200).json(allEquipments);
     } catch (e) {
       res.status(500).json(ErrorMessage(e));

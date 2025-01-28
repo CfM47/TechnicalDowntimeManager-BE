@@ -72,10 +72,10 @@ export class RateController {
    */
   getAll = async (req: Request, res: Response) => {
     try {
-      const { page, size, ...query } = req.query;
+      const { page, size, orderBy, ...query } = req.query;
       const filter: RateQuery = query;
       const pagination = validatePagination(page, size);
-      const allRates = await this.rateModel.getAll(filter, pagination);
+      const allRates = await this.rateModel.getAll(filter, pagination, orderBy as string);
       res.json(allRates);
     } catch (err) {
       res.status(400).send({ message: 'An error has occurred', error: err });

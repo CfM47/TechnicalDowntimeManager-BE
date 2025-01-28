@@ -1,7 +1,7 @@
 import { IUserModel } from '../../Interfaces/IUserModel';
 import { NewUser, User, user } from './schema';
 import { db } from '../../db/config/db_connect';
-import { and, eq } from 'drizzle-orm';
+import { and, asc, eq } from 'drizzle-orm';
 import { UserQuery, UserQueryBuilder } from './utils';
 import { department } from '../Department/schema';
 import { userSelection, UserType } from './types';
@@ -35,17 +35,18 @@ export class UserModel implements IUserModel {
     await db.delete(user).where(and(...filter));
   }
 
+  /**
+   * Retrieves all users from the database based on the provided filter.
+   * @param filter - The query filter to apply.
+   * @returns An array of users matching the filter.
+   */
   async getAll(filter: UserQuery, pagination: Pagination): Promise<UserType[]> {
-    /**
-     * Retrieves all users from the database based on the provided filter.
-     * @param filter - The query filter to apply.
-     * @returns An array of users matching the filter.
-     */
     return db
       .select(userSelection)
       .from(user)
       .innerJoin(department, eq(user.id_department, department.id))
       .where(and(...UserQueryBuilder(filter)))
+      .orderBy(asc(user.name))
       .limit(pagination.size)
       .offset(pagination.size * (pagination.page - 1));
   }
