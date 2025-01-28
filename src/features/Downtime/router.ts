@@ -1,6 +1,9 @@
 import { Router } from 'express';
 import { IDowntimeModel } from '../../Interfaces/IDowntimeModel';
 import { DowntimeController } from './controller';
+import { IDepartmentModel } from '../../Interfaces/IDepartmentModel';
+import { IEquipmentModel } from '../../Interfaces/IEquipmentModel';
+import { IUserModel } from '../../Interfaces/IUserModel';
 
 /**
  * @swagger
@@ -234,10 +237,6 @@ import { DowntimeController } from './controller';
  *         id_equipment:
  *           type: string
  *           description: ID of the equipment.
- *         date:
- *           type: string
- *           format: date
- *           description: Date of the downtime.
  *         id_dep_receiver:
  *           type: string
  *           description: ID of the department receiver.
@@ -253,12 +252,25 @@ import { DowntimeController } from './controller';
  * Creates a router for downtime-related routes.
  *
  * @param downtimeModel - The model to be used by the downtime controller.
+ * @param departmentModel
+ * @param equipmentModel
+ * @param userModel
  * @returns The configured router for downtime routes.
  */
-export const downtimeRouter = (downtimeModel: IDowntimeModel) => {
+export const downtimeRouter = (
+  downtimeModel: IDowntimeModel,
+  departmentModel: IDepartmentModel,
+  equipmentModel: IEquipmentModel,
+  userModel: IUserModel
+) => {
   const router = Router();
 
-  const downtimeController = new DowntimeController(downtimeModel);
+  const downtimeController = new DowntimeController(
+    downtimeModel,
+    equipmentModel,
+    departmentModel,
+    userModel
+  );
 
   router.route('/').post(downtimeController.create).get(downtimeController.getAll);
 
