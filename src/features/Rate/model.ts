@@ -6,7 +6,7 @@ import { RateQuery, RateQueryBuilder } from './utils';
 import { RateOrderBy, rateSelection, RateType } from './types';
 import { alias } from 'drizzle-orm/pg-core';
 import { user } from '../User/schema';
-import { Pagination } from '../../utils';
+import { countTableRows, PaginatedResponse, Pagination } from '../../utils';
 
 /**
  * Model class for handling CRUD operations on Rate entities.
@@ -74,9 +74,13 @@ export class RateModel implements IRateModel {
    * @param orderBy
    * @returns A promise that resolves to an array of rates.
    */
-  async getAll(filter: RateQuery, pagination: Pagination, orderBy?: string): Promise<RateType[]> {
+  async getAll(
+    filter: RateQuery,
+    pagination: Pagination,
+    orderBy?: string
+  ): Promise<PaginatedResponse<RateType>> {
     const orderParam = RateOrderBy[orderBy as keyof typeof RateOrderBy] ?? rate.date;
-    return db
+    const items = await db
       .select(rateSelection)
       .from(rate)
       .innerJoin(alias(user, 'technician'), eq(rate.id_technician, alias(user, 'technician').id))
@@ -85,6 +89,12 @@ export class RateModel implements IRateModel {
       .orderBy(desc(orderParam))
       .limit(pagination.size)
       .offset(pagination.size * (pagination.page - 1));
+    return {
+      items,
+      page: pagination.page,
+      size: pagination.size,
+      total: await countTableRows(rate)
+    };
   }
 
   /**

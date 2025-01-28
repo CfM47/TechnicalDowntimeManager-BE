@@ -4,7 +4,7 @@ import { NewDepartment, Department, department } from './schema';
 import { IDepartmentModel } from '../../Interfaces/IDepartmentModel';
 import { DepartmentQuery, DepartmentQueryBuilder } from './utils';
 import { departmentSelection, DepartmentType } from './types';
-import { Pagination } from '../../utils';
+import { countTableRows, PaginatedResponse, Pagination } from '../../utils';
 
 /**
  * Model class for handling CRUD operations on the Department entity.
@@ -30,19 +30,28 @@ export class DepartmentModel implements IDepartmentModel {
     await db.delete(department).where(and(...filter));
   }
 
-  async getAll(filter: DepartmentQuery, pagination: Pagination): Promise<DepartmentType[]> {
-    /**
-     * Retrieves all departments based on the provided filter.
-     *
-     * @param filter - The query object containing filter criteria.
-     * @returns An array of departments matching the filter criteria.
-     */
-    return db
+  /**
+   * Retrieves all departments based on the provided filter.
+   *
+   * @param filter - The query object containing filter criteria.
+   * @returns An array of departments matching the filter criteria.
+   */
+  async getAll(
+    filter: DepartmentQuery,
+    pagination: Pagination
+  ): Promise<PaginatedResponse<DepartmentType>> {
+    const items = await db
       .select()
       .from(department)
       .where(and(...DepartmentQueryBuilder(filter)))
       .limit(pagination.size)
       .offset(pagination.size * (pagination.page - 1));
+    return {
+      items,
+      page: pagination.page,
+      size: pagination.size,
+      total: await countTableRows(department)
+    };
   }
 
   /**

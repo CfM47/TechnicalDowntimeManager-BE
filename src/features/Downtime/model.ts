@@ -8,7 +8,7 @@ import { alias } from 'drizzle-orm/pg-core';
 import { user } from '../User/schema';
 import { equipment } from '../Equipment/schema';
 import { department } from '../Department/schema';
-import { Pagination } from '../../utils';
+import { countTableRows, PaginatedResponse, Pagination } from '../../utils';
 
 export class DowntimeModel implements IDowntimeModel {
   /**
@@ -46,8 +46,11 @@ export class DowntimeModel implements IDowntimeModel {
    * @param pagination
    * @returns An array of downtime records matching the filter criteria.
    */
-  async getAll(filter: DowntimeQuery, pagination: Pagination): Promise<DowntimeType[]> {
-    return db
+  async getAll(
+    filter: DowntimeQuery,
+    pagination: Pagination
+  ): Promise<PaginatedResponse<DowntimeType>> {
+    const items = await db
       .select(downtimeSelection)
       .from(downtime)
       .innerJoin(alias(user, 'sender'), eq(downtime.id_sender, alias(user, 'sender').id))
@@ -58,6 +61,12 @@ export class DowntimeModel implements IDowntimeModel {
       .orderBy(desc(downtime.date))
       .limit(pagination.size)
       .offset(pagination.size * (pagination.page - 1));
+    return {
+      items,
+      page: pagination.page,
+      size: pagination.size,
+      total: await countTableRows(downtime)
+    };
   }
 
   /**
