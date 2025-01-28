@@ -6,6 +6,7 @@
     "db:migrate": "npx drizzle-kit migrate",
     "db:migrate:local": "dotenv -e .env.development.local -- npx drizzle-kit migrate",
     "db:generate": "npx drizzle-kit generate",
+    "db:generate:local": "dotenv -e .env.development.local -- npx drizzle-kit generate",
     "db:seed": "ts-node src/seed.ts",
     "db:seed:local": "dotenv -e .env.development.local -- ts-node src/seed.ts",
     "start": "tsc && nodemon src/index.ts",
