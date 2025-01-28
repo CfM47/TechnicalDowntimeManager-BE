@@ -9,6 +9,7 @@ import {
 } from '../../utils';
 import { EquipmentQuery, equipmentSchema } from './utils';
 import { Equipment, NewEquipment } from './schema';
+import { IDepartmentModel } from '../../Interfaces/IDepartmentModel';
 
 /**
  * Controller for handling CRUD operations on equipment.
@@ -19,14 +20,17 @@ import { Equipment, NewEquipment } from './schema';
  */
 export class EquipmentController {
   equipmentModel: IEquipmentModel;
+  departmentModel: IDepartmentModel;
 
   /**
    * Constructs an EquipmentController.
    *
    * @param equipmentModel - The model used to interact with the equipment database.
+   * @param departmentModel
    */
-  constructor(equipmentModel: IEquipmentModel) {
+  constructor(equipmentModel: IEquipmentModel, departmentModel: IDepartmentModel) {
     this.equipmentModel = equipmentModel;
+    this.departmentModel = departmentModel;
   }
 
   /**
@@ -45,7 +49,13 @@ export class EquipmentController {
         res.status(400).json({ message: JSON.parse(result.error.message) });
         return;
       }
-      //TODO Verify if equipment department exist before insert
+
+      const department = await this.departmentModel.getById({ id: result.data.id_department });
+      if (!department) {
+        res.status(404).json({ message: 'Department not found' });
+        return;
+      }
+
       const equipmentData: NewEquipment = {
         ...result.data
       };

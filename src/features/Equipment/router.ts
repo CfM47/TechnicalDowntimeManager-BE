@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { IEquipmentModel } from '../../Interfaces/IEquipmentModel';
 import { EquipmentController } from './controller';
+import { IDepartmentModel } from '../../Interfaces/IDepartmentModel';
 
 /**
  * @swagger
@@ -166,10 +167,13 @@ import { EquipmentController } from './controller';
  * @param equipmentModel - The equipment model to be used by the controller.
  * @returns The configured router.
  */
-export const equipmentRouter = (equipmentModel: IEquipmentModel) => {
+export const equipmentRouter = (
+  equipmentModel: IEquipmentModel,
+  departmentModel: IDepartmentModel
+) => {
   const router = Router();
 
-  const equipmentController = new EquipmentController(equipmentModel);
+  const equipmentController = new EquipmentController(equipmentModel, departmentModel);
 
   router.route('/').post(equipmentController.create).get(equipmentController.getAll);
   router
