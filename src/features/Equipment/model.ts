@@ -5,7 +5,7 @@ import { and, desc, eq } from 'drizzle-orm';
 import { EquipmentQuery, EquipmentQueryBuilder } from './utils';
 import { EquipmentOrderBy, equipmentSelection, EquipmentType } from './types';
 import { department } from '../Department/schema';
-import { Pagination } from '../../utils';
+import { countTableRows, PaginatedResponse, Pagination } from '../../utils';
 
 /**
  * Model for handling CRUD operations on equipment.
@@ -56,10 +56,10 @@ export class EquipmentModel implements IEquipmentModel {
     filter: EquipmentQuery,
     pagination: Pagination,
     orderBy?: string
-  ): Promise<EquipmentType[]> {
+  ): Promise<PaginatedResponse<EquipmentType>> {
     const orderParam =
       EquipmentOrderBy[orderBy as keyof typeof EquipmentOrderBy] ?? equipment.acquisition_date;
-    return db
+    const items = await db
       .select(equipmentSelection)
       .from(equipment)
       .innerJoin(department, eq(equipment.id_department, department.id))
@@ -67,6 +67,12 @@ export class EquipmentModel implements IEquipmentModel {
       .orderBy(desc(orderParam))
       .limit(pagination.size)
       .offset(pagination.size * (pagination.page - 1));
+    return {
+      items,
+      page: pagination.page,
+      size: pagination.size,
+      total: await countTableRows(equipment)
+    };
   }
 
   /**

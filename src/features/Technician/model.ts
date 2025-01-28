@@ -6,7 +6,7 @@ import { TechnicianQuery, TechnicianQueryBuilder } from './utils';
 import { technicianSelection, TechnicianType } from './types';
 import { user } from '../User/schema';
 import { department } from '../Department/schema';
-import { Pagination } from '../../utils';
+import { countTableRows, PaginatedResponse, Pagination } from '../../utils';
 
 /**
  * Model for managing technicians.
@@ -43,14 +43,17 @@ export class TechnicianModel implements ITechnicianModel {
     await db.delete(technician).where(and(...filter));
   }
 
-  async getAll(filter: TechnicianQuery, pagination: Pagination): Promise<TechnicianType[]> {
-    /**
-     * Retrieves all technicians based on a filter.
-     *
-     * @param filter - The filter to apply when retrieving technicians.
-     * @returns An array of technicians matching the filter.
-     */
-    return db
+  /**
+   * Retrieves all technicians based on a filter.
+   *
+   * @param filter - The filter to apply when retrieving technicians.
+   * @returns An array of technicians matching the filter.
+   */
+  async getAll(
+    filter: TechnicianQuery,
+    pagination: Pagination
+  ): Promise<PaginatedResponse<TechnicianType>> {
+    const items = await db
       .select(technicianSelection)
       .from(technician)
       .innerJoin(user, eq(technician.id_user, user.id))
@@ -59,6 +62,12 @@ export class TechnicianModel implements ITechnicianModel {
       .orderBy(asc(user.name))
       .limit(pagination.size)
       .offset(pagination.size * (pagination.page - 1));
+    return {
+      items,
+      page: pagination.page,
+      size: pagination.size,
+      total: await countTableRows(technician)
+    };
   }
 
   /**

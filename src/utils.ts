@@ -7,10 +7,9 @@ import { ITransferModel } from './Interfaces/ITransferModel';
 import { IDepartmentModel } from './Interfaces/IDepartmentModel';
 import { IDowntimeModel } from './Interfaces/IDowntimeModel';
 import { IMaintenanceModel } from './Interfaces/IMaintenanceModel';
-
-/**
- * Utility functions and types for validation and error handling.
- */
+import { PgTable } from 'drizzle-orm/pg-core';
+import { db } from './db/config/db_connect';
+import { count } from 'drizzle-orm';
 
 /**
  * Generates an error message object.
@@ -43,34 +42,51 @@ export function validateUpdate<T extends ZodRawShape>(object: any, schema: ZodOb
   return schema.partial().safeParse(object);
 }
 
-/**
- * Type definition for the models used in the application.
- * @typedef {Object} Models
- * @property {IUserModel} userModel - The user model.
- * @property {ITechnicianModel} technicianModel - The technician model.
- * @property {IEquipmentModel} equipmentModel - The equipment model.
- * @property {IRateModel} rateModel - The rate model.
- * @property {ITransferModel} transferModel - The transfer model.
- * @property {IDepartmentModel} departmentModel - The department model.
- * @property {IDowntimeModel} downtimeModel - The downtime model.
- * @property {IMaintenanceModel} maintenanceModel - The maintenance model.
- */
-
 export interface Pagination {
   page: number;
   size: number;
 }
 
+/**
+ * Default pagination settings.
+ */
 export const defaultPagination: Pagination = {
   page: 1,
   size: 6
 };
 
+/**
+ * Validates and parses pagination parameters.
+ * @param {any} page - The page number.
+ * @param {any} size - The page size.
+ * @returns {Pagination} - The validated pagination object.
+ */
 export const validatePagination = (page: any, size: any): Pagination => {
   const resultPage: number = page ? parseInt(page) : defaultPagination.page;
   const resultSize: number = size ? parseInt(size) : defaultPagination.size;
   return { page: resultPage, size: resultSize };
 };
+
+export interface PaginatedResponse<T> {
+  items: T[];
+  page: number;
+  size: number;
+  total: number;
+}
+
+export const countTableType = {
+  count: count()
+};
+
+/**
+ * Counts the number of rows in a given table.
+ * @param {PgTable} table - The table to count rows in.
+ * @returns {Promise<number>} - The number of rows in the table.
+ */
+export async function countTableRows(table: PgTable): Promise<number> {
+  const [result] = await db.select(countTableType).from(table);
+  return result.count;
+}
 
 export type Models = {
   userModel: IUserModel;

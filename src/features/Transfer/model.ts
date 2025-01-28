@@ -8,7 +8,7 @@ import { user } from '../User/schema';
 import { equipment } from '../Equipment/schema';
 import { department } from '../Department/schema';
 import { alias } from 'drizzle-orm/pg-core';
-import { Pagination } from '../../utils';
+import { countTableRows, PaginatedResponse, Pagination } from '../../utils';
 
 /**
  * Class representing the Transfer model.
@@ -41,8 +41,11 @@ export class TransferModel implements ITransferModel {
     await db.delete(transfer).where(and(...filter));
   }
 
-  async getAll(filter: TransferQuery, pagination: Pagination): Promise<TransferType[]> {
-    return db
+  async getAll(
+    filter: TransferQuery,
+    pagination: Pagination
+  ): Promise<PaginatedResponse<TransferType>> {
+    const items = await db
       .select(transferSelection)
       .from(transfer)
       .innerJoin(alias(user, 'sender'), eq(transfer.id_sender, alias(user, 'sender').id))
@@ -60,6 +63,12 @@ export class TransferModel implements ITransferModel {
       .orderBy(desc(transfer.date))
       .limit(pagination.size)
       .offset(pagination.size * (pagination.page - 1));
+    return {
+      items,
+      page: pagination.page,
+      size: pagination.size,
+      total: await countTableRows(transfer)
+    };
   }
 
   async getById(keys: TransferQuery): Promise<TransferType | null> {

@@ -6,7 +6,7 @@ import { MaintenanceQuery, MaintenanceQueryBuilder } from './utils';
 import { maintenanceSelection, MaintenanceType } from './types';
 import { user } from '../User/schema';
 import { equipment } from '../Equipment/schema';
-import { Pagination } from '../../utils';
+import { countTableRows, PaginatedResponse, Pagination } from '../../utils';
 
 /**
  * Model for handling CRUD operations on the `Maintenance` resource.
@@ -41,14 +41,18 @@ export class MaintenanceModel implements IMaintenanceModel {
     await db.delete(maintenance).where(and(...filter));
   }
 
-  async getAll(filter: MaintenanceQuery, pagination: Pagination): Promise<MaintenanceType[]> {
-    /**
-     * Retrieves all maintenance records based on the provided filter.
-     *
-     * @param filter - The filter criteria for retrieving maintenance records.
-     * @returns A list of maintenance records matching the filter criteria.
-     */
-    return db
+  /**
+   * Retrieves all maintenance records based on the provided filter.
+   *
+   * @param filter - The filter criteria for retrieving maintenance records.
+   * @param pagination - The pagination parameters for the query.
+   * @returns A list of maintenance records matching the filter criteria.
+   */
+  async getAll(
+    filter: MaintenanceQuery,
+    pagination: Pagination
+  ): Promise<PaginatedResponse<MaintenanceType>> {
+    const items = await db
       .select(maintenanceSelection)
       .from(maintenance)
       .innerJoin(user, eq(maintenance.id_technician, user.id))
@@ -57,6 +61,12 @@ export class MaintenanceModel implements IMaintenanceModel {
       .orderBy(desc(maintenance.date))
       .limit(pagination.size)
       .offset(pagination.size * (pagination.page - 1));
+    return {
+      items,
+      page: pagination.page,
+      size: pagination.size,
+      total: await countTableRows(maintenance)
+    };
   }
 
   /**

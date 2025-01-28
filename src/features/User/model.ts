@@ -5,7 +5,7 @@ import { and, asc, eq } from 'drizzle-orm';
 import { UserQuery, UserQueryBuilder } from './utils';
 import { department } from '../Department/schema';
 import { userSelection, UserType } from './types';
-import { Pagination } from '../../utils';
+import { countTableRows, PaginatedResponse, Pagination } from '../../utils';
 
 /**
  * Implementation of the IUserModel interface.
@@ -40,8 +40,8 @@ export class UserModel implements IUserModel {
    * @param filter - The query filter to apply.
    * @returns An array of users matching the filter.
    */
-  async getAll(filter: UserQuery, pagination: Pagination): Promise<UserType[]> {
-    return db
+  async getAll(filter: UserQuery, pagination: Pagination): Promise<PaginatedResponse<UserType>> {
+    const items = await db
       .select(userSelection)
       .from(user)
       .innerJoin(department, eq(user.id_department, department.id))
@@ -49,6 +49,12 @@ export class UserModel implements IUserModel {
       .orderBy(asc(user.name))
       .limit(pagination.size)
       .offset(pagination.size * (pagination.page - 1));
+    return {
+      items,
+      page: pagination.page,
+      size: pagination.size,
+      total: await countTableRows(user)
+    };
   }
 
   /**

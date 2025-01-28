@@ -1,4 +1,4 @@
-import { Pagination } from '../utils';
+import { PaginatedResponse, Pagination } from '../utils';
 
 /**
  * Generic repository interface for CRUD operations.
@@ -12,7 +12,7 @@ import { Pagination } from '../utils';
 export interface IRepository<TQuery, TNew, TInsert, T> {
   create(newRate: TNew): Promise<T | null>;
 
-  getAll(filter: TQuery, pagination: Pagination, orderBy?: string): Promise<T[]>;
+  getAll(filter: TQuery, pagination: Pagination, orderBy?: string): Promise<PaginatedResponse<T>>;
 
   getById(keys: TQuery): Promise<T | null>;
 
