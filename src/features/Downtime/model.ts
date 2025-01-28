@@ -1,9 +1,14 @@
-import { NewDowntime, downtime, Downtime } from './schema';
+import { downtime, Downtime, NewDowntime } from './schema';
 import { db } from '../../db/config/db_connect';
 import { IDowntimeModel } from '../../Interfaces/IDowntimeModel';
-import { and, desc, eq } from 'drizzle-orm';
+import { and, desc, eq, gte } from 'drizzle-orm';
 import { DowntimeQuery, DowntimeQueryBuilder } from './utils';
-import { downtimeSelection, DowntimeType } from './types';
+import {
+  downtimeLastYearSelection,
+  DowntimeLastYearType,
+  downtimeSelection,
+  DowntimeType
+} from './types';
 import { alias } from 'drizzle-orm/pg-core';
 import { user } from '../User/schema';
 import { equipment } from '../Equipment/schema';
@@ -111,5 +116,33 @@ export class DowntimeModel implements IDowntimeModel {
       id_dep_receiver: updatedDowntime.id_dep_receiver
     };
     return await this.getById(query);
+  }
+
+  /**
+   * Retrieves downtime records for the last year with pagination.
+   *
+   * @param pagination - The pagination information to limit the number of records.
+   * @returns An array of downtime records from the last year.
+   * @throws Will throw an error if the database query fails.
+   */
+  async getLastYearDowntime(pagination: Pagination): Promise<DowntimeLastYearType[]> {
+    try {
+      const oneYearAgo = new Date();
+      oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+
+      return await db
+        .select(downtimeLastYearSelection)
+        .from(downtime)
+        .innerJoin(equipment, eq(downtime.id_equipment, equipment.id))
+        .innerJoin(user, eq(downtime.id_receiver, user.id))
+        .innerJoin(department, eq(downtime.id_dep_receiver, department.id))
+        .where(gte(downtime.date, oneYearAgo.toISOString()))
+        .orderBy(downtime.date)
+        .limit(pagination.size)
+        .offset(pagination.size * (pagination.page - 1));
+    } catch (error) {
+      console.error('Database error:', error);
+      throw new Error('Failed to retrieve downtime records');
+    }
   }
 }
