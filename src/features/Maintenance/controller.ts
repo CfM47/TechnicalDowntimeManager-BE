@@ -3,6 +3,10 @@ import { Request, Response } from 'express';
 import { MaintenanceQuery, maintenanceSchema } from './utils';
 import { NewMaintenance, Maintenance } from './schema';
 import { ErrorMessage, validate, validatePagination, validateUpdate } from '../../utils';
+import { ITechnicianModel } from '../../Interfaces/ITechnicianModel';
+import { TechnicianQuery } from '../Technician/utils';
+import { IEquipmentModel } from '../../Interfaces/IEquipmentModel';
+import { EquipmentQuery } from '../Equipment/utils';
 
 /**
  * Controller for handling CRUD operations on the `Maintenance` resource.
@@ -12,14 +16,23 @@ import { ErrorMessage, validate, validatePagination, validateUpdate } from '../.
  */
 export class MaintenanceController {
   maintenanceModel: IMaintenanceModel;
+  technicianModel: ITechnicianModel;
+  equipmentModel: IEquipmentModel;
 
   /**
    * Constructs a new `MaintenanceController`.
    *
    * @param maintenanceModel - The model used to interact with the maintenance data.
+   * @param technicianModel
    */
-  constructor(maintenanceModel: IMaintenanceModel) {
+  constructor(
+    maintenanceModel: IMaintenanceModel,
+    technicianModel: ITechnicianModel,
+    equipmentModel: IEquipmentModel
+  ) {
     this.maintenanceModel = maintenanceModel;
+    this.technicianModel = technicianModel;
+    this.equipmentModel = equipmentModel;
   }
 
   /**
@@ -38,6 +51,22 @@ export class MaintenanceController {
         res.status(400).json({ message: JSON.parse(result.error.message) });
         return;
       }
+
+      const technicianQuery: TechnicianQuery = { id_user: result.data.id_technician };
+
+      const technicianFound = await this.technicianModel.getById(technicianQuery);
+      if (!technicianFound) {
+        res.status(404).json({ message: 'Technician not found' });
+        return;
+      }
+
+      const equipmentQuery: EquipmentQuery = { id: result.data.id_equipment };
+      const equipmentFound = await this.equipmentModel.getById(equipmentQuery);
+      if (!equipmentFound) {
+        res.status(404).json({ message: 'Equipment not found' });
+        return;
+      }
+
       const maintenanceData: NewMaintenance = {
         ...result.data
       };
