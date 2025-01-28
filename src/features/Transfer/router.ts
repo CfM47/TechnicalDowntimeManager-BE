@@ -255,9 +255,6 @@ import { IDepartmentModel } from '../../Interfaces/IDepartmentModel';
  *         id_equipment:
  *           type: string
  *           description: ID of the equipment.
- *         date:
- *           type: string
- *           description: Date of the transfer.
  *         id_origin_dep:
  *           type: string
  *           description: ID of the origin department.

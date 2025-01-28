@@ -50,7 +50,6 @@ export class EquipmentController {
         return;
       }
 
-      //TODO Verify if equipment department exist before insert
       const department = await this.departmentModel.getById({ id: result.data.id_department });
       if (!department) {
         res.status(404).json({ message: 'Department not found' });
