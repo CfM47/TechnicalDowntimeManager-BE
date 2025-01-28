@@ -1,6 +1,8 @@
 import { Router } from 'express';
 import { IMaintenanceModel } from '../../Interfaces/IMaintenanceModel';
 import { MaintenanceController } from './controller';
+import { IEquipmentModel } from '../../Interfaces/IEquipmentModel';
+import { ITechnicianModel } from '../../Interfaces/ITechnicianModel';
 
 /**
  * @swagger
@@ -213,12 +215,22 @@ import { MaintenanceController } from './controller';
  * This function sets up the routes for creating, retrieving, updating, and deleting maintenance records.
  *
  * @param maintenanceModel - The model used for maintenance operations.
+ * @param technicianModel
+ * @param equipmentModel
  * @returns The configured router.
  */
-export const maintenanceRouter = (maintenanceModel: IMaintenanceModel) => {
+export const maintenanceRouter = (
+  maintenanceModel: IMaintenanceModel,
+  technicianModel: ITechnicianModel,
+  equipmentModel: IEquipmentModel
+) => {
   const router = Router();
 
-  const maintenanceController = new MaintenanceController(maintenanceModel);
+  const maintenanceController = new MaintenanceController(
+    maintenanceModel,
+    technicianModel,
+    equipmentModel
+  );
 
   router.route('/').post(maintenanceController.create).get(maintenanceController.getAll);
 
