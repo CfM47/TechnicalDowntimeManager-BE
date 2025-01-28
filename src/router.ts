@@ -24,7 +24,7 @@ export const appRouter = (appModels: Models): Router => {
     userRouter(appModels.userModel, appModels.technicianModel, appModels.departmentModel)
   );
   router.use('/technician', technicianRouter(appModels.technicianModel, appModels.userModel));
-  router.use('/equipment', equipmentRouter(appModels.equipmentModel));
+  router.use('/equipment', equipmentRouter(appModels.equipmentModel, appModels.departmentModel));
   router.use('/rate', rateRouter(appModels.rateModel, appModels.userModel));
   router.use('/department', departmentRouter(appModels.departmentModel));
   router.use(
