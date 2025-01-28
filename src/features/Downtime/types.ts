@@ -47,3 +47,29 @@ export const downtimeSelection = {
   status: downtime.status,
   cause: downtime.cause
 };
+
+/**
+ * Interface representing a downtime record for the last year.
+ */
+export interface DowntimeLastYearType {
+  equipmentName: string;
+  cause: string;
+  departmentName: string;
+  receiverName: string;
+  downtimeDate: string;
+}
+
+/**
+ * Selection object for downtime records for the last year.
+ *
+ * This object defines the fields to be selected from the downtime table
+ * for records from the last year, including related user, equipment,
+ * and department information.
+ */
+export const downtimeLastYearSelection = {
+  equipmentName: equipment.name,
+  cause: downtime.cause,
+  departmentName: department.name,
+  receiverName: user.name,
+  downtimeDate: downtime.date
+};

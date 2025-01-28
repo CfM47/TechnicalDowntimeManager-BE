@@ -222,4 +222,22 @@ export class DowntimeController {
       res.status(500).json(ErrorMessage(e));
     }
   };
+
+  /**
+   * Retrieves all downtime records from the last year.
+   *
+   * @param req - The HTTP request object.
+   * @param res - The HTTP response object.
+   */
+  getDowntimeLastYear = async (req: Request, res: Response) => {
+    try {
+      const { page, size } = req.query;
+      const pagination: Pagination = validatePagination(page, size);
+      const allDowntimesLastYear = await this.downtimeModel.getLastYearDowntime(pagination);
+      res.json(allDowntimesLastYear);
+    } catch (error) {
+      console.error('Report error:', error);
+      res.status(500).json({ message: 'Failed to generate report' });
+    }
+  };
 }
