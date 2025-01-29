@@ -1,6 +1,6 @@
 import request from 'supertest';
-import testingApp from '../../../test/testingApp';
-import { server } from '../../../test/server';
+import testingApp from '../../../TestDirectoryServer/testingApp';
+import { server } from '../../../TestDirectoryServer/server';
 
 /**
  * Sets up the Express application with necessary middleware and routes.

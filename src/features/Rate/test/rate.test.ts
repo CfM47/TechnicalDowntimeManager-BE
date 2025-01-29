@@ -1,5 +1,5 @@
 import request from 'supertest';
-import testingApp from '../../../test/testingApp';
+import testingApp from '../../../TestDirectoryServer/testingApp';
 
 /**
  * Test suite for CRUD operations on the `Rate` resource.
