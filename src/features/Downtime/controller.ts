@@ -234,10 +234,9 @@ export class DowntimeController {
       const { page, size } = req.query;
       const pagination: Pagination = validatePagination(page, size);
       const allDowntimesLastYear = await this.downtimeModel.getLastYearDowntime(pagination);
-      res.json(allDowntimesLastYear);
-    } catch (error) {
-      console.error('Report error:', error);
-      res.status(500).json({ message: 'Failed to generate report' });
+      res.status(200).json(allDowntimesLastYear);
+    } catch (e) {
+      res.status(500).json(ErrorMessage(e));
     }
   };
 }

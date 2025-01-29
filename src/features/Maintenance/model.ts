@@ -45,19 +45,20 @@ export class MaintenanceModel implements IMaintenanceModel {
    * Retrieves all maintenance records based on the provided filter.
    *
    * @param filter - The filter criteria for retrieving maintenance records.
-   * @param pagination - The pagination parameters for the query.
+   * @param pagination - The pagination parameters for the query.*
    * @returns A list of maintenance records matching the filter criteria.
    */
   async getAll(
     filter: MaintenanceQuery,
     pagination: Pagination
   ): Promise<PaginatedResponse<MaintenanceType>> {
+    const filterQuery = MaintenanceQueryBuilder(filter);
     const items = await db
       .select(maintenanceSelection)
       .from(maintenance)
       .innerJoin(user, eq(maintenance.id_technician, user.id))
       .innerJoin(equipment, eq(maintenance.id_equipment, equipment.id))
-      .where(and(...MaintenanceQueryBuilder(filter)))
+      .where(and(...filterQuery))
       .orderBy(desc(maintenance.date))
       .limit(pagination.size)
       .offset(pagination.size * (pagination.page - 1));
@@ -65,7 +66,7 @@ export class MaintenanceModel implements IMaintenanceModel {
       items,
       page: pagination.page,
       size: pagination.size,
-      total: await countTableRows(maintenance)
+      total: await countTableRows(maintenance, filterQuery)
     };
   }
 

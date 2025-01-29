@@ -80,12 +80,13 @@ export class RateModel implements IRateModel {
     orderBy?: string
   ): Promise<PaginatedResponse<RateType>> {
     const orderParam = RateOrderBy[orderBy as keyof typeof RateOrderBy] ?? rate.date;
+    const filterQuery = RateQueryBuilder(filter);
     const items = await db
       .select(rateSelection)
       .from(rate)
       .innerJoin(alias(user, 'technician'), eq(rate.id_technician, alias(user, 'technician').id))
       .innerJoin(user, eq(rate.id_user, user.id))
-      .where(and(...RateQueryBuilder(filter)))
+      .where(and(...filterQuery))
       .orderBy(desc(orderParam))
       .limit(pagination.size)
       .offset(pagination.size * (pagination.page - 1));
@@ -93,7 +94,7 @@ export class RateModel implements IRateModel {
       items,
       page: pagination.page,
       size: pagination.size,
-      total: await countTableRows(rate)
+      total: await countTableRows(rate, filterQuery)
     };
   }
 

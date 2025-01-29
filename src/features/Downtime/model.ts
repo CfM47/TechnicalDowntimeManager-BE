@@ -1,14 +1,9 @@
 import { downtime, Downtime, NewDowntime } from './schema';
 import { db } from '../../db/config/db_connect';
 import { IDowntimeModel } from '../../Interfaces/IDowntimeModel';
-import { and, desc, eq, gte } from 'drizzle-orm';
+import { and, count, desc, eq, gte } from 'drizzle-orm';
 import { DowntimeQuery, DowntimeQueryBuilder } from './utils';
-import {
-  downtimeLastYearSelection,
-  DowntimeLastYearType,
-  downtimeSelection,
-  DowntimeType
-} from './types';
+import { downtimeSelection, DowntimeType } from './types';
 import { alias } from 'drizzle-orm/pg-core';
 import { user } from '../User/schema';
 import { equipment } from '../Equipment/schema';
@@ -55,6 +50,7 @@ export class DowntimeModel implements IDowntimeModel {
     filter: DowntimeQuery,
     pagination: Pagination
   ): Promise<PaginatedResponse<DowntimeType>> {
+    const filterQuery = DowntimeQueryBuilder(filter);
     const items = await db
       .select(downtimeSelection)
       .from(downtime)
@@ -62,7 +58,7 @@ export class DowntimeModel implements IDowntimeModel {
       .innerJoin(alias(user, 'receiver'), eq(downtime.id_receiver, alias(user, 'receiver').id))
       .innerJoin(equipment, eq(downtime.id_equipment, equipment.id))
       .innerJoin(department, eq(downtime.id_dep_receiver, department.id))
-      .where(and(...DowntimeQueryBuilder(filter)))
+      .where(and(...filterQuery))
       .orderBy(desc(downtime.date))
       .limit(pagination.size)
       .offset(pagination.size * (pagination.page - 1));
@@ -70,7 +66,7 @@ export class DowntimeModel implements IDowntimeModel {
       items,
       page: pagination.page,
       size: pagination.size,
-      total: await countTableRows(downtime)
+      total: await countTableRows(downtime, filterQuery)
     };
   }
 
@@ -125,24 +121,32 @@ export class DowntimeModel implements IDowntimeModel {
    * @returns An array of downtime records from the last year.
    * @throws Will throw an error if the database query fails.
    */
-  async getLastYearDowntime(pagination: Pagination): Promise<DowntimeLastYearType[]> {
-    try {
-      const oneYearAgo = new Date();
-      oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+  async getLastYearDowntime(pagination: Pagination): Promise<PaginatedResponse<DowntimeType>> {
+    const oneYearAgo = new Date();
+    oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
 
-      return await db
-        .select(downtimeLastYearSelection)
-        .from(downtime)
-        .innerJoin(equipment, eq(downtime.id_equipment, equipment.id))
-        .innerJoin(user, eq(downtime.id_receiver, user.id))
-        .innerJoin(department, eq(downtime.id_dep_receiver, department.id))
-        .where(gte(downtime.date, oneYearAgo.toISOString()))
-        .orderBy(downtime.date)
-        .limit(pagination.size)
-        .offset(pagination.size * (pagination.page - 1));
-    } catch (error) {
-      console.error('Database error:', error);
-      throw new Error('Failed to retrieve downtime records');
-    }
+    const items = await db
+      .select(downtimeSelection)
+      .from(downtime)
+      .innerJoin(alias(user, 'sender'), eq(downtime.id_sender, alias(user, 'sender').id))
+      .innerJoin(alias(user, 'receiver'), eq(downtime.id_receiver, alias(user, 'receiver').id))
+      .innerJoin(equipment, eq(downtime.id_equipment, equipment.id))
+      .innerJoin(department, eq(downtime.id_dep_receiver, department.id))
+      .where(gte(downtime.date, oneYearAgo.toISOString()))
+      .orderBy(desc(downtime.date))
+      .limit(pagination.size)
+      .offset(pagination.size * (pagination.page - 1));
+    const [total] = await db
+      .select({
+        downtimesCount: count()
+      })
+      .from(downtime)
+      .where(gte(downtime.date, oneYearAgo.toISOString()));
+    return {
+      items,
+      page: pagination.page,
+      size: pagination.size,
+      total: total?.downtimesCount ?? 0
+    };
   }
 }

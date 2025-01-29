@@ -45,6 +45,7 @@ export class TransferModel implements ITransferModel {
     filter: TransferQuery,
     pagination: Pagination
   ): Promise<PaginatedResponse<TransferType>> {
+    const filterQuery = TransferQueryBuilder(filter);
     const items = await db
       .select(transferSelection)
       .from(transfer)
@@ -59,7 +60,7 @@ export class TransferModel implements ITransferModel {
         alias(department, 'receiver_dep'),
         eq(transfer.id_receiver_dep, alias(department, 'receiver_dep').id)
       )
-      .where(and(...TransferQueryBuilder(filter)))
+      .where(and(...filterQuery))
       .orderBy(desc(transfer.date))
       .limit(pagination.size)
       .offset(pagination.size * (pagination.page - 1));
@@ -67,7 +68,7 @@ export class TransferModel implements ITransferModel {
       items,
       page: pagination.page,
       size: pagination.size,
-      total: await countTableRows(transfer)
+      total: await countTableRows(transfer, filterQuery)
     };
   }
 

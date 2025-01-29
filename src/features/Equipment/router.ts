@@ -165,6 +165,7 @@ import { IDepartmentModel } from '../../Interfaces/IDepartmentModel';
  * and define the route handlers.
  *
  * @param equipmentModel - The equipment model to be used by the controller.
+ * @param departmentModel
  * @returns The configured router.
  */
 export const equipmentRouter = (
@@ -176,6 +177,9 @@ export const equipmentRouter = (
   const equipmentController = new EquipmentController(equipmentModel, departmentModel);
 
   router.route('/').post(equipmentController.create).get(equipmentController.getAll);
+  router
+    .route('/maintenances-last-year')
+    .get(equipmentController.getEquipmentsWithFrequentMaintenances);
   router
     .route('/:id')
     .get(equipmentController.getById)

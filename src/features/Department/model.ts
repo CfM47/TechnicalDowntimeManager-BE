@@ -34,23 +34,25 @@ export class DepartmentModel implements IDepartmentModel {
    * Retrieves all departments based on the provided filter.
    *
    * @param filter - The query object containing filter criteria.
+   * @param pagination
    * @returns An array of departments matching the filter criteria.
    */
   async getAll(
     filter: DepartmentQuery,
     pagination: Pagination
   ): Promise<PaginatedResponse<DepartmentType>> {
+    const filterQuery = DepartmentQueryBuilder(filter);
     const items = await db
       .select()
       .from(department)
-      .where(and(...DepartmentQueryBuilder(filter)))
+      .where(and(...filterQuery))
       .limit(pagination.size)
       .offset(pagination.size * (pagination.page - 1));
     return {
       items,
       page: pagination.page,
       size: pagination.size,
-      total: await countTableRows(department)
+      total: await countTableRows(department, filterQuery)
     };
   }
 
