@@ -136,9 +136,6 @@ import { IDepartmentModel } from '../../Interfaces/IDepartmentModel';
  *     Equipment:
  *       type: object
  *       properties:
- *         id:
- *           type: string
- *           description: ID of the equipment.
  *         name:
  *           type: string
  *           description: Name of the equipment.
@@ -151,9 +148,6 @@ import { IDepartmentModel } from '../../Interfaces/IDepartmentModel';
  *         id_department:
  *           type: string
  *           description: ID of the department.
- *         acquisition_date:
- *            type: string
- *            description: Acquisition date of the equipment.
  *
  */
 

@@ -1,14 +1,9 @@
 import request from 'supertest';
-import express from 'express';
-import cors from 'cors';
-import { appRouter } from '../../../router';
-import { appModels } from '../../../index';
+import testingApp from '../../../test/testingApp';
 
-const app = express();
-app.use(express.json());
-app.use(cors());
-app.disable('x-powered-by');
-app.use('/api', appRouter(appModels));
+/**
+ * Sets up the Express application with necessary middleware and routes.
+ */
 
 /**
  * Test suite for CRUD operations on the Downtime entity.
@@ -24,12 +19,12 @@ describe('Downtime CRUD', () => {
   let id_dep_receiver = '';
   let date = '';
   it('should create a new downtime', async () => {
-    const response = await request(app).post('/api/downtime').send({
-      id_sender: 'add0921a-6979-46a3-a070-5f41a9ac08f7',
-      id_receiver: 'e1eb14d6-0750-41f8-975b-316b9dbc1a4d',
-      id_equipment: 'a3739594-c850-4669-9c5f-5b43d1253507',
-      id_dep_receiver: '18412513-0ac2-41ef-b1bf-826d0acb4952',
-      status: 'active',
+    const response = await request(testingApp).post('/api/downtime').send({
+      id_sender: '02d6ddd9-7f7e-4c60-8c2d-79cba69736b9',
+      id_receiver: 'af4685e7-87ef-4a82-9e88-7155be87f899',
+      id_equipment: '86bef522-ad02-4e29-a4ba-b4fc96a01bb1',
+      id_dep_receiver: '08f6e7f5-0649-47b4-81bc-05c3734ecd1f',
+      status: 'Pendiente de evaluación',
       cause: 'Maintenance'
     });
     expect(response.status).toEqual(201);
@@ -42,26 +37,102 @@ describe('Downtime CRUD', () => {
   });
 
   it('should get all downtimes', async () => {
-    const response = await request(app).get('/api/downtime');
+    const response = await request(testingApp).get('/api/downtime');
     expect(response.status).toEqual(200);
   });
 
   it('should get a downtime by ID', async () => {
-    const response = await request(app).get(
+    const response = await request(testingApp).get(
       `/api/downtime/${id_sender}/${id_reciever}/${id_equipment}/${date}/${id_dep_receiver}`
     );
     expect(response.status).toEqual(200);
   });
 
+  it('should return 404 for non-existent transfer', async () => {
+    const response = await request(testingApp).get(
+      `/api/transfer/86bef522-ad02-4e29-a4ba-b4fc96a01bb2`
+    );
+    expect(response.status).toEqual(404);
+  });
+
+  it('should not create a downtime with invalid status', async () => {
+    const response = await request(testingApp).post('/api/downtime/').send({
+      id_sender: '02d6ddd9-7f7e-4c60-8c2d-79cba69736b9',
+      id_receiver: 'af4685e7-87ef-4a82-9e88-7155be87f899',
+      id_equipment: '86bef522-ad02-4e29-a4ba-b4fc96a01bb1',
+      id_receiver_dep: '4bef9dc3-6584-41f8-9415-a9bd8726f646',
+      status: 'Bien',
+      cause: 'Maintenance'
+    });
+    expect(response.status).toEqual(400);
+  });
+
+  it('should not create a downtime with invalid type in parameters', async () => {
+    const response = await request(testingApp).post('/api/downtime').send({
+      id_sender: '02d6ddd9-7f7e-4c60-8c2d-79cba69736b9',
+      id_receiver: 'af4685e7-87ef-4a82-9e88-7155be87f899',
+      id_equipment: '86bef522-ad02-4e29-a4ba-b4fc96a01bb1',
+      id_receiver_dep: '08f6e7f5-0649-47b4-81bc-05c3734ecd1f',
+      status: 2,
+      cause: 'Maintenance'
+    });
+    expect(response.status).toEqual(400);
+  });
+
+  it('should not create a downtime with same sender and receiver', async () => {
+    const response = await request(testingApp).post('/api/downtime').send({
+      id_sender: '02d6ddd9-7f7e-4c60-8c2d-79cba69736b9',
+      id_receiver: '02d6ddd9-7f7e-4c60-8c2d-79cba69736b9',
+      id_equipment: '86bef522-ad02-4e29-a4ba-b4fc96a01bb1',
+      id_origin_dep: '08f6e7f5-0649-47b4-81bc-05c3734ecd1f',
+      id_receiver_dep: '4bef9dc3-6584-41f8-9415-a9bd8726f646',
+      status: 'Baja Definitiva',
+      cause: 'Maintenance'
+    });
+    expect(response.status).toEqual(400);
+  });
+
+  it('should return 400 for creating a downtime with missing id_sender', async () => {
+    const response = await request(testingApp).post('/api/downtime/').send({
+      id_receiver: '02d6ddd9-7f7e-4c60-8c2d-79cba69736b9',
+      id_equipment: '86bef522-ad02-4e29-a4ba-b4fc96a01bb1',
+      id_receiver_dep: '4bef9dc3-6584-41f8-9415-a9bd8726f646',
+      status: 'Pendiente de evaluación',
+      cause: 'Maintenance'
+    });
+    expect(response.status).toEqual(400);
+  });
+
+  it('should return 400 for creating a downtime with missing id_receiver', async () => {
+    const response = await request(testingApp).post('/api/downtime/').send({
+      id_sender: '02d6ddd9-7f7e-4c60-8c2d-79cba69736b9',
+      id_equipment: '86bef522-ad02-4e29-a4ba-b4fc96a01bb1',
+      id_receiver_dep: '4bef9dc3-6584-41f8-9415-a9bd8726f646',
+      status: 'Pendiente de evaluación',
+      cause: 'Maintenance'
+    });
+    expect(response.status).toEqual(400);
+  });
+
+  it('should return 400 for creating a downtime with missing fields', async () => {
+    const response = await request(testingApp).post('/api/downtime/').send({
+      id_sender: '02d6ddd9-7f7e-4c60-8c2d-79cba69736b9',
+      id_receiver: '02d6ddd9-7f7e-4c60-8c2d-79cba69736b9',
+      id_equipment: '86bef522-ad02-4e29-a4ba-b4fc96a01bb1',
+      id_receiver_dep: '4bef9dc3-6584-41f8-9415-a9bd8726f646'
+    });
+    expect(response.status).toEqual(400);
+  });
+
   it('should update a downtime by ID', async () => {
-    const response = await request(app)
+    const response = await request(testingApp)
       .put(`/api/downtime/${id_sender}/${id_reciever}/${id_equipment}/${date}/${id_dep_receiver}`)
-      .send({ status: 'inactive' });
+      .send({ status: 'Reutilizado' });
     expect(response.status).toEqual(200);
   });
 
   it('should delete a downtime by ID', async () => {
-    const response = await request(app).delete(
+    const response = await request(testingApp).delete(
       `/api/downtime/${id_sender}/${id_reciever}/${id_equipment}/${date}/${id_dep_receiver}`
     );
     expect(response.status).toEqual(200);
