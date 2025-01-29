@@ -50,7 +50,7 @@ export function EquipmentQueryBuilder(query: EquipmentQuery): SQL[] {
   if (query.id) filters.push(eq(equipment.id, query.id));
   if (query.name) filters.push(eq(equipment.name, query.name));
   if (query.type) filters.push(eq(equipment.type, query.type));
-  if (query.status) filters.push(eq(equipment, query.status));
+  if (query.status) filters.push(eq(equipment.status, query.status));
   if (query.id_department) filters.push(eq(equipment.id_department, query.id_department));
   if (query.acquisition_date) filters.push(eq(equipment.acquisition_date, query.acquisition_date));
   return filters;
