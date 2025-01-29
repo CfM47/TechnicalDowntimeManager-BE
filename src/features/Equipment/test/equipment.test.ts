@@ -1,5 +1,4 @@
 import request from 'supertest';
-import http from 'http';
 import testingApp from '../../../TestDirectoryServer/testingApp';
 
 /**
