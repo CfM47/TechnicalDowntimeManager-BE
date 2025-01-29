@@ -47,18 +47,20 @@ export class TechnicianModel implements ITechnicianModel {
    * Retrieves all technicians based on a filter.
    *
    * @param filter - The filter to apply when retrieving technicians.
+   * @param pagination
    * @returns An array of technicians matching the filter.
    */
   async getAll(
     filter: TechnicianQuery,
     pagination: Pagination
   ): Promise<PaginatedResponse<TechnicianType>> {
+    const filterQuery = TechnicianQueryBuilder(filter);
     const items = await db
       .select(technicianSelection)
       .from(technician)
       .innerJoin(user, eq(technician.id_user, user.id))
       .innerJoin(department, eq(user.id_department, department.id))
-      .where(and(...TechnicianQueryBuilder(filter)))
+      .where(and(...filterQuery))
       .orderBy(asc(user.name))
       .limit(pagination.size)
       .offset(pagination.size * (pagination.page - 1));
@@ -66,7 +68,7 @@ export class TechnicianModel implements ITechnicianModel {
       items,
       page: pagination.page,
       size: pagination.size,
-      total: await countTableRows(technician)
+      total: await countTableRows(technician, filterQuery)
     };
   }
 

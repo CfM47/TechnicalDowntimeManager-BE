@@ -1,6 +1,7 @@
 import { DepartmentType } from '../Department/types';
 import { equipment } from './schema';
 import { department } from '../Department/schema';
+import { count } from 'drizzle-orm';
 
 /**
  * Interface representing the equipment type.
@@ -14,14 +15,10 @@ export interface EquipmentType {
   acquisition_date: string;
 }
 
-export const EquipmentOrderBy = {
-  name: equipment.name,
-  date: equipment.acquisition_date
-};
+export interface EquipmentWithMaintenances extends EquipmentType {
+  totalMaintenances: number;
+}
 
-/**
- * Selection object for retrieving full equipment details.
- */
 export const equipmentSelection = {
   id: equipment.id,
   name: equipment.name,
@@ -33,6 +30,20 @@ export const equipmentSelection = {
   },
   acquisition_date: equipment.acquisition_date
 };
+
+export const equipmentsWithMaintenancesSelection = {
+  ...equipmentSelection,
+  totalMaintenances: count()
+};
+
+export const EquipmentOrderBy = {
+  name: equipment.name,
+  date: equipment.acquisition_date
+};
+
+/**
+ * Selection object for retrieving full equipment details.
+ */
 
 /**
  * Selection object for retrieving basic equipment information.

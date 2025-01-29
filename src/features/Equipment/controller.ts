@@ -165,4 +165,16 @@ export class EquipmentController {
       res.status(500).json(ErrorMessage(e));
     }
   };
+
+  getEquipmentsWithFrequentMaintenances = async (req: Request, res: Response) => {
+    try {
+      const { page, size } = req.query;
+      const pagination: Pagination = validatePagination(page, size);
+      const equipments =
+        await this.equipmentModel.getEquipmentsWithFrequentMaintenances(pagination);
+      res.status(200).json(equipments);
+    } catch (e) {
+      res.status(500).json(ErrorMessage(e));
+    }
+  };
 }

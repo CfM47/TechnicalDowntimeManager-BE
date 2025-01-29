@@ -38,14 +38,16 @@ export class UserModel implements IUserModel {
   /**
    * Retrieves all users from the database based on the provided filter.
    * @param filter - The query filter to apply.
+   * @param pagination
    * @returns An array of users matching the filter.
    */
   async getAll(filter: UserQuery, pagination: Pagination): Promise<PaginatedResponse<UserType>> {
+    const filterQuery = UserQueryBuilder(filter);
     const items = await db
       .select(userSelection)
       .from(user)
       .innerJoin(department, eq(user.id_department, department.id))
-      .where(and(...UserQueryBuilder(filter)))
+      .where(and(...filterQuery))
       .orderBy(asc(user.name))
       .limit(pagination.size)
       .offset(pagination.size * (pagination.page - 1));
@@ -53,7 +55,7 @@ export class UserModel implements IUserModel {
       items,
       page: pagination.page,
       size: pagination.size,
-      total: await countTableRows(user)
+      total: await countTableRows(user, filterQuery)
     };
   }
 

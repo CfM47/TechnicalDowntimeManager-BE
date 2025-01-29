@@ -9,7 +9,7 @@ import { IDowntimeModel } from './Interfaces/IDowntimeModel';
 import { IMaintenanceModel } from './Interfaces/IMaintenanceModel';
 import { PgTable } from 'drizzle-orm/pg-core';
 import { db } from './db/config/db_connect';
-import { count } from 'drizzle-orm';
+import { and, count, SQL } from 'drizzle-orm';
 
 /**
  * Generates an error message object.
@@ -81,10 +81,14 @@ export const countTableType = {
 /**
  * Counts the number of rows in a given table.
  * @param {PgTable} table - The table to count rows in.
+ * @param filter
  * @returns {Promise<number>} - The number of rows in the table.
  */
-export async function countTableRows(table: PgTable): Promise<number> {
-  const [result] = await db.select(countTableType).from(table);
+export async function countTableRows(table: PgTable, filter: SQL[]): Promise<number> {
+  const [result] = await db
+    .select(countTableType)
+    .from(table)
+    .where(and(...filter));
   return result.count;
 }
 
