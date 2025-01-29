@@ -1,14 +1,10 @@
 import request from 'supertest';
 import testingApp from '../../../TestDirectoryServer/testingApp';
-import { server } from '../../../TestDirectoryServer/server';
 
 /**
  * Sets up the Express application with necessary middleware and routes.
  */
 
-afterAll((done) => {
-  server.close(done); // Cierra el servidor después de las pruebas
-});
 /**
  * Test suite for Transfer CRUD operations.
  * This suite tests the following functionalities:
