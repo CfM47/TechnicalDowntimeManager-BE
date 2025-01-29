@@ -1,14 +1,9 @@
 import request from 'supertest';
-import express from 'express';
-import cors from 'cors';
-import { appRouter } from '../../../router';
-import { appModels } from '../../../index';
+import testingApp from '../../../TestDirectoryServer/testingApp';
 
-const app = express();
-app.use(express.json());
-app.use(cors());
-app.disable('x-powered-by');
-app.use('/api', appRouter(appModels));
+/**
+ * Sets up the Express application with necessary middleware and routes.
+ */
 
 /**
  * Test suite for Equipment CRUD operations.
@@ -20,11 +15,11 @@ describe('Equipment CRUD', () => {
    * Test case for creating a new equipment.
    */
   it('should create a new equipment', async () => {
-    const response = await request(app).post('/api/equipment').send({
+    const response = await request(testingApp).post('/api/equipment').send({
       name: 'High resolution X-Ray machine',
-      type: 'X-ray Machine',
-      state: 'active',
-      id_department: '24cc863c-2969-49a3-ac60-8db75a3d3b35'
+      type: 'Electrónico',
+      status: 'Mantenimiento',
+      id_department: '4bef9dc3-6584-41f8-9415-a9bd8726f646'
     });
     expect(response.status).toEqual(201);
     equipmentId = response.body.id;
@@ -34,7 +29,7 @@ describe('Equipment CRUD', () => {
    * Test case for retrieving all equipment.
    */
   it('should get all equipment', async () => {
-    const response = await request(app).get('/api/equipment');
+    const response = await request(testingApp).get('/api/equipment');
     expect(response.status).toEqual(200);
   });
 
@@ -42,7 +37,7 @@ describe('Equipment CRUD', () => {
    * Test case for retrieving equipment by ID.
    */
   it('should get equipment by ID', async () => {
-    const response = await request(app).get(`/api/equipment/${equipmentId}`);
+    const response = await request(testingApp).get(`/api/equipment/${equipmentId}`);
     expect(response.status).toEqual(200);
   });
 
@@ -50,17 +45,72 @@ describe('Equipment CRUD', () => {
    * Test case for updating equipment by ID.
    */
   it('should update equipment by ID', async () => {
-    const response = await request(app)
+    const response = await request(testingApp)
       .put(`/api/equipment/${equipmentId}`)
       .send({ name: 'Updated X-Ray Machine' });
     expect(response.status).toEqual(200);
+  });
+
+  it('should not update equipment by ID for an invalid parameter type', async () => {
+    const response = await request(testingApp)
+      .put(`/api/equipment/${equipmentId}`)
+      .send({ name: true });
+    expect(response.status).toEqual(400);
+  });
+
+  /**
+   * Test case for creating equipment with missing fields.
+   */
+  it('should not create equipment with missing fields', async () => {
+    const response = await request(testingApp).post('/api/equipment').send({
+      name: 'Incomplete Equipment'
+    });
+    expect(response.status).toEqual(400);
+  });
+
+  /**
+   * Test case for retrieving equipment with invalid ID.
+   */
+  it('should return 404 for retrieving equipment with invalid ID', async () => {
+    const response = await request(testingApp).get(
+      '/api/equipment/86bef522-ad02-4e29-a4ba-b4fc96a01bb2'
+    );
+    expect(response.status).toEqual(404);
+  });
+
+  it('should return 500 for retrieving equipment with invalid ID type', async () => {
+    const response = await request(testingApp).get('/api/equipment/346346424');
+    expect(response.status).toEqual(500);
+  });
+
+  /**
+   * Test case for creating equipment with invalid data type.
+   */
+  it('should return 400 for creating equipment with invalid data type', async () => {
+    const response = await request(testingApp).post('/api/equipment').send({
+      name: 12345,
+      type: 'Electrónico',
+      status: 'Mantenimiento',
+      id_department: '4bef9dc3-6584-41f8-9415-a9bd8726f646'
+    });
+    expect(response.status).toEqual(400);
+  });
+
+  /**
+   * Test case for updating equipment with invalid data type.
+   */
+  it('should return 400 for updating equipment with invalid data type', async () => {
+    const response = await request(testingApp)
+      .put(`/api/equipment/86bef522-ad02-4e29-a4ba-b4fc96a01bb1`)
+      .send({ name: 12345 });
+    expect(response.status).toEqual(400);
   });
 
   /**
    * Test case for deleting equipment by ID.
    */
   it('should delete equipment by ID', async () => {
-    const response = await request(app).delete(`/api/equipment/${equipmentId}`);
+    const response = await request(testingApp).delete(`/api/equipment/${equipmentId}`);
     expect(response.status).toEqual(200);
   });
 });

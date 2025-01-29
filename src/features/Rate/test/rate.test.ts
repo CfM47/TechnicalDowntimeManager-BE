@@ -1,14 +1,5 @@
 import request from 'supertest';
-import express from 'express';
-import cors from 'cors';
-import { appRouter } from '../../../router';
-import { appModels } from '../../../index';
-
-const app = express();
-app.use(express.json());
-app.use(cors());
-app.disable('x-powered-by');
-app.use('/api', appRouter(appModels));
+import testingApp from '../../../TestDirectoryServer/testingApp';
 
 /**
  * Test suite for CRUD operations on the `Rate` resource.
@@ -23,9 +14,9 @@ describe('Rate CRUD', () => {
    * Sends a POST request to create a new rate and verifies the response status.
    */
   it('should create a new rate', async () => {
-    const response = await request(app).post('/api/rate').send({
-      id_technician: 'add0921a-6979-46a3-a070-5f41a9ac08f7',
-      id_user: '84732729-8c92-4067-9912-9f6743920bb3',
+    const response = await request(testingApp).post('/api/rate').send({
+      id_technician: 'af4685e7-87ef-4a82-9e88-7155be87f899',
+      id_user: '9f6dbbd9-3a80-4138-8f06-c467aec3f946',
       score: 5,
       comment: 'Excellent service'
     });
@@ -40,7 +31,7 @@ describe('Rate CRUD', () => {
    * Sends a GET request to retrieve all rates and verifies the response status.
    */
   it('should get all rates', async () => {
-    const response = await request(app).get('/api/rate');
+    const response = await request(testingApp).get('/api/rate');
     expect(response.status).toEqual(200);
   });
 
@@ -49,8 +40,52 @@ describe('Rate CRUD', () => {
    * Sends a GET request to retrieve a rate by its ID and verifies the response status.
    */
   it('should get rate by ID', async () => {
-    const response = await request(app).get(`/api/rate/${id_technician}/${id_user}/${date}`);
+    const response = await request(testingApp).get(`/api/rate/${id_technician}/${id_user}/${date}`);
     expect(response.status).toEqual(200);
+  });
+
+  it('should return an error for invalid user ID', async () => {
+    const response = await request(testingApp).get(
+      `/api/rate/af4685e7-87ef-4a82-9e88-7155be87f899/02d6ddd9-7f7e-4c60-8c2d-79cba69736b7/${date}`
+    );
+    expect(response.status).toEqual(404);
+  });
+
+  it('should return an error for invalid parameters in update a rate by ID', async () => {
+    const response = await request(testingApp)
+      .put(`/api/rate/${id_technician}/${id_user}/${date}`)
+      .send({ score: 'cuatro' });
+    expect(response.status).toEqual(400);
+  });
+
+  it('should return an error for invalid parameters in update a rate by ID', async () => {
+    const response = await request(testingApp)
+      .put(`/api/rate/${id_technician}/${id_user}/${date}`)
+      .send({ comment: 456 });
+    expect(response.status).toEqual(400);
+  });
+
+  it('should return 400 for creating a rate with missing fields', async () => {
+    const response = await request(testingApp).post('/api/rate/').send({
+      id_user: '9f6dbbd9-3a80-4138-8f06-c467aec3f946',
+      score: 5,
+      comment: 'Excellent service'
+    });
+    expect(response.status).toEqual(400);
+  });
+
+  /**
+   * Test case for handling errors when creating a new rate with invalid data.
+   * Sends a POST request with invalid data and verifies the response status.
+   */
+  it('should return an error for invalid data', async () => {
+    const response = await request(testingApp).post('/api/rate').send({
+      id_technician: '',
+      id_user: '',
+      score: -1,
+      comment: ''
+    });
+    expect(response.status).toEqual(400);
   });
 
   /**
@@ -58,7 +93,7 @@ describe('Rate CRUD', () => {
    * Sends a PUT request to update a rate by its ID and verifies the response status.
    */
   it('should update rate by ID', async () => {
-    const response = await request(app)
+    const response = await request(testingApp)
       .put(`/api/rate/${id_technician}/${id_user}/${date}`)
       .send({ score: 4 });
     expect(response.status).toEqual(200);
@@ -69,7 +104,9 @@ describe('Rate CRUD', () => {
    * Sends a DELETE request to delete a rate by its ID and verifies the response status.
    */
   it('should delete rate by ID', async () => {
-    const response = await request(app).delete(`/api/rate/${id_technician}/${id_user}/${date}`);
+    const response = await request(testingApp).delete(
+      `/api/rate/${id_technician}/${id_user}/${date}`
+    );
     expect(response.status).toEqual(200);
   });
 });

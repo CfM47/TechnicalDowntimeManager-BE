@@ -1,18 +1,8 @@
 import request from 'supertest';
-import express from 'express';
-import cors from 'cors';
-import { appRouter } from '../../../router';
-import { appModels } from '../../../index';
-
+import testingApp from '../../../TestDirectoryServer/testingApp';
 /**
  * Sets up the Express application with necessary middleware and routes.
  */
-const app = express();
-app.use(express.json());
-app.use(cors());
-app.disable('x-powered-by');
-
-app.use('/api', appRouter(appModels));
 
 /**
  * Test suite for User CRUD operations.
@@ -24,35 +14,68 @@ describe('User CRUD', () => {
   let userId = '';
 
   it('should create a new user', async () => {
-    const response = await request(app).post('/api/user').send({
+    const response = await request(testingApp).post('/api/user').send({
       name: 'roberto',
       password: 'revolucionario2025',
-      id_role: 2,
-      id_department: '24cc863c-2969-49a3-ac60-8db75a3d3b35'
+      role: 'Técnico',
+      id_department: '4bef9dc3-6584-41f8-9415-a9bd8726f646',
+      isTechnician: false
     });
     expect(response.status).toEqual(201);
     userId = response.body.id;
   });
 
   it('should get all users', async () => {
-    const response = await request(app).get('/api/user');
+    const response = await request(testingApp).get('/api/user');
     expect(response.status).toEqual(200);
   });
 
   it('should get a user by ID', async () => {
-    const response = await request(app).get(`/api/user/${userId}`);
+    const response = await request(testingApp).get(`/api/user/${userId}`);
     expect(response.status).toEqual(200);
   });
 
   it('should update a user by ID', async () => {
-    const response = await request(app)
+    const response = await request(testingApp)
       .put(`/api/user/${userId}`)
       .send({ password: 'newpassword123' });
     expect(response.status).toEqual(200);
   });
 
+  it('should return 404 for non-existent user', async () => {
+    const response = await request(testingApp).get(
+      '/api/user/02d6ddd9-7f7e-4c60-8c2d-79cba69736b7'
+    );
+    expect(response.status).toEqual(404);
+  });
+
+  it('should not create a user with invalid data', async () => {
+    const response = await request(testingApp).post('/api/user').send({
+      name: '',
+      password: 'short',
+      role: 'InvalidRole',
+      id_department: 'invalid-id',
+      isTechnician: 'not-a-boolean'
+    });
+    expect(response.status).toEqual(400);
+  });
+
+  it('should not update a user with invalid data', async () => {
+    const response = await request(testingApp)
+      .put(`/api/user/02d6ddd9-7f7e-4c60-8c2d-79cba69736b9`)
+      .send({ role: 'Futbolista' });
+    expect(response.status).toEqual(400);
+  });
+
+  it('should return 400 for creating a user with missing fields', async () => {
+    const response = await request(testingApp).post('/api/user').send({
+      name: 'roberto'
+    });
+    expect(response.status).toEqual(400);
+  });
+
   it('should delete a user by ID', async () => {
-    const response = await request(app).delete(`/api/user/${userId}`);
+    const response = await request(testingApp).delete(`/api/user/${userId}`);
     expect(response.status).toEqual(200);
   });
 });
