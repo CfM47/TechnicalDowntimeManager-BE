@@ -184,10 +184,39 @@ const seed = async () => {
       id_department: '4bef9dc3-6584-41f8-9415-a9bd8726f646'
     },
     {
+      id: 'f4b865dc-da93-4f93-beeb-c4c2f6d7a5bf',
       name: 'Laura Fernández Martínez',
       password: await bcrypt.hash('1111', 10),
-      role: 'Jefe de sección',
+      role: 'Técnico',
       id_department: '2a67444c-734e-416e-a9c0-17dbdac4819c'
+    },
+    {
+      id: '04c9b1ce-27b3-4168-aea9-20510bcc8e3b',
+      name: 'Pedro Pérez Gonzáles',
+      password: await bcrypt.hash('1111', 10),
+      role: 'Técnico',
+      id_department: '614ce720-78e3-43f2-9c19-93cff24b77ac'
+    },
+    {
+      id: 'a5ec0b34-3770-4a71-822a-e1bdc7d2611a',
+      name: 'José Agustín del Toro',
+      password: await bcrypt.hash('1111', 10),
+      role: 'Técnico',
+      id_department: '614ce720-78e3-43f2-9c19-93cff24b77ac'
+    },
+    {
+      id: 'a7012c3c-2ef4-48c7-97a3-705f05ad5582',
+      name: 'José Agustín del Toro',
+      password: await bcrypt.hash('1111', 10),
+      role: 'Técnico',
+      id_department: '614ce720-78e3-43f2-9c19-93cff24b77ac'
+    },
+    {
+      id: '05da4935-dfa5-46b7-9611-45932e5e7b34',
+      name: 'Fransisco Préstamo Bernardes',
+      password: await bcrypt.hash('1111', 10),
+      role: 'Técnico',
+      id_department: '614ce720-78e3-43f2-9c19-93cff24b77ac'
     }
   ];
 
@@ -201,6 +230,31 @@ const seed = async () => {
       id_user: '500e408b-681e-418a-b51a-76d86d5feec6',
       exp_years: 2,
       specialty: 'Mecánica'
+    },
+    {
+      id_user: '04c9b1ce-27b3-4168-aea9-20510bcc8e3b',
+      exp_years: 8,
+      specialty: 'Mecánica'
+    },
+    {
+      id_user: 'a5ec0b34-3770-4a71-822a-e1bdc7d2611a',
+      exp_years: 4,
+      specialty: 'Electricidad'
+    },
+    {
+      id_user: 'a7012c3c-2ef4-48c7-97a3-705f05ad5582',
+      exp_years: 5,
+      specialty: 'Informático'
+    },
+    {
+      id_user: '05da4935-dfa5-46b7-9611-45932e5e7b34',
+      exp_years: 6,
+      specialty: 'Mecánica'
+    },
+    {
+      id_user: 'f4b865dc-da93-4f93-beeb-c4c2f6d7a5bf',
+      exp_years: 7,
+      specialty: 'Informático'
     }
   ];
 
@@ -220,12 +274,14 @@ const seed = async () => {
       id_department: '614ce720-78e3-43f2-9c19-93cff24b77ac'
     },
     {
+      id: '49d72fb1-30d1-4cd9-bb59-6bc0a2f1a0d6',
       name: 'Monitor',
       type: 'Informático',
       status: 'Mantenimiento',
       id_department: '2a67444c-734e-416e-a9c0-17dbdac4819c'
     },
     {
+      id: 'ca829997-ebe7-4986-990b-a7b6d9fdc614',
       name: 'Teclado',
       type: 'Informático',
       status: 'Baja',
@@ -238,12 +294,14 @@ const seed = async () => {
       id_department: '4bef9dc3-6584-41f8-9415-a9bd8726f646'
     },
     {
+      id: '72c67277-11ac-4dc5-a816-1301303e4ee5',
       name: 'Ventilador',
       type: 'Oficina',
       status: 'Mantenimiento',
       id_department: '4bef9dc3-6584-41f8-9415-a9bd8726f646'
     },
     {
+      id: '270dc468-6dd2-4037-b3dc-5096234be52d',
       name: 'Aire acondicionado',
       type: 'Oficina',
       status: 'Operativo',
@@ -254,6 +312,48 @@ const seed = async () => {
       type: 'Oficina',
       status: 'Operativo',
       id_department: 'cd53346b-b237-46f4-9ea8-222be05e7e72'
+    },
+    {
+      name: 'Tablet',
+      type: 'Oficina',
+      status: 'Operativo',
+      id_department: 'cd53346b-b237-46f4-9ea8-222be05e7e72'
+    },
+    {
+      name: 'Impresora',
+      type: 'Oficina',
+      status: 'Operativo',
+      id_department: 'cd53346b-b237-46f4-9ea8-222be05e7e72'
+    },
+    {
+      name: 'Teléfono',
+      type: 'Oficina',
+      status: 'Operativo',
+      id_department: 'cd53346b-b237-46f4-9ea8-222be05e7e72'
+    },
+    {
+      name: 'Fax',
+      type: 'Oficina',
+      status: 'Operativo',
+      id_department: 'cd53346b-b237-46f4-9ea8-222be05e7e72'
+    },
+    {
+      name: 'Caja registradora',
+      type: 'Oficina',
+      status: 'Operativo',
+      id_department: 'cd53346b-b237-46f4-9ea8-222be05e7e72'
+    },
+    {
+      name: 'Caja fuerte',
+      type: 'Oficina',
+      status: 'Operativo',
+      id_department: '2a67444c-734e-416e-a9c0-17dbdac4819c'
+    },
+    {
+      name: 'Contadora',
+      type: 'Oficina',
+      status: 'Operativo',
+      id_department: '2a67444c-734e-416e-a9c0-17dbdac4819c'
     }
   ];
 
@@ -281,10 +381,156 @@ const seed = async () => {
       id_technician: '500e408b-681e-418a-b51a-76d86d5feec6',
       comment: 'Excelente trabajo, demora un poco en algunas tareas',
       score: 4
+    },
+    {
+      id_user: '9f6dbbd9-3a80-4138-8f06-c467aec3f946',
+      id_technician: '500e408b-681e-418a-b51a-76d86d5feec6',
+      comment: 'Mal trabajo, no es muy eficiente en su trabajo',
+      score: 2
+    },
+    {
+      id_user: '247e10c9-f555-461c-a783-a0af0201c92c',
+      id_technician: 'af4685e7-87ef-4a82-9e88-7155be87f899',
+      comment: 'Muy enfocado en lo que hace',
+      score: 4
+    },
+    {
+      id_user: '9f6dbbd9-3a80-4138-8f06-c467aec3f946',
+      id_technician: 'af4685e7-87ef-4a82-9e88-7155be87f899',
+      comment: 'No hay quejas sobre su trabajo',
+      score: 4
+    },
+    {
+      id_user: '4456449c-808d-4f3d-b390-9767207a9de4',
+      id_technician: '500e408b-681e-418a-b51a-76d86d5feec6',
+      comment: 'Buen trabajo, pero tiene que trabajar más horas en la semana',
+      score: 3
+    },
+    {
+      id_user: '9f6dbbd9-3a80-4138-8f06-c467aec3f946',
+      id_technician: 'af4685e7-87ef-4a82-9e88-7155be87f899',
+      comment: 'Muy bien, muy óptimo su trabajo',
+      score: 3
+    },
+    {
+      id_user: '4456449c-808d-4f3d-b390-9767207a9de4',
+      id_technician: '500e408b-681e-418a-b51a-76d86d5feec6',
+      comment: 'Mal trabajo, puede esforzarse más',
+      score: 2
+    },
+    {
+      id_user: '9f6dbbd9-3a80-4138-8f06-c467aec3f946',
+      id_technician: '500e408b-681e-418a-b51a-76d86d5feec6',
+      comment: 'Mal trabajo, no es muy eficiente en su trabajo',
+      score: 2
+    },
+    {
+      id_user: '247e10c9-f555-461c-a783-a0af0201c92c',
+      id_technician: 'af4685e7-87ef-4a82-9e88-7155be87f899',
+      comment: 'Muy enfocado en lo que hace',
+      score: 4
+    },
+    {
+      id_user: '247e10c9-f555-461c-a783-a0af0201c92c',
+      id_technician: 'af4685e7-87ef-4a82-9e88-7155be87f899',
+      comment: 'Muy buen trabajo, se esfuerza mucho en lo que hace y optimiza mucho su tiempo',
+      score: 5
+    },
+    {
+      id_user: '9f6dbbd9-3a80-4138-8f06-c467aec3f946',
+      id_technician: 'af4685e7-87ef-4a82-9e88-7155be87f899',
+      comment: 'Excelente trabajo, muy preciso y confiable.',
+      score: 5
+    },
+    {
+      id_user: '9f6dbbd9-3a80-4138-8f06-c467aec3f946',
+      id_technician: 'af4685e7-87ef-4a82-9e88-7155be87f899',
+      comment: 'Muy bien, muy óptimo su trabajo',
+      score: 3
     }
   ];
 
   const transfers: NewTransfer[] = [
+    {
+      id_sender: '500e408b-681e-418a-b51a-76d86d5feec6',
+      id_receiver: 'af4685e7-87ef-4a82-9e88-7155be87f899',
+      id_equipment: 'cb911356-501b-4a78-bbce-7fee12326946',
+      id_origin_dep: '614ce720-78e3-43f2-9c19-93cff24b77ac',
+      id_receiver_dep: '2a67444c-734e-416e-a9c0-17dbdac4819c',
+      status: 'Completado'
+    },
+    {
+      id_sender: 'af4685e7-87ef-4a82-9e88-7155be87f899',
+      id_receiver: '500e408b-681e-418a-b51a-76d86d5feec6',
+      id_equipment: 'cb911356-501b-4a78-bbce-7fee12326946',
+      id_origin_dep: '2a67444c-734e-416e-a9c0-17dbdac4819c',
+      id_receiver_dep: '614ce720-78e3-43f2-9c19-93cff24b77ac',
+      status: 'Completado'
+    },
+    {
+      id_sender: '500e408b-681e-418a-b51a-76d86d5feec6',
+      id_receiver: 'af4685e7-87ef-4a82-9e88-7155be87f899',
+      id_equipment: 'cb911356-501b-4a78-bbce-7fee12326946',
+      id_origin_dep: '614ce720-78e3-43f2-9c19-93cff24b77ac',
+      id_receiver_dep: '2a67444c-734e-416e-a9c0-17dbdac4819c',
+      status: 'Completado'
+    },
+    {
+      id_sender: 'af4685e7-87ef-4a82-9e88-7155be87f899',
+      id_receiver: '500e408b-681e-418a-b51a-76d86d5feec6',
+      id_equipment: 'cb911356-501b-4a78-bbce-7fee12326946',
+      id_origin_dep: '2a67444c-734e-416e-a9c0-17dbdac4819c',
+      id_receiver_dep: '614ce720-78e3-43f2-9c19-93cff24b77ac',
+      status: 'Completado'
+    },
+    {
+      id_sender: '500e408b-681e-418a-b51a-76d86d5feec6',
+      id_receiver: 'af4685e7-87ef-4a82-9e88-7155be87f899',
+      id_equipment: 'cb911356-501b-4a78-bbce-7fee12326946',
+      id_origin_dep: '614ce720-78e3-43f2-9c19-93cff24b77ac',
+      id_receiver_dep: '2a67444c-734e-416e-a9c0-17dbdac4819c',
+      status: 'Completado'
+    },
+    {
+      id_sender: 'af4685e7-87ef-4a82-9e88-7155be87f899',
+      id_receiver: '500e408b-681e-418a-b51a-76d86d5feec6',
+      id_equipment: 'cb911356-501b-4a78-bbce-7fee12326946',
+      id_origin_dep: '2a67444c-734e-416e-a9c0-17dbdac4819c',
+      id_receiver_dep: '614ce720-78e3-43f2-9c19-93cff24b77ac',
+      status: 'Completado'
+    },
+    {
+      id_sender: '500e408b-681e-418a-b51a-76d86d5feec6',
+      id_receiver: 'af4685e7-87ef-4a82-9e88-7155be87f899',
+      id_equipment: 'cb911356-501b-4a78-bbce-7fee12326946',
+      id_origin_dep: '614ce720-78e3-43f2-9c19-93cff24b77ac',
+      id_receiver_dep: '2a67444c-734e-416e-a9c0-17dbdac4819c',
+      status: 'Completado'
+    },
+    {
+      id_sender: 'af4685e7-87ef-4a82-9e88-7155be87f899',
+      id_receiver: '500e408b-681e-418a-b51a-76d86d5feec6',
+      id_equipment: 'cb911356-501b-4a78-bbce-7fee12326946',
+      id_origin_dep: '2a67444c-734e-416e-a9c0-17dbdac4819c',
+      id_receiver_dep: '614ce720-78e3-43f2-9c19-93cff24b77ac',
+      status: 'Completado'
+    },
+    {
+      id_sender: '500e408b-681e-418a-b51a-76d86d5feec6',
+      id_receiver: 'af4685e7-87ef-4a82-9e88-7155be87f899',
+      id_equipment: 'cb911356-501b-4a78-bbce-7fee12326946',
+      id_origin_dep: '614ce720-78e3-43f2-9c19-93cff24b77ac',
+      id_receiver_dep: '2a67444c-734e-416e-a9c0-17dbdac4819c',
+      status: 'Completado'
+    },
+    {
+      id_sender: 'af4685e7-87ef-4a82-9e88-7155be87f899',
+      id_receiver: '500e408b-681e-418a-b51a-76d86d5feec6',
+      id_equipment: 'cb911356-501b-4a78-bbce-7fee12326946',
+      id_origin_dep: '2a67444c-734e-416e-a9c0-17dbdac4819c',
+      id_receiver_dep: '614ce720-78e3-43f2-9c19-93cff24b77ac',
+      status: 'Completado'
+    },
     {
       id_sender: '500e408b-681e-418a-b51a-76d86d5feec6',
       id_receiver: 'af4685e7-87ef-4a82-9e88-7155be87f899',
@@ -343,6 +589,60 @@ const seed = async () => {
       id_equipment: '056385ca-5db2-4b83-a6c7-f0f40ddecd60',
       type: 'Correctivo',
       cost: 250
+    },
+    {
+      id_technician: 'af4685e7-87ef-4a82-9e88-7155be87f899',
+      id_equipment: 'cb911356-501b-4a78-bbce-7fee12326946',
+      type: 'Preventivo',
+      cost: 120
+    },
+    {
+      id_technician: '500e408b-681e-418a-b51a-76d86d5feec6',
+      id_equipment: 'cb911356-501b-4a78-bbce-7fee12326946',
+      type: 'Correctivo',
+      cost: 353
+    },
+    {
+      id_technician: 'af4685e7-87ef-4a82-9e88-7155be87f899',
+      id_equipment: '056385ca-5db2-4b83-a6c7-f0f40ddecd60',
+      type: 'Preventivo',
+      cost: 299
+    },
+    {
+      id_technician: 'f4b865dc-da93-4f93-beeb-c4c2f6d7a5bf',
+      id_equipment: '056385ca-5db2-4b83-a6c7-f0f40ddecd60',
+      type: 'Correctivo',
+      cost: 250
+    },
+    {
+      id_technician: 'af4685e7-87ef-4a82-9e88-7155be87f899',
+      id_equipment: 'cb911356-501b-4a78-bbce-7fee12326946',
+      type: 'Preventivo',
+      cost: 130
+    },
+    {
+      id_technician: 'af4685e7-87ef-4a82-9e88-7155be87f899',
+      id_equipment: '056385ca-5db2-4b83-a6c7-f0f40ddecd60',
+      type: 'Preventivo',
+      cost: 199
+    },
+    {
+      id_technician: 'af4685e7-87ef-4a82-9e88-7155be87f899',
+      id_equipment: '056385ca-5db2-4b83-a6c7-f0f40ddecd60',
+      type: 'Preventivo',
+      cost: 24
+    },
+    {
+      id_technician: 'af4685e7-87ef-4a82-9e88-7155be87f899',
+      id_equipment: 'cb911356-501b-4a78-bbce-7fee12326946',
+      type: 'Preventivo',
+      cost: 89
+    },
+    {
+      id_technician: 'f4b865dc-da93-4f93-beeb-c4c2f6d7a5bf',
+      id_equipment: '056385ca-5db2-4b83-a6c7-f0f40ddecd60',
+      type: 'Correctivo',
+      cost: 250
     }
   ];
 
@@ -358,10 +658,42 @@ const seed = async () => {
     {
       id_sender: 'af4685e7-87ef-4a82-9e88-7155be87f899',
       id_receiver: '500e408b-681e-418a-b51a-76d86d5feec6',
+      id_equipment: '056385ca-5db2-4b83-a6c7-f0f40ddecd60',
+      id_dep_receiver: '614ce720-78e3-43f2-9c19-93cff24b77ac',
+      status: 'Reutilizado',
+      cause: 'Falla en la cinta'
+    },
+    {
+      id_sender: '500e408b-681e-418a-b51a-76d86d5feec6',
+      id_receiver: 'af4685e7-87ef-4a82-9e88-7155be87f899',
+      id_equipment: '49d72fb1-30d1-4cd9-bb59-6bc0a2f1a0d6',
+      id_dep_receiver: '614ce720-78e3-43f2-9c19-93cff24b77ac',
+      status: 'Reutilizado',
+      cause: 'Falla en la pantalla'
+    },
+    {
+      id_sender: 'af4685e7-87ef-4a82-9e88-7155be87f899',
+      id_receiver: '500e408b-681e-418a-b51a-76d86d5feec6',
+      id_equipment: 'ca829997-ebe7-4986-990b-a7b6d9fdc614',
+      id_dep_receiver: '614ce720-78e3-43f2-9c19-93cff24b77ac',
+      status: 'Pendiente de evaluación',
+      cause: 'Fallos en algunas teclas'
+    },
+    {
+      id_sender: '500e408b-681e-418a-b51a-76d86d5feec6',
+      id_receiver: 'af4685e7-87ef-4a82-9e88-7155be87f899',
       id_equipment: 'cb911356-501b-4a78-bbce-7fee12326946',
       id_dep_receiver: '614ce720-78e3-43f2-9c19-93cff24b77ac',
       status: 'Reutilizado',
-      cause: 'Falla en el sistema operativo'
+      cause: 'Falla en puerto HDMI'
+    },
+    {
+      id_sender: 'af4685e7-87ef-4a82-9e88-7155be87f899',
+      id_receiver: '500e408b-681e-418a-b51a-76d86d5feec6',
+      id_equipment: 'cb911356-501b-4a78-bbce-7fee12326946',
+      id_dep_receiver: '614ce720-78e3-43f2-9c19-93cff24b77ac',
+      status: 'Pendiente de evaluación',
+      cause: 'Falla en puerto USB'
     },
     {
       id_sender: '500e408b-681e-418a-b51a-76d86d5feec6',
@@ -377,7 +709,31 @@ const seed = async () => {
       id_equipment: 'cb911356-501b-4a78-bbce-7fee12326946',
       id_dep_receiver: '614ce720-78e3-43f2-9c19-93cff24b77ac',
       status: 'Pendiente de evaluación',
-      cause: 'Falla en el sistema operativo'
+      cause: 'Falla en el botón de encendido'
+    },
+    {
+      id_sender: 'af4685e7-87ef-4a82-9e88-7155be87f899',
+      id_receiver: '500e408b-681e-418a-b51a-76d86d5feec6',
+      id_equipment: '72c67277-11ac-4dc5-a816-1301303e4ee5',
+      id_dep_receiver: '614ce720-78e3-43f2-9c19-93cff24b77ac',
+      status: 'Reutilizado',
+      cause: 'Falla en el motor'
+    },
+    {
+      id_sender: '500e408b-681e-418a-b51a-76d86d5feec6',
+      id_receiver: 'af4685e7-87ef-4a82-9e88-7155be87f899',
+      id_equipment: '270dc468-6dd2-4037-b3dc-5096234be52d',
+      id_dep_receiver: '614ce720-78e3-43f2-9c19-93cff24b77ac',
+      status: 'Reutilizado',
+      cause: 'Falla en el sistema de enfriamiento'
+    },
+    {
+      id_sender: '500e408b-681e-418a-b51a-76d86d5feec6',
+      id_receiver: 'af4685e7-87ef-4a82-9e88-7155be87f899',
+      id_equipment: '270dc468-6dd2-4037-b3dc-5096234be52d',
+      id_dep_receiver: '614ce720-78e3-43f2-9c19-93cff24b77ac',
+      status: 'Pendiente de evaluación',
+      cause: 'Falla en el sistema de arranque'
     }
   ];
 
