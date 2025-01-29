@@ -1,4 +1,4 @@
-import express from "express";
+import express from 'express';
 import cors from 'cors';
 import { appRouter } from '../router';
 import { appModels } from '../index';

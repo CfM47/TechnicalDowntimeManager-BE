@@ -1,5 +1,5 @@
-import http from "http";
-import testingApp from "./testingApp"; // Asegúrate de importar la app correctamente
+import http from 'http';
+import testingApp from './testingApp'; // Asegúrate de importar la app correctamente
 
 /**
  * This module sets up and manages a test server for running integration tests.
@@ -23,7 +23,6 @@ beforeAll((done) => {
   };
   tryListen();
 });
-
 
 afterAll((done) => {
   server.close(done); // Cierra el servidor después de todas las pruebas
