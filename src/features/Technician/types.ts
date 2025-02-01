@@ -101,7 +101,7 @@ export type TechnicianInterventionType = {
 export const TechniciansRatesInterventions = {
   date: rate.date,
   type: sql<string>`'Valoración'`.as('type'),
-  aditional_info: sql<string>`CAST(${rate.score} AS VARCHAR)`.as('aditional_info')
+  aditional_info: sql<string>`CAST(${rate.comment} AS VARCHAR)`.as('aditional_info')
 };
 
 export const TechniciansMaintenancesInterventions = {

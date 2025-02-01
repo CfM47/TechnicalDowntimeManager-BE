@@ -173,11 +173,6 @@ export class TechnicianModel implements ITechnicianModel {
       .limit(pagination.size)
       .offset(pagination.size * (pagination.page - 1));
 
-    const total = await countTableRows(technician, [eq(technician.id_user, technicianId)]);
-
-    // const result = [...technicianRateData, ...technicianmaintenanceData, ...techniciandowntimeData]; //solucion facil
-    const result = unionAll(technicianRateData, technicianmaintenanceData, techniciandowntimeData);
-
     return {
       items: result,
       page: pagination.page,
