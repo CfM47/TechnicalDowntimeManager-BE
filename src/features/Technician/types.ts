@@ -84,6 +84,39 @@ export const technicianSelection = {
   specialty: technician.specialty
 };
 /**
+ * Type representing general technician intervention data.
+ */
+
+export type TechnicianInterventionType = {
+  date: string;
+  type: string;
+  aditional_info: string;
+};
+/**
+ * Object representing the selection of technician fields for database queries.
+ *
+ * Includes fields from the user, department, and technician schemas.
+ */
+
+export const TechniciansRatesInterventions = {
+  date: rate.date,
+  type: sql<string>`'Valoración'`.as('type'),
+  aditional_info: sql<string>`CAST(${rate.score} AS VARCHAR)`.as('aditional_info')
+};
+
+export const TechniciansMaintenancesInterventions = {
+  date: maintenance.date,
+  type: sql<string>`'Mantenimiento'`.as('type'),
+  aditional_info: sql<string>`CAST(${maintenance.type} AS VARCHAR)`.as('aditional_info')
+};
+
+export const TechniciansDowntimesInterventions = {
+  date: downtime.date,
+  type: sql<string>`'Baja'`.as('type'),
+  aditional_info: sql<string>`CAST(${downtime.status} AS VARCHAR)`.as('aditional_info')
+};
+
+/**
  * Type representing basic information about a Technician.
  *
  * Includes only the `id` and `name` properties from the TechnicianType interface.
