@@ -6,6 +6,7 @@ import { avg, countDistinct } from 'drizzle-orm/sql/functions/aggregate';
 import { rate } from '../Rate/schema';
 import { maintenance } from '../Maintenance/schema';
 import { sql } from 'drizzle-orm';
+import { downtime } from '../Downtime/schema';
 
 /**
  * Interface representing a Technician.
@@ -35,6 +36,35 @@ export const TechnicianPerformanceSelection = {
   score_avg: sql<number>`COALESCE(ROUND(${avg(rate.score)},1),0)`.as('score_avg'),
   total_rates: countDistinct(rate.date),
   total_maintenances: countDistinct(maintenance.date)
+};
+
+export type TechnicianInterventionType = {
+  date: string;
+  type: string;
+  aditional_info: string;
+};
+/**
+ * Object representing the selection of technician fields for database queries.
+ *
+ * Includes fields from the user, department, and technician schemas.
+ */
+
+export const TechniciansRatesInterventions = {
+  date: rate.date,
+  type: sql<string>`'Valoración'`.as('type'),
+  aditional_info: sql<string>`CAST(${rate.comment} AS VARCHAR)`.as('aditional_info')
+};
+
+export const TechniciansMaintenancesInterventions = {
+  date: maintenance.date,
+  type: sql<string>`'Mantenimiento'`.as('type'),
+  aditional_info: sql<string>`CAST(${maintenance.type} AS VARCHAR)`.as('aditional_info')
+};
+
+export const TechniciansDowntimesInterventions = {
+  date: downtime.date,
+  type: sql<string>`'Baja'`.as('type'),
+  aditional_info: sql<string>`CAST(${downtime.status} AS VARCHAR)`.as('aditional_info')
 };
 
 /**

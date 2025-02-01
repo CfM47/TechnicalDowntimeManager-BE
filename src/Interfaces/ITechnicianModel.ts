@@ -1,7 +1,7 @@
 import { Technician, NewTechnician } from '../features/Technician/schema';
 import { TechnicianQuery } from '../features/Technician/utils';
 import { IRepository } from './IRepository';
-import { TechnicianPerformanceType, TechnicianType } from '../features/Technician/types';
+import { TechnicianInterventionType, TechnicianPerformanceType, TechnicianType } from '../features/Technician/types';
 import { PaginatedResponse, Pagination } from '../utils';
 
 /**
@@ -12,4 +12,8 @@ export interface ITechnicianModel
   getTechniciansPerformance(
     pagination: Pagination
   ): Promise<PaginatedResponse<TechnicianPerformanceType>>;
+  getPerformanceData(
+    technicianId: string,
+    pagination: Pagination
+  ): Promise<PaginatedResponse<TechnicianInterventionType>>;
 }

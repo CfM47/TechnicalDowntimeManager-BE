@@ -175,6 +175,7 @@ export const technicianRouter = (technicianModel: ITechnicianModel, userModel: I
   const technicianController = new TechnicianController(userModel, technicianModel);
 
   router.route('/').post(technicianController.create).get(technicianController.getAll);
+  router.get('/:id/interventions', technicianController.getPerformanceData);
   router.route('/performance').get(technicianController.getTechniciansPerformance);
   router
     .route('/:id')
