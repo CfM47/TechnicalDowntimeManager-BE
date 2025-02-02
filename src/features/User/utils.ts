@@ -10,14 +10,12 @@ import { user } from './schema';
  * - `password`: The password of the user (string).
  * - `id_department`: The UUID of the department the user belongs to (string).
  * - `role`: The role of the user (enum).
- * - `token`: An optional token for the user (string).
  */
 export const userSchema = z.object({
   name: z.string(),
   password: z.string(),
   id_department: z.string().uuid(),
   id_role: z.number().int().positive(),
-  token: z.string().optional(),
   isTechnician: z.boolean(),
   exp_years: z.number().int().positive().optional(),
   specialty: z.string().optional()
@@ -31,14 +29,12 @@ export const userSchema = z.object({
  * - `name`: The name of the user (optional string).
  * - `id_department`: The ID of the department the user belongs to (optional string).
  * - `role`: The role of the user (optional string).
- * - `token`: The token of the user (optional string).
  */
 export type UserQuery = {
   id?: string;
   name?: string;
   id_department?: string;
   id_role?: number;
-  token?: string;
 };
 
 /**

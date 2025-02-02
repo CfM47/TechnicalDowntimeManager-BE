@@ -3,8 +3,6 @@ import { validate } from '../../utils';
 import { IUserModel } from '../../Interfaces/IUserModel';
 import { createToken, signinSchema } from './utils';
 import bcrypt from 'bcrypt';
-import { UserQuery } from '../User/utils';
-import { User } from '../User/schema';
 
 /**
  * Controller for handling authentication-related operations.
@@ -45,9 +43,7 @@ export class AuthController {
       return;
     }
     const token = createToken(data.name);
-    const query: UserQuery = { name: data.name };
-    const updateToken: Partial<User> = { token: token };
-    await this.userModel.update(query, updateToken);
+
     res.status(200).json({
       token: token,
       name: userData.name,
