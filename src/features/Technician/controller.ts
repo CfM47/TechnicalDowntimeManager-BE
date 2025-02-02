@@ -131,6 +131,31 @@ export class TechnicianController {
   };
 
   /**
+   * Retrieves technician performance data.
+   *
+   * @param req - The HTTP request object.
+   * @param res - The HTTP response object.
+   */
+  getInterventionData = async (req: Request, res: Response) => {
+    try {
+      const technicianId = req.params.id;
+      const { page, size } = req.query;
+      const pagination = validatePagination(page, size);
+      const performanceData = await this.technicianModel.getInterventionData(
+        technicianId,
+        pagination
+      );
+      if (!performanceData) {
+        res.status(404).json({ message: 'Technician not found' });
+        return;
+      }
+      res.status(200).json(performanceData);
+    } catch (e) {
+      res.status(500).json(ErrorMessage(e));
+    }
+  };
+
+  /**
    * Deletes a technician by ID.
    *
    * @param req - The request object.
@@ -152,6 +177,12 @@ export class TechnicianController {
     }
   };
 
+  /**
+   * Retrieves the performance data of all technicians.
+   *
+   * @param req - The HTTP request object.
+   * @param res - The HTTP response object.
+   */
   getTechniciansPerformance = async (req: Request, res: Response) => {
     try {
       const { page, size } = req.query;

@@ -1,12 +1,16 @@
 import { ITechnicianModel } from '../../Interfaces/ITechnicianModel';
 import { NewTechnician, technician, Technician } from './schema';
 import { db } from '../../db/config/db_connect';
-import { and, asc, desc, eq, sql } from 'drizzle-orm';
+import { and, asc, desc, eq, or, sql } from 'drizzle-orm';
 import { TechnicianQuery, TechnicianQueryBuilder } from './utils';
 import {
+  TechnicianInterventionType,
   TechnicianPerformanceSelection,
   TechnicianPerformanceType,
+  TechniciansDowntimesInterventions,
   technicianSelection,
+  TechniciansMaintenancesInterventions,
+  TechniciansRatesInterventions,
   TechnicianType
 } from './types';
 import { user } from '../User/schema';
@@ -14,6 +18,9 @@ import { department } from '../Department/schema';
 import { countTableRows, PaginatedResponse, Pagination } from '../../utils';
 import { rate } from '../Rate/schema';
 import { maintenance } from '../Maintenance/schema';
+import { equipment } from '../Equipment/schema';
+import { downtime } from '../Downtime/schema';
+import { unionAll } from 'drizzle-orm/pg-core';
 
 /**
  * Model for managing technicians.
@@ -120,6 +127,76 @@ export class TechnicianModel implements ITechnicianModel {
     return await this.getById(query);
   }
 
+  /**
+   * Retrieves intervention data for a technician.
+   *
+   * @param technicianId - The ID of the technician.
+   * @param pagination - The pagination information.
+   * @returns A paginated response containing the technician's intervention data.
+   */
+  async getInterventionData(
+    technicianId: string,
+    pagination: Pagination
+  ): Promise<PaginatedResponse<TechnicianInterventionType>> {
+    const technicianRateQuery = db
+      .select(TechniciansRatesInterventions)
+      .from(technician)
+      .innerJoin(rate, eq(rate.id_technician, technician.id_user))
+      .where(eq(technician.id_user, technicianId));
+
+    const technicianMaintenanceQuery = db
+      .select(TechniciansMaintenancesInterventions)
+      .from(technician)
+      .innerJoin(maintenance, eq(maintenance.id_technician, technician.id_user))
+      .innerJoin(equipment, eq(equipment.id, maintenance.id_equipment))
+      .where(eq(technician.id_user, technicianId));
+
+    const technicianDowntimeQuery = db
+      .select(TechniciansDowntimesInterventions)
+      .from(technician)
+      .innerJoin(
+        downtime,
+        or(eq(downtime.id_receiver, technician.id_user), eq(downtime.id_sender, technician.id_user))
+      )
+      .innerJoin(equipment, eq(equipment.id, downtime.id_equipment))
+      .where(eq(technician.id_user, technicianId));
+
+    const totalRate = countTableRows(rate, [eq(rate.id_technician, technicianId)]);
+    const totalMaintenance = countTableRows(maintenance, [
+      eq(maintenance.id_technician, technicianId)
+    ]);
+    const totalDowntime = countTableRows(downtime, [
+      eq(downtime.id_receiver, technicianId),
+      eq(downtime.id_sender, technicianId)
+    ]);
+
+    const total = await Promise.all([totalRate, totalMaintenance, totalDowntime]).then((values) => {
+      return values.reduce((acc, curr) => acc + curr, 0);
+    });
+
+    const result: TechnicianInterventionType[] = await unionAll(
+      technicianRateQuery,
+      technicianMaintenanceQuery,
+      technicianDowntimeQuery
+    )
+      .orderBy(maintenance.date)
+      .limit(pagination.size)
+      .offset(pagination.size * (pagination.page - 1));
+
+    return {
+      items: result,
+      page: pagination.page,
+      size: pagination.size,
+      total
+    };
+  }
+
+  /**
+   * Retrieves the performance data of all technicians.
+   *
+   * @param pagination - The pagination information.
+   * @returns A paginated response containing the performance data of technicians.
+   */
   async getTechniciansPerformance(
     pagination: Pagination
   ): Promise<PaginatedResponse<TechnicianPerformanceType>> {
