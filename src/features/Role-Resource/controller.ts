@@ -75,7 +75,12 @@ export class RoleResourceController {
   getById = async (req: Request, res: Response) => {
     try {
       const { role_id, resource_id } = req.params;
-      const roleResourceQuery: RoleResourceQuery = { role_id, resource_id };
+      const result = validate({ role_id, resource_id }, roleResourceSchema);
+      if (!result.success) {
+        res.status(400).json({ message: JSON.parse(result.error.message) });
+        return;
+      }
+      const roleResourceQuery: RoleResourceQuery = { ...result.data };
 
       const roleResourceFound = await this.roleResourceModel.getById(roleResourceQuery);
 
@@ -98,13 +103,19 @@ export class RoleResourceController {
   update = async (req: Request, res: Response) => {
     try {
       const { role_id, resource_id } = req.params;
+      const paramsResult = validate({ role_id, resource_id }, roleResourceSchema);
+      if (!paramsResult.success) {
+        res.status(400).json({ message: JSON.parse(paramsResult.error.message) });
+        return;
+      }
+
       const result = validateUpdate(req.body, roleResourceSchema);
 
       if (!result.success) {
         res.status(400).json({ message: JSON.parse(result.error.message) });
         return;
       }
-      const roleResourceQuery: RoleResourceQuery = { role_id, resource_id };
+      const roleResourceQuery: RoleResourceQuery = { ...paramsResult.data };
       const roleResourceFound = await this.roleResourceModel.getById(roleResourceQuery);
 
       if (!roleResourceFound) {
@@ -149,7 +160,12 @@ export class RoleResourceController {
   delete = async (req: Request, res: Response) => {
     try {
       const { role_id, resource_id } = req.params;
-      const roleResourceQuery: RoleResourceQuery = { role_id, resource_id };
+      const result = validate({ role_id, resource_id }, roleResourceSchema);
+      if (!result.success) {
+        res.status(400).json({ message: JSON.parse(result.error.message) });
+        return;
+      }
+      const roleResourceQuery: RoleResourceQuery = { ...result.data };
 
       const roleResourceFound = await this.roleResourceModel.getById(roleResourceQuery);
 

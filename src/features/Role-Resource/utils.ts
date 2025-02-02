@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { roleResource } from './schema';
 
 export const roleResourceSchema = z.object({
-  role_id: z.string().uuid(),
+  role_id: z.number(),
   resource_id: z.string().uuid()
 });
 
