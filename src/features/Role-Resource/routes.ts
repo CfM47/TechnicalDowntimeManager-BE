@@ -18,4 +18,6 @@ export const roleResourceRouter = (
     .get(controller.getById)
     .put(controller.update)
     .delete(controller.delete);
+
+  return router;
 };

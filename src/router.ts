@@ -10,6 +10,8 @@ import { departmentRouter } from './features/Department/router';
 import { downtimeRouter } from './features/Downtime/router';
 import { maintenanceRouter } from './features/Maintenance/router';
 import { authRouter } from './features/Auth/router';
+import { resourceRouter } from './features/Resources/router';
+import { roleResourceRouter } from './features/Role-Resource/routes';
 import { getAllFormats } from './core/utils';
 
 /**
@@ -62,6 +64,11 @@ export const appRouter = (appModels: Models): Router => {
       appModels.equipmentModel,
       appModels.userModel
     )
+  );
+  router.use('/resource', resourceRouter(appModels.resourceModel));
+  router.use(
+    'role-resource',
+    roleResourceRouter(appModels.roleResourceModel, appModels.roleModel, appModels.resourceModel)
   );
   router.use('/auth', authRouter(appModels.userModel, appModels.roleModel));
   router.get('/available-export-formats', getAllFormats);

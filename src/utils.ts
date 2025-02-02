@@ -11,6 +11,8 @@ import { IMaintenanceModel } from './Interfaces/IMaintenanceModel';
 import { PgTable } from 'drizzle-orm/pg-core';
 import { db } from './db/config/db_connect';
 import { and, count, SQL } from 'drizzle-orm';
+import { IResourceModel } from './Interfaces/IResourceModel';
+import { IRoleResourceModel } from './Interfaces/IRoleResourceModel';
 
 /**
  * Generates an error message object.
@@ -103,4 +105,6 @@ export type Models = {
   departmentModel: IDepartmentModel;
   downtimeModel: IDowntimeModel;
   maintenanceModel: IMaintenanceModel;
+  resourceModel: IResourceModel;
+  roleResourceModel: IRoleResourceModel;
 };
