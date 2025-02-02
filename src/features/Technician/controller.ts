@@ -136,12 +136,12 @@ export class TechnicianController {
    * @param req - The HTTP request object.
    * @param res - The HTTP response object.
    */
-  getPerformanceData = async (req: Request, res: Response) => {
+  getInterventionData = async (req: Request, res: Response) => {
     try {
       const technicianId = req.params.id;
       const { page, size } = req.query;
       const pagination = validatePagination(page, size);
-      const performanceData = await this.technicianModel.getPerformanceData(
+      const performanceData = await this.technicianModel.getInterventionData(
         technicianId,
         pagination
       );
@@ -177,6 +177,12 @@ export class TechnicianController {
     }
   };
 
+  /**
+   * Retrieves the performance data of all technicians.
+   *
+   * @param req - The HTTP request object.
+   * @param res - The HTTP response object.
+   */
   getTechniciansPerformance = async (req: Request, res: Response) => {
     try {
       const { page, size } = req.query;

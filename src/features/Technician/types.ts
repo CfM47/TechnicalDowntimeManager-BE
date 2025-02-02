@@ -22,6 +22,16 @@ export interface TechnicianType extends UserType {
   specialty: string;
 }
 
+/**
+ * Interface representing the performance data of a technician.
+ *
+ * Properties:
+ * - `id`: The unique identifier of the technician.
+ * - `name`: The name of the technician.
+ * - `score_avg`: The average score of the technician.
+ * - `total_rates`: The total number of rates received by the technician.
+ * - `total_maintenances`: The total number of maintenances performed by the technician.
+ */
 export interface TechnicianPerformanceType {
   id: string;
   name: string;
@@ -38,17 +48,31 @@ export const TechnicianPerformanceSelection = {
   total_maintenances: countDistinct(maintenance.date)
 };
 
+/**
+ * Type representing an intervention performed by a technician.
+ *
+ * Properties:
+ * - `date`: The date of the intervention.
+ * - `type`: The type of the intervention.
+ * - `aditional_info`: Additional information about the intervention.
+ */
 export type TechnicianInterventionType = {
   date: string;
   type: string;
   aditional_info: string;
 };
+
 /**
  * Object representing the selection of technician fields for database queries.
  *
  * Includes fields from the user, department, and technician schemas.
  */
 
+/**
+ * Object representing the selection of technician interventions for database queries.
+ *
+ * Includes fields for rates, maintenances, and downtimes.
+ */
 export const TechniciansRatesInterventions = {
   date: rate.date,
   type: sql<string>`'Valoración'`.as('type'),
@@ -82,38 +106,6 @@ export const technicianSelection = {
   role: user.role,
   exp_years: technician.exp_years,
   specialty: technician.specialty
-};
-/**
- * Type representing general technician intervention data.
- */
-
-export type TechnicianInterventionType = {
-  date: string;
-  type: string;
-  aditional_info: string;
-};
-/**
- * Object representing the selection of technician fields for database queries.
- *
- * Includes fields from the user, department, and technician schemas.
- */
-
-export const TechniciansRatesInterventions = {
-  date: rate.date,
-  type: sql<string>`'Valoración'`.as('type'),
-  aditional_info: sql<string>`CAST(${rate.comment} AS VARCHAR)`.as('aditional_info')
-};
-
-export const TechniciansMaintenancesInterventions = {
-  date: maintenance.date,
-  type: sql<string>`'Mantenimiento'`.as('type'),
-  aditional_info: sql<string>`CAST(${maintenance.type} AS VARCHAR)`.as('aditional_info')
-};
-
-export const TechniciansDowntimesInterventions = {
-  date: downtime.date,
-  type: sql<string>`'Baja'`.as('type'),
-  aditional_info: sql<string>`CAST(${downtime.status} AS VARCHAR)`.as('aditional_info')
 };
 
 /**

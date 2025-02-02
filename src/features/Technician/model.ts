@@ -6,8 +6,11 @@ import { TechnicianQuery, TechnicianQueryBuilder } from './utils';
 import {
   TechnicianInterventionType,
   TechnicianPerformanceSelection,
-  TechnicianPerformanceType, TechniciansDowntimesInterventions,
-  technicianSelection, TechniciansMaintenancesInterventions, TechniciansRatesInterventions,
+  TechnicianPerformanceType,
+  TechniciansDowntimesInterventions,
+  technicianSelection,
+  TechniciansMaintenancesInterventions,
+  TechniciansRatesInterventions,
   TechnicianType
 } from './types';
 import { user } from '../User/schema';
@@ -124,7 +127,14 @@ export class TechnicianModel implements ITechnicianModel {
     return await this.getById(query);
   }
 
-  async getPerformanceData(
+  /**
+   * Retrieves intervention data for a technician.
+   *
+   * @param technicianId - The ID of the technician.
+   * @param pagination - The pagination information.
+   * @returns A paginated response containing the technician's intervention data.
+   */
+  async getInterventionData(
     technicianId: string,
     pagination: Pagination
   ): Promise<PaginatedResponse<TechnicianInterventionType>> {
@@ -181,6 +191,12 @@ export class TechnicianModel implements ITechnicianModel {
     };
   }
 
+  /**
+   * Retrieves the performance data of all technicians.
+   *
+   * @param pagination - The pagination information.
+   * @returns A paginated response containing the performance data of technicians.
+   */
   async getTechniciansPerformance(
     pagination: Pagination
   ): Promise<PaginatedResponse<TechnicianPerformanceType>> {
