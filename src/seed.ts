@@ -30,6 +30,10 @@ const seed = async () => {
     {
       id: 3,
       name: Role.sectionLeader
+    },
+    {
+      id: 4,
+      name: Role.user
     }
   ];
 

@@ -12,13 +12,13 @@ export const signinSchema = z.object({
 const secret = process.env.SECRET_KEY || 'secret';
 
 /**
- * Creates a JWT token for the given user name.
+ * Creates a JWT token for the given user name and role.
  *
  * @param name - The name of the user.
  * @returns The generated JWT token.
  */
-export function createToken(name: string) {
-  return jwt.sign({ name: name }, secret, { expiresIn: '24h' });
+export function createToken(name: string, role: string) {
+  return jwt.sign({ name, role }, secret, { expiresIn: '1h' });
 }
 
 /**

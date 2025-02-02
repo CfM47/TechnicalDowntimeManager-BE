@@ -3,6 +3,8 @@ import { validate } from '../../utils';
 import { IUserModel } from '../../Interfaces/IUserModel';
 import { createToken, signinSchema } from './utils';
 import bcrypt from 'bcrypt';
+import { IRoleModel } from '../../Interfaces/IRoleModel';
+import { Role } from '../../enums';
 
 /**
  * Controller for handling authentication-related operations.
@@ -11,8 +13,10 @@ import bcrypt from 'bcrypt';
  */
 export class AuthController {
   private userModel: IUserModel;
-  constructor(userModel: IUserModel) {
+  private roleModel: IRoleModel;
+  constructor(userModel: IUserModel, roleModel: IRoleModel) {
     this.userModel = userModel;
+    this.roleModel = roleModel;
   }
 
   /**
@@ -31,18 +35,24 @@ export class AuthController {
       res.status(400).json({ message: JSON.parse(result.error.message) });
       return;
     }
+
     const data = result.data;
+
     const userData = await this.userModel.getByName(data.name);
     if (!userData) {
       res.status(404).json({ message: 'User not found' });
       return;
     }
+
     const correctPassword: boolean = await bcrypt.compare(data.password, userData.password);
     if (!correctPassword) {
       res.status(401).json({ message: 'Invalid password' });
       return;
     }
-    const token = createToken(data.name);
+
+    const roleData = await this.roleModel.getById({ id: userData.id_role });
+
+    const token = createToken(data.name, roleData?.name || Role.user);
 
     res.status(200).json({
       token: token,

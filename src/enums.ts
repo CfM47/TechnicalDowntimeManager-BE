@@ -44,5 +44,6 @@ export const MaintenanceTypes: [string, ...string[]] = ['Preventivo', 'Correctiv
 export enum Role {
   admin = 'Administrator',
   technician = 'Technician',
-  sectionLeader = 'Section Leader'
+  sectionLeader = 'Section Leader',
+  user = 'User'
 }
