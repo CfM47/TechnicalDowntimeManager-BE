@@ -29,3 +29,14 @@ export function createToken(name: string, role: string) {
 export function isValidToken(token: string) {
   jwt.verify(token, secret, { complete: true });
 }
+
+/**
+ * Extracts the user name and role from a JWT token.
+ *
+ * @param token - The JWT token.
+ * @returns The user name and role extracted from the token.
+ */
+export function decodeToken(token: string) {
+  const decoded = jwt.decode(token) as { name: string; role: string };
+  return decoded;
+}

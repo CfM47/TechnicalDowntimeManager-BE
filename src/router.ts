@@ -63,7 +63,7 @@ export const appRouter = (appModels: Models): Router => {
       appModels.userModel
     )
   );
-  router.use('/auth', authRouter(appModels.userModel));
+  router.use('/auth', authRouter(appModels.userModel, appModels.roleModel));
   router.get('/available-export-formats', getAllFormats);
   return router;
 };

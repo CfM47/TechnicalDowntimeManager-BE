@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { IUserModel } from '../../Interfaces/IUserModel';
 import { AuthController } from './controller';
+import { IRoleModel } from '../../Interfaces/IRoleModel';
 
 /**
  * Creates and configures the authentication router.
@@ -12,9 +13,9 @@ import { AuthController } from './controller';
  * @param userModel - The user model to be used by the authentication controller.
  * @returns The configured authentication router.
  */
-export const authRouter = (userModel: IUserModel) => {
+export const authRouter = (userModel: IUserModel, roleModel: IRoleModel) => {
   const router = Router();
-  const authController = new AuthController(userModel);
+  const authController = new AuthController(userModel, roleModel);
 
   router.post('/signin', authController.signin);
 
