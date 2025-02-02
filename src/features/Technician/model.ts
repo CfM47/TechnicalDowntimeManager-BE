@@ -1,12 +1,19 @@
 import { ITechnicianModel } from '../../Interfaces/ITechnicianModel';
 import { NewTechnician, technician, Technician } from './schema';
 import { db } from '../../db/config/db_connect';
-import { and, asc, eq } from 'drizzle-orm';
+import { and, asc, desc, eq, sql } from 'drizzle-orm';
 import { TechnicianQuery, TechnicianQueryBuilder } from './utils';
-import { technicianSelection, TechnicianType } from './types';
+import {
+  TechnicianPerformanceSelection,
+  TechnicianPerformanceType,
+  technicianSelection,
+  TechnicianType
+} from './types';
 import { user } from '../User/schema';
 import { department } from '../Department/schema';
 import { countTableRows, PaginatedResponse, Pagination } from '../../utils';
+import { rate } from '../Rate/schema';
+import { maintenance } from '../Maintenance/schema';
 
 /**
  * Model for managing technicians.
@@ -111,5 +118,27 @@ export class TechnicianModel implements ITechnicianModel {
       id_user: updatedTechnician.id_user
     };
     return await this.getById(query);
+  }
+
+  async getTechniciansPerformance(
+    pagination: Pagination
+  ): Promise<PaginatedResponse<TechnicianPerformanceType>> {
+    const items = await db
+      .select(TechnicianPerformanceSelection)
+      .from(technician)
+      .innerJoin(user, eq(technician.id_user, user.id))
+      .leftJoin(rate, eq(technician.id_user, rate.id_technician))
+      .leftJoin(maintenance, eq(technician.id_user, maintenance.id_technician))
+      .groupBy(technician.id_user, user.name)
+      .orderBy(desc(sql`score_avg`))
+      .limit(pagination.size)
+      .offset(pagination.size * (pagination.page - 1));
+
+    return {
+      items,
+      page: pagination.page,
+      size: pagination.size,
+      total: await countTableRows(technician, [])
+    };
   }
 }

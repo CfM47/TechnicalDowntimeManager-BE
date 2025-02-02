@@ -151,4 +151,15 @@ export class TechnicianController {
       res.status(500).json(ErrorMessage(e));
     }
   };
+
+  getTechniciansPerformance = async (req: Request, res: Response) => {
+    try {
+      const { page, size } = req.query;
+      const pagination = validatePagination(page, size);
+      const result = await this.technicianModel.getTechniciansPerformance(pagination);
+      res.status(200).json(result);
+    } catch (e) {
+      res.status(500).json(ErrorMessage(e));
+    }
+  };
 }
