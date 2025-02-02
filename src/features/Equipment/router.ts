@@ -2,6 +2,12 @@ import { Router } from 'express';
 import { IEquipmentModel } from '../../Interfaces/IEquipmentModel';
 import { EquipmentController } from './controller';
 import { IDepartmentModel } from '../../Interfaces/IDepartmentModel';
+import { AuthController } from '../Auth/controller';
+import { Role } from '../../enums';
+import { IRoleResourceModel } from '../../Interfaces/IRoleResourceModel';
+import { IResourceModel } from '../../Interfaces/IResourceModel';
+import { IRoleModel } from '../../Interfaces/IRoleModel';
+import { IUserModel } from '../../Interfaces/IUserModel';
 
 /**
  * @swagger
@@ -164,23 +170,36 @@ import { IDepartmentModel } from '../../Interfaces/IDepartmentModel';
  */
 export const equipmentRouter = (
   equipmentModel: IEquipmentModel,
-  departmentModel: IDepartmentModel
+  departmentModel: IDepartmentModel,
+  userModel: IUserModel,
+  roleModel: IRoleModel,
+  resourceModel: IResourceModel,
+  roleResourceModel: IRoleResourceModel
 ) => {
   const router = Router();
 
   const equipmentController = new EquipmentController(equipmentModel, departmentModel);
+  const authController = new AuthController(userModel, roleModel, resourceModel, roleResourceModel);
 
-  router.route('/').post(equipmentController.create).get(equipmentController.getAll);
+  const allowedRoles = [Role.admin, Role.sectionLeader, Role.technician];
+
+  router
+    .route('/')
+    .post(authController.hasRole({ allowedRoles }), equipmentController.create)
+    .get(authController.hasRole({ allowedRoles }), equipmentController.getAll);
   router
     .route('/maintenances-last-year')
-    .get(equipmentController.getEquipmentsWithFrequentMaintenances);
+    .get(
+      authController.hasRole({ allowedRoles }),
+      equipmentController.getEquipmentsWithFrequentMaintenances
+    );
   router
     .route('/maintenances-last-year/report')
     .get(equipmentController.generateReportEquipmentWithFrequentMaintenances);
   router
     .route('/:id')
-    .get(equipmentController.getById)
-    .put(equipmentController.update)
-    .delete(equipmentController.delete);
+    .get(authController.hasRole({ allowedRoles }), equipmentController.getById)
+    .put(authController.hasRole({ allowedRoles }), equipmentController.update)
+    .delete(authController.hasRole({ allowedRoles }), equipmentController.delete);
   return router;
 };

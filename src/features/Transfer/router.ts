@@ -4,6 +4,11 @@ import { TransferController } from './controller';
 import { IUserModel } from '../../Interfaces/IUserModel';
 import { IEquipmentModel } from '../../Interfaces/IEquipmentModel';
 import { IDepartmentModel } from '../../Interfaces/IDepartmentModel';
+import { AuthController } from '../Auth/controller';
+import { Role } from '../../enums';
+import { IRoleResourceModel } from '../../Interfaces/IRoleResourceModel';
+import { IResourceModel } from '../../Interfaces/IResourceModel';
+import { IRoleModel } from '../../Interfaces/IRoleModel';
 
 /**
  * @swagger
@@ -311,7 +316,10 @@ export const transferRouter = (
   transferModel: ITransferModel,
   userModel: IUserModel,
   equipmentModel: IEquipmentModel,
-  departmentModel: IDepartmentModel
+  departmentModel: IDepartmentModel,
+  roleModel: IRoleModel,
+  resourceModel: IResourceModel,
+  roleResourceModel: IRoleResourceModel
 ) => {
   const router = Router();
 
@@ -321,17 +329,36 @@ export const transferRouter = (
     equipmentModel,
     departmentModel
   );
+  const authController = new AuthController(userModel, roleModel, resourceModel, roleResourceModel);
 
-  router.route('/').post(transferController.create).get(transferController.getAll);
+  router
+    .route('/')
+    .post(
+      authController.hasRole({ allowedRoles: [Role.admin, Role.sectionLeader] }),
+      transferController.create
+    )
+    .get(
+      authController.hasRole({ allowedRoles: [Role.admin, Role.sectionLeader] }),
+      transferController.getAll
+    );
   router.route('/equipment-record/report').get(transferController.generateEquipmentTransferRecord);
   router
     .route('/department-record/report')
     .get(transferController.generateDepartmentTransferRecord);
   router
     .route('/:id_sender/:id_receiver/:id_equipment/:date/:id_origin_dep/:id_receiver_dep')
-    .get(transferController.getById)
-    .put(transferController.update)
-    .delete(transferController.delete);
+    .get(
+      authController.hasRole({ allowedRoles: [Role.admin, Role.sectionLeader] }),
+      transferController.getById
+    )
+    .put(
+      authController.hasRole({ allowedRoles: [Role.admin, Role.sectionLeader] }),
+      transferController.update
+    )
+    .delete(
+      authController.hasRole({ allowedRoles: [Role.admin, Role.sectionLeader] }),
+      transferController.delete
+    );
 
   return router;
 };

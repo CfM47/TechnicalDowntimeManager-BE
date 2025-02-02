@@ -1,6 +1,11 @@
 import { Router } from 'express';
 import { IRoleModel } from '../../Interfaces/IRoleModel';
 import { RoleController } from './controller';
+import { AuthController } from '../Auth/controller';
+import { IUserModel } from '../../Interfaces/IUserModel';
+import { IResourceModel } from '../../Interfaces/IResourceModel';
+import { IRoleResourceModel } from '../../Interfaces/IRoleResourceModel';
+import { Role } from '../../enums';
 
 /**
  * @swagger
@@ -158,16 +163,25 @@ import { RoleController } from './controller';
  *           description: Name of the role.
  */
 
-export const roleRouter = (roleModel: IRoleModel) => {
+export const roleRouter = (
+  roleModel: IRoleModel,
+  userModel: IUserModel,
+  resourceModel: IResourceModel,
+  roleResourceModel: IRoleResourceModel
+) => {
   const router = Router();
 
   const roleController = new RoleController(roleModel);
+  const authController = new AuthController(userModel, roleModel, resourceModel, roleResourceModel);
 
-  router.route('/').post(roleController.create).get(roleController.getAll);
+  router
+    .route('/')
+    .post(authController.hasRole({ allowedRoles: [Role.admin] }), roleController.create)
+    .get(roleController.getAll);
   router
     .route('/:id')
     .get(roleController.getById)
-    .put(roleController.update)
-    .delete(roleController.delete);
+    .put(authController.hasRole({ allowedRoles: [Role.admin] }), roleController.update)
+    .delete(authController.hasRole({ allowedRoles: [Role.admin] }), roleController.delete);
   return router;
 };

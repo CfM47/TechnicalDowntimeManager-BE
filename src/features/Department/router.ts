@@ -1,6 +1,12 @@
 import { Router } from 'express';
 import { IDepartmentModel } from '../../Interfaces/IDepartmentModel';
 import { DepartmentController } from './controller';
+import { IResourceModel } from '../../Interfaces/IResourceModel';
+import { IRoleModel } from '../../Interfaces/IRoleModel';
+import { IRoleResourceModel } from '../../Interfaces/IRoleResourceModel';
+import { IUserModel } from '../../Interfaces/IUserModel';
+import { AuthController } from '../Auth/controller';
+import { Role } from '../../enums';
 
 /**
  * @swagger
@@ -150,16 +156,26 @@ import { DepartmentController } from './controller';
  * @param departmentModel - The model instance for department operations.
  * @returns The configured router.
  */
-export const departmentRouter = (departmentModel: IDepartmentModel) => {
+export const departmentRouter = (
+  departmentModel: IDepartmentModel,
+  userModel: IUserModel,
+  roleModel: IRoleModel,
+  resourceModel: IResourceModel,
+  roleResourceModel: IRoleResourceModel
+) => {
   const router = Router();
 
   const departmentController = new DepartmentController(departmentModel);
+  const authController = new AuthController(userModel, roleModel, resourceModel, roleResourceModel);
 
-  router.route('/').post(departmentController.create).get(departmentController.getAll);
+  router
+    .route('/')
+    .post(authController.hasRole({ allowedRoles: [Role.admin] }), departmentController.create)
+    .get(departmentController.getAll);
   router
     .route('/:id')
     .get(departmentController.getById)
-    .put(departmentController.update)
-    .delete(departmentController.delete);
+    .put(authController.hasRole({ allowedRoles: [Role.admin] }), departmentController.update)
+    .delete(authController.hasRole({ allowedRoles: [Role.admin] }), departmentController.delete);
   return router;
 };

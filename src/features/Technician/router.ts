@@ -2,6 +2,11 @@ import { Router } from 'express';
 import { IUserModel } from '../../Interfaces/IUserModel';
 import { ITechnicianModel } from '../../Interfaces/ITechnicianModel';
 import { TechnicianController } from './controller';
+import { AuthController } from '../Auth/controller';
+import { Role } from '../../enums';
+import { IRoleResourceModel } from '../../Interfaces/IRoleResourceModel';
+import { IRoleModel } from '../../Interfaces/IRoleModel';
+import { IResourceModel } from '../../Interfaces/IResourceModel';
 
 /**
  * @swagger
@@ -169,21 +174,42 @@ import { TechnicianController } from './controller';
  * @param userModel - The user model to interact with the database.
  * @returns The configured router for technician routes.
  */
-export const technicianRouter = (technicianModel: ITechnicianModel, userModel: IUserModel) => {
+export const technicianRouter = (
+  technicianModel: ITechnicianModel,
+  userModel: IUserModel,
+  roleModel: IRoleModel,
+  resourceModel: IResourceModel,
+  roleResourceModel: IRoleResourceModel
+) => {
   const router = Router();
 
   const technicianController = new TechnicianController(userModel, technicianModel);
+  const authController = new AuthController(userModel, roleModel, resourceModel, roleResourceModel);
 
-  router.route('/').post(technicianController.create).get(technicianController.getAll);
+  router
+    .route('/')
+    .post(authController.hasRole({ allowedRoles: [Role.admin] }), technicianController.create)
+    .get(
+      authController.hasRole({ allowedRoles: [Role.admin, Role.sectionLeader, Role.technician] }),
+      technicianController.getAll
+    );
   router.get('/:id/interventions', technicianController.getInterventionData);
   router.get('/:id/interventions/report', technicianController.generateTechniciansIntervention);
-  router.route('/performance').get(technicianController.getTechniciansPerformance);
+  router
+    .route('/performance')
+    .get(
+      authController.hasRole({ allowedRoles: [Role.admin] }),
+      technicianController.getTechniciansPerformance
+    );
   router.route('/performance/report').get(technicianController.generateTechniciansPerformance);
   router
     .route('/:id')
-    .get(technicianController.getById)
-    .put(technicianController.update)
-    .delete(technicianController.delete);
+    .get(
+      authController.hasRole({ allowedRoles: [Role.admin, Role.sectionLeader, Role.technician] }),
+      technicianController.getById
+    )
+    .put(authController.hasRole({ allowedRoles: [Role.admin] }), technicianController.update)
+    .delete(authController.hasRole({ allowedRoles: [Role.admin] }), technicianController.delete);
 
   return router;
 };

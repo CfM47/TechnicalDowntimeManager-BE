@@ -28,24 +28,72 @@ export const appRouter = (appModels: Models): Router => {
       appModels.userModel,
       appModels.technicianModel,
       appModels.departmentModel,
-      appModels.roleModel
+      appModels.roleModel,
+      appModels.resourceModel,
+      appModels.roleResourceModel
     )
   );
-  router.use('/technician', technicianRouter(appModels.technicianModel, appModels.userModel));
-  router.use('/equipment', equipmentRouter(appModels.equipmentModel, appModels.departmentModel));
+  router.use(
+    '/technician',
+    technicianRouter(
+      appModels.technicianModel,
+      appModels.userModel,
+      appModels.roleModel,
+      appModels.resourceModel,
+      appModels.roleResourceModel
+    )
+  );
+  router.use(
+    '/equipment',
+    equipmentRouter(
+      appModels.equipmentModel,
+      appModels.departmentModel,
+      appModels.userModel,
+      appModels.roleModel,
+      appModels.resourceModel,
+      appModels.roleResourceModel
+    )
+  );
   router.use(
     '/rate',
-    rateRouter(appModels.rateModel, appModels.userModel, appModels.technicianModel)
+    rateRouter(
+      appModels.rateModel,
+      appModels.userModel,
+      appModels.technicianModel,
+      appModels.roleModel,
+      appModels.resourceModel,
+      appModels.roleResourceModel
+    )
   );
-  router.use('/role', roleRouter(appModels.roleModel));
-  router.use('/department', departmentRouter(appModels.departmentModel));
+  router.use(
+    '/role',
+    roleRouter(
+      appModels.roleModel,
+      appModels.userModel,
+      appModels.resourceModel,
+      appModels.roleResourceModel
+    )
+  );
+  router.use(
+    '/department',
+    departmentRouter(
+      appModels.departmentModel,
+      appModels.userModel,
+      appModels.roleModel,
+      appModels.resourceModel,
+      appModels.roleResourceModel
+    )
+  );
   router.use(
     '/transfer',
     transferRouter(
       appModels.transferModel,
       appModels.userModel,
       appModels.equipmentModel,
-      appModels.departmentModel
+      appModels.departmentModel,
+      appModels.roleModel,
+      appModels.resourceModel,
+      appModels.roleResourceModel
     )
   );
   router.use(
@@ -53,7 +101,11 @@ export const appRouter = (appModels: Models): Router => {
     maintenanceRouter(
       appModels.maintenanceModel,
       appModels.technicianModel,
-      appModels.equipmentModel
+      appModels.equipmentModel,
+      appModels.userModel,
+      appModels.roleModel,
+      appModels.resourceModel,
+      appModels.roleResourceModel
     )
   );
   router.use(
@@ -62,15 +114,39 @@ export const appRouter = (appModels: Models): Router => {
       appModels.downtimeModel,
       appModels.departmentModel,
       appModels.equipmentModel,
+      appModels.userModel,
+      appModels.roleModel,
+      appModels.resourceModel,
+      appModels.roleResourceModel
+    )
+  );
+  router.use(
+    '/resource',
+    resourceRouter(
+      appModels.resourceModel,
+      appModels.userModel,
+      appModels.roleModel,
+      appModels.roleResourceModel
+    )
+  );
+  router.use(
+    'role-resource',
+    roleResourceRouter(
+      appModels.roleResourceModel,
+      appModels.roleModel,
+      appModels.resourceModel,
       appModels.userModel
     )
   );
-  router.use('/resource', resourceRouter(appModels.resourceModel));
   router.use(
-    'role-resource',
-    roleResourceRouter(appModels.roleResourceModel, appModels.roleModel, appModels.resourceModel)
+    '/auth',
+    authRouter(
+      appModels.userModel,
+      appModels.roleModel,
+      appModels.resourceModel,
+      appModels.roleResourceModel
+    )
   );
-  router.use('/auth', authRouter(appModels.userModel, appModels.roleModel));
   router.get('/available-export-formats', getAllFormats);
   return router;
 };

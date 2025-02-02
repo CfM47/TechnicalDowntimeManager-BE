@@ -20,7 +20,9 @@ export default defineConfig({
     './src/features/Rate/schema.ts',
     './src/features/Technician/schema.ts',
     './src/features/Equipment/schema.ts',
-    './src/features/Downtime/schema.ts'
+    './src/features/Downtime/schema.ts',
+    './src/features/Resources/schema.ts',
+    './src/features/Role-Resource/schema.ts'
   ],
   dialect: 'postgresql',
   dbCredentials: {

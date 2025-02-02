@@ -3,6 +3,11 @@ import { IRateModel } from '../../Interfaces/IRateModel';
 import { RateController } from './controller';
 import { IUserModel } from '../../Interfaces/IUserModel';
 import { ITechnicianModel } from '../../Interfaces/ITechnicianModel';
+import { AuthController } from '../Auth/controller';
+import { Role } from '../../enums';
+import { IResourceModel } from '../../Interfaces/IResourceModel';
+import { IRoleModel } from '../../Interfaces/IRoleModel';
+import { IRoleResourceModel } from '../../Interfaces/IRoleResourceModel';
 
 /**
  * @swagger
@@ -219,15 +224,38 @@ import { ITechnicianModel } from '../../Interfaces/ITechnicianModel';
 export const rateRouter = (
   rateModel: IRateModel,
   userModel: IUserModel,
-  technicianModel: ITechnicianModel
+  technicianModel: ITechnicianModel,
+  roleModel: IRoleModel,
+  resourceModel: IResourceModel,
+  roleResourceModel: IRoleResourceModel
 ) => {
   const router = Router();
   const rateController = new RateController(rateModel, userModel, technicianModel);
-  router.route('/').post(rateController.create).get(rateController.getAll);
+  const authController = new AuthController(userModel, roleModel, resourceModel, roleResourceModel);
+
+  router
+    .route('/')
+    .post(
+      authController.hasRole({ allowedRoles: [Role.admin, Role.sectionLeader] }),
+      rateController.create
+    )
+    .get(
+      authController.hasRole({ allowedRoles: [Role.admin, Role.sectionLeader] }),
+      rateController.getAll
+    );
   router
     .route('/:id_technician/:id_user/:date')
-    .get(rateController.getById)
-    .put(rateController.update)
-    .delete(rateController.delete);
+    .get(
+      authController.hasRole({ allowedRoles: [Role.admin, Role.sectionLeader] }),
+      rateController.getById
+    )
+    .put(
+      authController.hasRole({ allowedRoles: [Role.admin, Role.sectionLeader] }),
+      rateController.update
+    )
+    .delete(
+      authController.hasRole({ allowedRoles: [Role.admin, Role.sectionLeader] }),
+      rateController.delete
+    );
   return router;
 };

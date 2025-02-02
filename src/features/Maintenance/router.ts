@@ -3,6 +3,12 @@ import { IMaintenanceModel } from '../../Interfaces/IMaintenanceModel';
 import { MaintenanceController } from './controller';
 import { IEquipmentModel } from '../../Interfaces/IEquipmentModel';
 import { ITechnicianModel } from '../../Interfaces/ITechnicianModel';
+import { AuthController } from '../Auth/controller';
+import { Role } from '../../enums';
+import { IRoleResourceModel } from '../../Interfaces/IRoleResourceModel';
+import { IResourceModel } from '../../Interfaces/IResourceModel';
+import { IRoleModel } from '../../Interfaces/IRoleModel';
+import { IUserModel } from '../../Interfaces/IUserModel';
 
 /**
  * @swagger
@@ -222,7 +228,11 @@ import { ITechnicianModel } from '../../Interfaces/ITechnicianModel';
 export const maintenanceRouter = (
   maintenanceModel: IMaintenanceModel,
   technicianModel: ITechnicianModel,
-  equipmentModel: IEquipmentModel
+  equipmentModel: IEquipmentModel,
+  userModel: IUserModel,
+  roleModel: IRoleModel,
+  resourceModel: IResourceModel,
+  roleResourceModel: IRoleResourceModel
 ) => {
   const router = Router();
 
@@ -232,13 +242,33 @@ export const maintenanceRouter = (
     equipmentModel
   );
 
-  router.route('/').post(maintenanceController.create).get(maintenanceController.getAll);
+  const authController = new AuthController(userModel, roleModel, resourceModel, roleResourceModel);
+
+  router
+    .route('/')
+    .post(
+      authController.hasRole({ allowedRoles: [Role.admin, Role.sectionLeader, Role.technician] }),
+      maintenanceController.create
+    )
+    .get(
+      authController.hasRole({ allowedRoles: [Role.admin, Role.sectionLeader, Role.technician] }),
+      maintenanceController.getAll
+    );
   router.route('/equipment-history/report').get(maintenanceController.generateEquipmentHistory);
   router
     .route('/:id_technician/:id_equipment/:date')
-    .get(maintenanceController.getById)
-    .put(maintenanceController.update)
-    .delete(maintenanceController.delete);
+    .get(
+      authController.hasRole({ allowedRoles: [Role.admin, Role.sectionLeader, Role.technician] }),
+      maintenanceController.getById
+    )
+    .put(
+      authController.hasRole({ allowedRoles: [Role.admin, Role.sectionLeader, Role.technician] }),
+      maintenanceController.update
+    )
+    .delete(
+      authController.hasRole({ allowedRoles: [Role.admin, Role.sectionLeader, Role.technician] }),
+      maintenanceController.delete
+    );
 
   return router;
 };

@@ -4,6 +4,11 @@ import { DowntimeController } from './controller';
 import { IDepartmentModel } from '../../Interfaces/IDepartmentModel';
 import { IEquipmentModel } from '../../Interfaces/IEquipmentModel';
 import { IUserModel } from '../../Interfaces/IUserModel';
+import { AuthController } from '../Auth/controller';
+import { Role } from '../../enums';
+import { IRoleResourceModel } from '../../Interfaces/IRoleResourceModel';
+import { IResourceModel } from '../../Interfaces/IResourceModel';
+import { IRoleModel } from '../../Interfaces/IRoleModel';
 
 /**
  * @swagger
@@ -261,7 +266,10 @@ export const downtimeRouter = (
   downtimeModel: IDowntimeModel,
   departmentModel: IDepartmentModel,
   equipmentModel: IEquipmentModel,
-  userModel: IUserModel
+  userModel: IUserModel,
+  roleModel: IRoleModel,
+  resourceModel: IResourceModel,
+  roleResourceModel: IRoleResourceModel
 ) => {
   const router = Router();
 
@@ -272,15 +280,41 @@ export const downtimeRouter = (
     userModel
   );
 
-  router.route('/').post(downtimeController.create).get(downtimeController.getAll);
-  router.route('/last-year').get(downtimeController.getDowntimeLastYear);
+  const authController = new AuthController(userModel, roleModel, resourceModel, roleResourceModel);
+
+  router
+    .route('/')
+    .post(
+      authController.hasRole({ allowedRoles: [Role.admin, Role.sectionLeader, Role.technician] }),
+      downtimeController.create
+    )
+    .get(
+      authController.hasRole({ allowedRoles: [Role.admin, Role.sectionLeader, Role.technician] }),
+      downtimeController.getAll
+    );
+
+  router
+    .route('/last-year')
+    .get(
+      authController.hasRole({ allowedRoles: [Role.admin, Role.sectionLeader, Role.technician] }),
+      downtimeController.getDowntimeLastYear
+    );
   router.route('/last-year/report').get(downtimeController.generateReportLastYear);
 
   router
     .route('/:id_sender/:id_receiver/:id_equipment/:date/:id_dep_receiver')
-    .get(downtimeController.getById)
-    .put(downtimeController.update)
-    .delete(downtimeController.delete);
+    .get(
+      authController.hasRole({ allowedRoles: [Role.admin, Role.sectionLeader, Role.technician] }),
+      downtimeController.getById
+    )
+    .put(
+      authController.hasRole({ allowedRoles: [Role.admin, Role.sectionLeader, Role.technician] }),
+      downtimeController.update
+    )
+    .delete(
+      authController.hasRole({ allowedRoles: [Role.admin, Role.sectionLeader, Role.technician] }),
+      downtimeController.delete
+    );
 
   return router;
 };

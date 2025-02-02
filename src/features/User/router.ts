@@ -4,6 +4,10 @@ import { UserController } from './controller';
 import { ITechnicianModel } from '../../Interfaces/ITechnicianModel';
 import { IDepartmentModel } from '../../Interfaces/IDepartmentModel';
 import { IRoleModel } from '../../Interfaces/IRoleModel';
+import { AuthController } from '../Auth/controller';
+import { Role } from '../../enums';
+import { IRoleResourceModel } from '../../Interfaces/IRoleResourceModel';
+import { IResourceModel } from '../../Interfaces/IResourceModel';
 
 /**
  * @swagger
@@ -211,17 +215,29 @@ export const userRouter = (
   userModel: IUserModel,
   technicianModel: ITechnicianModel,
   departmentModel: IDepartmentModel,
-  roleModel: IRoleModel
+  roleModel: IRoleModel,
+  resourceModel: IResourceModel,
+  roleResourceModel: IRoleResourceModel
 ) => {
   const router = Router();
 
   const userController = new UserController(userModel, technicianModel, departmentModel, roleModel);
+  const authController = new AuthController(userModel, roleModel, resourceModel, roleResourceModel);
 
-  router.route('/').post(userController.create).get(userController.getAll);
+  router
+    .route('/')
+    .post(authController.hasRole({ allowedRoles: [Role.admin] }), userController.create)
+    .get(
+      authController.hasRole({ allowedRoles: [Role.admin, Role.sectionLeader, Role.technician] }),
+      userController.getAll
+    );
   router
     .route('/:id')
-    .get(userController.getById)
-    .put(userController.update)
-    .delete(userController.delete);
+    .get(
+      authController.hasRole({ allowedRoles: [Role.admin, Role.sectionLeader, Role.technician] }),
+      userController.getById
+    )
+    .put(authController.hasRole({ allowedRoles: [Role.admin] }), userController.update)
+    .delete(authController.hasRole({ allowedRoles: [Role.admin] }), userController.delete);
   return router;
 };
