@@ -21,6 +21,7 @@ import { maintenance } from '../Maintenance/schema';
 import { equipment } from '../Equipment/schema';
 import { downtime } from '../Downtime/schema';
 import { unionAll } from 'drizzle-orm/pg-core';
+import { role } from '../Role/schema';
 
 /**
  * Model for managing technicians.
@@ -32,6 +33,7 @@ import { unionAll } from 'drizzle-orm/pg-core';
  * - Update a technician by ID
  * - Delete a technician by ID
  */
+
 export class TechnicianModel implements ITechnicianModel {
   /**
    * Creates a new technician.
@@ -74,6 +76,7 @@ export class TechnicianModel implements ITechnicianModel {
       .from(technician)
       .innerJoin(user, eq(technician.id_user, user.id))
       .innerJoin(department, eq(user.id_department, department.id))
+      .innerJoin(role, eq(user.id_role, role.id))
       .where(and(...filterQuery))
       .orderBy(asc(user.name))
       .limit(pagination.size)
@@ -99,6 +102,7 @@ export class TechnicianModel implements ITechnicianModel {
       .from(technician)
       .innerJoin(user, eq(technician.id_user, user.id))
       .innerJoin(department, eq(user.id_department, department.id))
+      .innerJoin(role, eq(user.id_role, role.id))
       .where(and(...filter))
       .limit(1);
     return resultTechnician;

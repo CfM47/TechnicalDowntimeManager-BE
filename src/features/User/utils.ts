@@ -1,7 +1,6 @@
 import z from 'zod';
 import { eq, SQL } from 'drizzle-orm';
 import { user } from './schema';
-import { Roles } from '../../enums';
 
 /**
  * Zod schema for validating user data.
@@ -17,7 +16,7 @@ export const userSchema = z.object({
   name: z.string(),
   password: z.string(),
   id_department: z.string().uuid(),
-  role: z.enum(Roles),
+  id_role: z.number().int().positive(),
   token: z.string().optional(),
   isTechnician: z.boolean(),
   exp_years: z.number().int().positive().optional(),
@@ -38,7 +37,7 @@ export type UserQuery = {
   id?: string;
   name?: string;
   id_department?: string;
-  role?: string;
+  id_role?: number;
   token?: string;
 };
 
@@ -53,6 +52,6 @@ export function UserQueryBuilder(query: UserQuery): SQL[] {
   if (query.id) filters.push(eq(user.id, query.id));
   if (query.name) filters.push(eq(user.name, query.name));
   if (query.id_department) filters.push(eq(user.id_department, query.id_department));
-  if (query.role) filters.push(eq(user.role, query.role));
+  if (query.id_role) filters.push(eq(user.id_role, query.id_role));
   return filters;
 }

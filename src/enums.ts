@@ -41,7 +41,8 @@ export const TransferStatuses: [string, ...string[]] = [
 
 export const MaintenanceTypes: [string, ...string[]] = ['Preventivo', 'Correctivo', 'Predictivo'];
 
-/**
- * Enum representing the various roles.
- */
-export const Roles: [string, ...string[]] = ['Administrador', 'Técnico', 'Jefe de sección'];
+export enum Role {
+  admin = 'Administrator',
+  technician = 'Technician',
+  sectionLeader = 'Section Leader'
+}

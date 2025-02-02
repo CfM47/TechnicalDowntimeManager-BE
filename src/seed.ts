@@ -6,8 +6,10 @@ import { NewRate, rate } from './features/Rate/schema';
 import { NewTransfer, transfer } from './features/Transfer/schema';
 import { maintenance, NewMaintenance } from './features/Maintenance/schema';
 import { downtime, NewDowntime } from './features/Downtime/schema';
+import { role, NewRole } from './features/Role/schema';
 import { db } from './db/config/db_connect';
 import bcrypt from 'bcrypt';
+import { Role } from './enums';
 
 /**
  * Seeds the database with initial data for departments, users, technicians, equipments, rates, transfers, maintenances, and downtimes.
@@ -16,6 +18,21 @@ import bcrypt from 'bcrypt';
  * It handles any errors that occur during the insertion process and logs them to the console.
  */
 const seed = async () => {
+  const roles: NewRole[] = [
+    {
+      id: 1,
+      name: Role.admin
+    },
+    {
+      id: 2,
+      name: Role.technician
+    },
+    {
+      id: 3,
+      name: Role.sectionLeader
+    }
+  ];
+
   const departments: NewDepartment[] = [
     {
       id: '08f6e7f5-0649-47b4-81bc-05c3734ecd1f',
@@ -128,94 +145,94 @@ const seed = async () => {
       id: 'af4685e7-87ef-4a82-9e88-7155be87f899',
       name: 'Diego Manuel Viera Martínez',
       password: await bcrypt.hash('1111', 10),
-      role: 'Técnico',
+      id_role: 2,
       id_department: '614ce720-78e3-43f2-9c19-93cff24b77ac'
     },
     {
       id: '500e408b-681e-418a-b51a-76d86d5feec6',
       name: 'Pablo Gómez Vidal',
       password: await bcrypt.hash('1111', 10),
-      role: 'Técnico',
+      id_role: 2,
       id_department: '614ce720-78e3-43f2-9c19-93cff24b77ac'
     },
     {
       id: '247e10c9-f555-461c-a783-a0af0201c92c',
       name: 'Luis Alejandro Arteaga Morales',
       password: await bcrypt.hash('1111', 10),
-      role: 'Administrador',
+      id_role: 1,
       id_department: '614ce720-78e3-43f2-9c19-93cff24b77ac'
     },
     {
       id: '4456449c-808d-4f3d-b390-9767207a9de4',
       name: 'Mauricio Sunde Jiménez',
       password: await bcrypt.hash('1111', 10),
-      role: 'Administrador',
+      id_role: 1,
       id_department: '614ce720-78e3-43f2-9c19-93cff24b77ac'
     },
     {
       id: '9f6dbbd9-3a80-4138-8f06-c467aec3f946',
       name: 'Jossué Arteche Muñoz',
       password: await bcrypt.hash('1111', 10),
-      role: 'Jefe de sección',
+      id_role: 3,
       id_department: '4bef9dc3-6584-41f8-9415-a9bd8726f646'
     },
     {
       name: 'Ana María López',
       password: await bcrypt.hash('1111', 10),
-      role: 'Jefe de sección',
+      id_role: 3,
       id_department: '2a67444c-734e-416e-a9c0-17dbdac4819c'
     },
     {
       name: 'Carlos Pérez Gonzáles',
       password: await bcrypt.hash('1111', 10),
-      role: 'Jefe de sección',
+      id_role: 3,
       id_department: 'cd53346b-b237-46f4-9ea8-222be05e7e72'
     },
     {
       name: 'María García Montes de Oca',
       password: await bcrypt.hash('1111', 10),
-      role: 'Administrador',
+      id_role: 1,
       id_department: '08f6e7f5-0649-47b4-81bc-05c3734ecd1f'
     },
     {
       name: 'Juan Rodríguez García',
       password: await bcrypt.hash('1111', 10),
-      role: 'Jefe de sección',
+      id_role: 3,
       id_department: '4bef9dc3-6584-41f8-9415-a9bd8726f646'
     },
     {
       id: 'f4b865dc-da93-4f93-beeb-c4c2f6d7a5bf',
       name: 'Laura Fernández Martínez',
       password: await bcrypt.hash('1111', 10),
-      role: 'Técnico',
+      id_role: 2,
       id_department: '2a67444c-734e-416e-a9c0-17dbdac4819c'
     },
     {
       id: '04c9b1ce-27b3-4168-aea9-20510bcc8e3b',
       name: 'Pedro Pérez Gonzáles',
       password: await bcrypt.hash('1111', 10),
-      role: 'Técnico',
+      id_role: 2,
       id_department: '614ce720-78e3-43f2-9c19-93cff24b77ac'
     },
     {
       id: 'a5ec0b34-3770-4a71-822a-e1bdc7d2611a',
       name: 'José Agustín del Toro',
       password: await bcrypt.hash('1111', 10),
-      role: 'Técnico',
+      id_role: 2,
       id_department: '614ce720-78e3-43f2-9c19-93cff24b77ac'
     },
     {
       id: 'a7012c3c-2ef4-48c7-97a3-705f05ad5582',
       name: 'José Agustín del Toro',
       password: await bcrypt.hash('1111', 10),
-      role: 'Técnico',
+      id_role: 2,
       id_department: '614ce720-78e3-43f2-9c19-93cff24b77ac'
     },
     {
       id: '05da4935-dfa5-46b7-9611-45932e5e7b34',
       name: 'Fransisco Préstamo Bernardes',
       password: await bcrypt.hash('1111', 10),
-      role: 'Técnico',
+      id_role: 2,
       id_department: '614ce720-78e3-43f2-9c19-93cff24b77ac'
     }
   ];
@@ -738,6 +755,9 @@ const seed = async () => {
   ];
 
   try {
+    for (const r of roles) {
+      await db.insert(role).values(r);
+    }
     for (const dep of departments) {
       await db.insert(department).values(dep);
     }

@@ -51,7 +51,7 @@ export class AuthController {
     res.status(200).json({
       token: token,
       name: userData.name,
-      role: userData.role
+      id_role: userData.id_role
     });
   };
 }

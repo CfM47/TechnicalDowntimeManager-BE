@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import { validate, validatePagination, validateUpdate } from '../../utils';
 import { RateQuery, rateSchema } from './utils';
 import { IUserModel } from '../../Interfaces/IUserModel';
+import { ITechnicianModel } from '../../Interfaces/ITechnicianModel';
 
 /**
  * Controller class for handling CRUD operations on Rate entities.
@@ -13,10 +14,12 @@ import { IUserModel } from '../../Interfaces/IUserModel';
 export class RateController {
   rateModel: IRateModel;
   userModel: IUserModel;
+  technicianModel: ITechnicianModel;
 
-  constructor(rateModel: IRateModel, userModel: IUserModel) {
+  constructor(rateModel: IRateModel, userModel: IUserModel, technicianModel: ITechnicianModel) {
     this.rateModel = rateModel;
     this.userModel = userModel;
+    this.technicianModel = technicianModel;
   }
 
   /**
@@ -41,13 +44,9 @@ export class RateController {
         return;
       }
 
-      const technician = await this.userModel.getById({ id: data.id_technician });
+      const technician = await this.technicianModel.getById({ id_user: data.id_technician });
       if (!technician) {
         res.status(404).json({ message: 'Technician not found' });
-        return;
-      }
-      if (technician.role !== 'Técnico') {
-        res.status(400).json({ message: 'The technician user is not a technician' });
         return;
       }
 
@@ -131,13 +130,9 @@ export class RateController {
       const data = result.data;
 
       if (data.id_technician) {
-        const technician = await this.userModel.getById({ id: data.id_technician });
+        const technician = await this.technicianModel.getById({ id_user: data.id_technician });
         if (!technician) {
           res.status(404).json({ message: 'Technician not found' });
-          return;
-        }
-        if (technician.role !== 'Técnico') {
-          res.status(400).json({ message: 'The technician user is not a technician' });
           return;
         }
       }

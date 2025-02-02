@@ -1,6 +1,8 @@
 import { DepartmentType } from '../Department/types';
+import { RoleType } from '../Role/types';
 import { user } from './schema';
 import { department } from '../Department/schema';
+import { role } from '../Role/schema';
 
 /**
  * Interface representing a user.
@@ -9,7 +11,7 @@ export interface UserType {
   id: string;
   name: string;
   department: DepartmentType;
-  role: string;
+  role: RoleType;
 }
 
 /**
@@ -22,7 +24,10 @@ export const userSelection = {
     id: department.id,
     name: department.name
   },
-  role: user.role
+  role: {
+    id: role.id,
+    name: role.name
+  }
 };
 
 /**

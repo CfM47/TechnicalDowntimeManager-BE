@@ -8,6 +8,8 @@ import { ITechnicianModel } from '../../Interfaces/ITechnicianModel';
 import { NewTechnician } from '../Technician/schema';
 import { IDepartmentModel } from '../../Interfaces/IDepartmentModel';
 import { DepartmentQuery } from '../Department/utils';
+import { Role } from '../../enums';
+import { IRoleModel } from '../../Interfaces/IRoleModel';
 
 /**
  * Controller class for handling User-related operations.
@@ -17,20 +19,24 @@ export class UserController {
   userModel: IUserModel;
   technicianModel: ITechnicianModel;
   departmentModel: IDepartmentModel;
+  roleModel: IRoleModel;
   /**
    * Constructor for UserController.
    * @param userModel - The user model to interact with the database.
    * @param technicianModel - The technician model to interact with the database.
    * @param departmentModel - The department model to interact with the database.
+   * @param roleModel - The role model to interact with the database.
    */
   constructor(
     userModel: IUserModel,
     technicianModel: ITechnicianModel,
-    departmentModel: IDepartmentModel
+    departmentModel: IDepartmentModel,
+    roleModel: IRoleModel
   ) {
     this.userModel = userModel;
     this.technicianModel = technicianModel;
     this.departmentModel = departmentModel;
+    this.roleModel = roleModel;
   }
 
   /**
@@ -63,11 +69,13 @@ export class UserController {
 
       const userPassword = await bcrypt.hash(data.password, 10);
 
+      const technicianRole = await this.roleModel.getById({ name: Role.technician });
+
       const userData: NewUser = {
         name: result.data.name,
         password: userPassword,
         id_department: data.id_department,
-        role: data.isTechnician ? 'Técnico' : data.role
+        id_role: data.isTechnician && technicianRole ? technicianRole.id : data.id_role
       };
 
       const newUser = await this.userModel.create(userData);

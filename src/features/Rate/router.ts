@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { IRateModel } from '../../Interfaces/IRateModel';
 import { RateController } from './controller';
 import { IUserModel } from '../../Interfaces/IUserModel';
+import { ITechnicianModel } from '../../Interfaces/ITechnicianModel';
 
 /**
  * @swagger
@@ -215,9 +216,13 @@ import { IUserModel } from '../../Interfaces/IUserModel';
  * @param userModel - The model instance for interacting with user data.
  * @returns An Express router configured with rate routes.
  */
-export const rateRouter = (rateModel: IRateModel, userModel: IUserModel) => {
+export const rateRouter = (
+  rateModel: IRateModel,
+  userModel: IUserModel,
+  technicianModel: ITechnicianModel
+) => {
   const router = Router();
-  const rateController = new RateController(rateModel, userModel);
+  const rateController = new RateController(rateModel, userModel, technicianModel);
   router.route('/').post(rateController.create).get(rateController.getAll);
   router
     .route('/:id_technician/:id_user/:date')
