@@ -13,6 +13,7 @@ import { db } from './db/config/db_connect';
 import { and, count, SQL } from 'drizzle-orm';
 import { IResourceModel } from './Interfaces/IResourceModel';
 import { IRoleResourceModel } from './Interfaces/IRoleResourceModel';
+import { ResourcePages } from './enums';
 
 /**
  * Generates an error message object.
@@ -94,6 +95,38 @@ export async function countTableRows(table: PgTable, filter: SQL[]): Promise<num
     .where(and(...filter));
   return result.count;
 }
+
+/**
+ * Retrieves the pathname from a given URL.
+ * @param {string} url - The full URL.
+ * @returns {string} - The URL without the host.
+ */
+export const getPathName = (url: string): string => {
+  try {
+    const parsedUrl = new URL(url);
+    return parsedUrl.pathname;
+  } catch {
+    return url;
+  }
+};
+
+export const routesToResource: Record<string, ResourcePages> = {
+  '/': ResourcePages.HOME_PAGE,
+  '/equipment': ResourcePages.EQUIPMENT_PAGE,
+  '/maintenances': ResourcePages.MAINTENANCE_PAGE,
+  '/downtimes': ResourcePages.DOWNTIME_PAGE,
+  '/rate': ResourcePages.RATE_PAGE,
+  '/transfers': ResourcePages.TRANSFER_PAGE,
+  '/user': ResourcePages.USER_PAGE,
+  '/reports': ResourcePages.REPORT_PAGE,
+  '/reports/defectiveEquipments': ResourcePages.REPORT_DEFECTIVE_EQUIPMENTS_PAGE,
+  '/reports/deptTransferHistory': ResourcePages.REPORT_DEPT_TRANSFER_HISTORY_PAGE,
+  '/reports/lastYearDowntimes': ResourcePages.REPORT_LAST_YEAR_DOWNTIMES_PAGE,
+  '/reports/maintenanceHistory': ResourcePages.REPORT_MAINTENANCE_HISTORY_PAGE,
+  '/reports/technicianInterventions': ResourcePages.REPORT_TECHNICIAN_INTERVENTIONS_PAGE,
+  '/reports/techniciansPerformance': ResourcePages.REPORT_TECHNICIAN_PERFORMANCE_PAGE,
+  '/reports/transferHistory': ResourcePages.REPORT_TRANSFER_HISTORY_PAGE
+};
 
 export type Models = {
   userModel: IUserModel;

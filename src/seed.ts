@@ -10,6 +10,8 @@ import { role, NewRole } from './features/Role/schema';
 import { db } from './db/config/db_connect';
 import bcrypt from 'bcrypt';
 import { Role } from './enums';
+import { NewResource, resource } from './features/Resources/schema';
+import { NewRoleResource, roleResource } from './features/Role-Resource/schema';
 
 /**
  * Seeds the database with initial data for departments, users, technicians, equipments, rates, transfers, maintenances, and downtimes.
@@ -34,6 +36,76 @@ const seed = async () => {
     {
       id: 4,
       name: Role.user
+    }
+  ];
+
+  const resources: NewResource[] = [
+    { id: '28cdfceb-1ff0-421c-90c0-88c53b1f08ff', name: 'REPORT_TECHNICIAN_INTERVENTIONS_PAGE' },
+    { id: '32d0e3b0-6a4b-4120-bb56-41bf73c5a40d', name: 'DOWNTIME_PAGE' },
+    { id: '3a264a1b-82da-49dd-9f1a-4272f0e7f243', name: 'TRANSFER_PAGE' },
+    { id: '3c252625-21d5-4d6f-b2e2-85a7d53f8ff3', name: 'EQUIPMENT_PAGE' },
+    { id: '3f29a762-0739-4006-ab52-c8f9b7bee024', name: 'REPORT_TRANSFER_HISTORY_PAGE' },
+    { id: '41455ef6-3bcb-42a6-9830-c1409fe8ab85', name: 'REPORT_PAGE' },
+    { id: '45197192-1125-4548-86fe-414a1a276ab5', name: 'REPORT_LAST_YEAR_DOWNTIMES_PAGE' },
+    { id: '8379e97a-c152-4ee2-ab3c-9f4a02f0b31e', name: 'HOME_PAGE' },
+    { id: 'b3175015-4496-4def-a632-1374e6a6132e', name: 'REPORT_DEPT_TRANSFER_HISTORY_PAGE' },
+    { id: 'b65d48a9-50c8-4849-b3a0-7dfea92bf7cc', name: 'REPORT_MAINTENANCE_HISTORY_PAGE' },
+    { id: 'bf8bd095-5cd4-4828-a045-033090cf1395', name: 'REPORT_DEFECTIVE_EQUIPMENTS_PAGE' },
+    { id: 'c4193a5e-1cc5-464f-bcea-d298e115958e', name: 'RATE_PAGE' },
+    { id: 'd4eb9bbc-5091-4428-99fc-6f33357feb3e', name: 'MAINTENANCE_PAGE' },
+    { id: 'ddd12b65-c4f7-4a7f-9574-6ca68350d5cd', name: 'USER_PAGE' },
+    { id: 'dddb9983-7701-4e74-8466-9f5bc8cc03ce', name: 'REPORT_TECHNICIAN_PERFORMANCE_PAGE' }
+  ];
+
+  //accesos a las páginas, no tocar, es muy dificil volver a escribirlos :(
+  const roleResources: NewRoleResource[] = [
+    ...resources.map((resource) => ({
+      role_id: 1, // Assuming 1 is the admin role ID
+      resource_id: resource.id!
+    })),
+    {
+      role_id: 2, // Assuming 2 is the technician role ID
+      resource_id: '8379e97a-c152-4ee2-ab3c-9f4a02f0b31e' // HOME_PAGE ID
+    },
+    {
+      role_id: 3, // Assuming 3 is the section leader role ID
+      resource_id: '8379e97a-c152-4ee2-ab3c-9f4a02f0b31e' // HOME_PAGE ID
+    },
+    {
+      role_id: 4, // Assuming 4 is the user role ID
+      resource_id: '8379e97a-c152-4ee2-ab3c-9f4a02f0b31e' // HOME_PAGE ID
+    },
+    {
+      role_id: 2, // Technician role ID
+      resource_id: '3c252625-21d5-4d6f-b2e2-85a7d53f8ff3' // EQUIPMENT_PAGE ID
+    },
+    {
+      role_id: 2, // Technician role ID
+      resource_id: 'd4eb9bbc-5091-4428-99fc-6f33357feb3e' // MAINTENANCE_PAGE ID
+    },
+    {
+      role_id: 2, // Technician role ID
+      resource_id: '32d0e3b0-6a4b-4120-bb56-41bf73c5a40d' // DOWNTIME_PAGE ID
+    },
+    {
+      role_id: 3, // Section leader role ID
+      resource_id: '3c252625-21d5-4d6f-b2e2-85a7d53f8ff3' // EQUIPMENT_PAGE ID
+    },
+    {
+      role_id: 3, // Section leader role ID
+      resource_id: 'd4eb9bbc-5091-4428-99fc-6f33357feb3e' // MAINTENANCE_PAGE ID
+    },
+    {
+      role_id: 3, // Section leader role ID
+      resource_id: '3a264a1b-82da-49dd-9f1a-4272f0e7f243' // TRANSFER_PAGE ID
+    },
+    {
+      role_id: 3, // Section leader role ID
+      resource_id: '32d0e3b0-6a4b-4120-bb56-41bf73c5a40d' // DOWNTIME_PAGE ID
+    },
+    {
+      role_id: 3, // Section leader role ID
+      resource_id: 'c4193a5e-1cc5-464f-bcea-d298e115958e' // RATE_PAGE ID
     }
   ];
 
@@ -761,6 +833,12 @@ const seed = async () => {
   try {
     for (const r of roles) {
       await db.insert(role).values(r);
+    }
+    for (const res of resources) {
+      await db.insert(resource).values(res);
+    }
+    for (const rr of roleResources) {
+      await db.insert(roleResource).values(rr);
     }
     for (const dep of departments) {
       await db.insert(department).values(dep);

@@ -1,10 +1,12 @@
 import { Request, RequestHandler, Response } from 'express';
-import { validate } from '../../utils';
+import { getPathName, routesToResource, validate } from '../../utils';
 import { IUserModel } from '../../Interfaces/IUserModel';
 import { createToken, decodeToken, signinSchema } from './utils';
 import bcrypt from 'bcrypt';
 import { IRoleModel } from '../../Interfaces/IRoleModel';
 import { Role } from '../../enums';
+import { IRoleResourceModel } from '../../Interfaces/IRoleResourceModel';
+import { IResourceModel } from '../../Interfaces/IResourceModel';
 
 /**
  * Controller for handling authentication-related operations.
@@ -14,9 +16,18 @@ import { Role } from '../../enums';
 export class AuthController {
   private userModel: IUserModel;
   private roleModel: IRoleModel;
-  constructor(userModel: IUserModel, roleModel: IRoleModel) {
+  private resourceModel: IResourceModel;
+  private roleResourceModel: IRoleResourceModel;
+  constructor(
+    userModel: IUserModel,
+    roleModel: IRoleModel,
+    resourceModel: IResourceModel,
+    roleResourceModel: IRoleResourceModel
+  ) {
     this.userModel = userModel;
     this.roleModel = roleModel;
+    this.resourceModel = resourceModel;
+    this.roleResourceModel = roleResourceModel;
   }
 
   /**
@@ -30,9 +41,6 @@ export class AuthController {
    * @param res - The response object.
    */
   signin = async (req: Request, res: Response) => {
-    const referer = req.get('Referer');
-    console.log('Request made from:', referer);
-
     const result = validate(req.body, signinSchema);
     if (!result.success) {
       res.status(400).json({ message: JSON.parse(result.error.message) });
@@ -101,5 +109,64 @@ export class AuthController {
 
       next();
     };
+  };
+
+  authorize = async (req: Request, res: Response) => {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      res.status(401).json({ message: 'Unauthorized' });
+      return;
+    }
+
+    const token = authHeader.split(' ')[1];
+    if (!token) {
+      res.status(401).json({ message: 'Unauthorized' });
+      return;
+    }
+
+    const referer = req.headers.referer;
+
+    if (!referer) {
+      res.status(200).json({ message: 'Authorized' });
+      return;
+    }
+
+    const decoded = decodeToken(token);
+    const { name, role } = decoded;
+
+    if (!name || !role) {
+      res.status(401).json({ message: 'Unauthorized' });
+      return;
+    }
+
+    const pathname = getPathName(referer);
+    const resourceName = routesToResource[pathname];
+
+    if (!resourceName) {
+      res.status(404).json({ message: 'Resource not found' });
+      return;
+    }
+
+    const resource = await this.resourceModel.getById({ name: resourceName });
+    if (!resource) {
+      res.status(404).json({ message: 'Resource not found' });
+      return;
+    }
+    const roleEntrie = await this.roleModel.getById({ name: role });
+    if (!roleEntrie) {
+      res.status(404).json({ message: 'Role not found' });
+      return;
+    }
+
+    const roleResource = await this.roleResourceModel.getById({
+      role_id: roleEntrie.id,
+      resource_id: resource.id
+    });
+    if (!roleResource) {
+      res.status(403).json({ message: 'Forbidden' });
+      return;
+    }
+
+    res.status(200).json({ message: 'Authorized' });
   };
 }

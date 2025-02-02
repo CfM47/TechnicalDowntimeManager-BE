@@ -8,7 +8,7 @@ export const roleResourceSchema = z.object({
 });
 
 export type RoleResourceQuery = {
-  role_id?: string;
+  role_id?: number;
   resource_id?: string;
 };
 

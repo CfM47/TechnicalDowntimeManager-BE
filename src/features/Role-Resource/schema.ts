@@ -1,9 +1,9 @@
-import { pgTable, uuid } from 'drizzle-orm/pg-core';
+import { pgTable, serial, uuid } from 'drizzle-orm/pg-core';
 import { role } from '../Role/schema';
 import { resource } from '../Resources/schema';
 
 export const roleResource = pgTable('role_resource', {
-  role_id: uuid('role_id')
+  role_id: serial('role_id')
     .notNull()
     .references(() => role.id),
   resource_id: uuid('resource_id')
