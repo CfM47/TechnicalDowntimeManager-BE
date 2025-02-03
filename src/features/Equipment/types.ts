@@ -57,3 +57,11 @@ export const equipmentInfoSelection = {
  * Type representing basic equipment information.
  */
 export type EquipmentInfo = Pick<EquipmentType, 'id' | 'name'>;
+
+export interface DefectiveEquipmentTypeTable {
+  Name: string;
+  Type: string;
+  Status: string;
+  Department: string;
+  Total_Maintenances: number;
+}

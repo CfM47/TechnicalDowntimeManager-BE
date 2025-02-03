@@ -48,3 +48,18 @@ export const transferSelection = {
   },
   status: transfer.status
 };
+
+export interface EquipmentTransferRecordTypeTable {
+  Sender: string;
+  Origin_Department: string;
+  Destiny_Department: string;
+  Receiver: string;
+  Date: string;
+}
+
+export interface DepartmentTransferRecordTypeTable {
+  Sender: string;
+  Receiver: string;
+  Origin_Department: string;
+  Equipment: string;
+}

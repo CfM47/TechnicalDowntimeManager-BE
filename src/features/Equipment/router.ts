@@ -175,6 +175,9 @@ export const equipmentRouter = (
     .route('/maintenances-last-year')
     .get(equipmentController.getEquipmentsWithFrequentMaintenances);
   router
+    .route('/maintenances-last-year/report')
+    .get(equipmentController.generateReportEquipmentWithFrequentMaintenances);
+  router
     .route('/:id')
     .get(equipmentController.getById)
     .put(equipmentController.update)

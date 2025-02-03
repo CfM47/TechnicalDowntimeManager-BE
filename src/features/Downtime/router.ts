@@ -274,6 +274,7 @@ export const downtimeRouter = (
 
   router.route('/').post(downtimeController.create).get(downtimeController.getAll);
   router.route('/last-year').get(downtimeController.getDowntimeLastYear);
+  router.route('/last-year/report').get(downtimeController.generateReportLastYear);
 
   router
     .route('/:id_sender/:id_receiver/:id_equipment/:date/:id_dep_receiver')

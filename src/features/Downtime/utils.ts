@@ -2,6 +2,7 @@ import z from 'zod';
 import { eq, SQL } from 'drizzle-orm';
 import { downtime } from './schema';
 import { DowntimeStatuses } from '../../enums';
+import { DowntimeLastYearTypeTable, DowntimeType } from './types';
 
 const downtimeStatus = z.enum(DowntimeStatuses);
 
@@ -42,4 +43,19 @@ export function DowntimeQueryBuilder(query: DowntimeQuery): SQL[] {
   if (query.status) filters.push(eq(downtime.status, query.status));
   if (query.cause) filters.push(eq(downtime.cause, query.cause));
   return filters;
+}
+
+/**
+ * Maps a DowntimeType object to a DowntimeLastYearType object.
+ *
+ * @param downtime - The DowntimeType object to map.
+ * @returns The mapped DowntimeLastYearType object.
+ */
+export function mapToLastYearTypeTable(downtime: DowntimeType): DowntimeLastYearTypeTable {
+  return {
+    Sender: downtime.sender.name,
+    Receiver: downtime.receiver.name,
+    Equipment: downtime.equipment.name,
+    Destiny: downtime.dep_receiver.name
+  };
 }

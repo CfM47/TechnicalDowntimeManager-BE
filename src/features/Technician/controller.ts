@@ -1,10 +1,23 @@
 import { Request, Response } from 'express';
-import { TechnicianQuery, technicianSchema } from './utils';
-import { ErrorMessage, validate, validatePagination, validateUpdate } from '../../utils';
+import {
+  mapToInterventionTypeTable,
+  mapToPerformanceTypeTable,
+  TechnicianQuery,
+  technicianSchema
+} from './utils';
+import {
+  ErrorMessage,
+  Pagination,
+  validate,
+  validatePagination,
+  validateUpdate
+} from '../../utils';
 import { NewTechnician, Technician } from './schema';
 import { IUserModel } from '../../Interfaces/IUserModel';
 import { ITechnicianModel } from '../../Interfaces/ITechnicianModel';
 import { UserQuery } from '../User/utils';
+import { pickPlugin, ReportData } from '../../core/utils';
+import { TechnicianInterventionType, TechnicianPerformanceType } from './types';
 
 /**
  * Controller for managing technicians.
@@ -141,15 +154,12 @@ export class TechnicianController {
       const technicianId = req.params.id;
       const { page, size } = req.query;
       const pagination = validatePagination(page, size);
-      const performanceData = await this.technicianModel.getInterventionData(
-        technicianId,
-        pagination
-      );
-      if (!performanceData) {
+      const Data = await this.technicianModel.getInterventionData(technicianId, pagination);
+      if (!Data) {
         res.status(404).json({ message: 'Technician not found' });
         return;
       }
-      res.status(200).json(performanceData);
+      res.status(200).json(Data);
     } catch (e) {
       res.status(500).json(ErrorMessage(e));
     }
@@ -189,6 +199,73 @@ export class TechnicianController {
       const pagination = validatePagination(page, size);
       const result = await this.technicianModel.getTechniciansPerformance(pagination);
       res.status(200).json(result);
+    } catch (e) {
+      res.status(500).json(ErrorMessage(e));
+    }
+  };
+
+  generateTechniciansPerformance = async (req: Request, res: Response) => {
+    try {
+      const { page, size, format = 'pdf' } = req.query;
+      const pagination: Pagination = validatePagination(page, size);
+      const result = await this.technicianModel.getTechniciansPerformance(pagination);
+
+      const reportData: ReportData = {
+        reportName: 'Technicians Performance Report',
+        headers: ['Name', 'Score_Avg', 'Total_Rates', 'Total_Maintenances'],
+        data: result.items.map((technician: TechnicianPerformanceType) =>
+          mapToPerformanceTypeTable(technician)
+        )
+      };
+
+      const plugin = await pickPlugin(format as string);
+
+      if (!plugin) {
+        res.status(400).json({ message: 'Format not supported' });
+        return;
+      }
+
+      const buffer = await plugin.generate(reportData);
+
+      res
+        .status(200)
+        .setHeader('Content-Type', `application/${format}`)
+        .setHeader('Content-Disposition', `attachment; filename="report.${format}"`)
+        .send(buffer);
+    } catch (e) {
+      res.status(500).json(ErrorMessage(e));
+    }
+  };
+
+  generateTechniciansIntervention = async (req: Request, res: Response) => {
+    try {
+      const technicianId = req.params.id;
+      const { page, size, format = 'pdf' } = req.query;
+      const pagination: Pagination = validatePagination(page, size);
+      const result = await this.technicianModel.getInterventionData(technicianId, pagination);
+
+      const reportData: ReportData = {
+        reportName: `Technicians Intervention Report`,
+        headers: ['Date', 'Type', 'Additional_Info'],
+        data: result.items.map((intervention: TechnicianInterventionType) =>
+          mapToInterventionTypeTable(intervention)
+        )
+      };
+
+      const plugin = await pickPlugin(format as string);
+
+      if (!plugin) {
+        res.status(400).json({ message: 'Format not supported' });
+        return;
+      }
+
+      const buffer = await plugin.generate(reportData);
+
+      res
+        .status(200)
+        .setHeader('Content-Type', `application/${format}`)
+        .setHeader('Content-Disposition', `attachment; filename="report.${format}"`)
+        .send(buffer);
     } catch (e) {
       res.status(500).json(ErrorMessage(e));
     }

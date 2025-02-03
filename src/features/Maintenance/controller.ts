@@ -1,12 +1,17 @@
 import { IMaintenanceModel } from '../../Interfaces/IMaintenanceModel';
 import { Request, Response } from 'express';
-import { MaintenanceQuery, maintenanceSchema } from './utils';
+import {
+  MaintenanceQuery,
+  maintenanceSchema,
+  mapToEquipmentMaintenanceHistoryTypeTable
+} from './utils';
 import { NewMaintenance, Maintenance } from './schema';
 import { ErrorMessage, validate, validatePagination, validateUpdate } from '../../utils';
 import { ITechnicianModel } from '../../Interfaces/ITechnicianModel';
 import { TechnicianQuery } from '../Technician/utils';
 import { IEquipmentModel } from '../../Interfaces/IEquipmentModel';
 import { EquipmentQuery } from '../Equipment/utils';
+import { pickPlugin, ReportData } from '../../core/utils';
 
 /**
  * Controller for handling CRUD operations on the `Maintenance` resource.
@@ -193,6 +198,43 @@ export class MaintenanceController {
       }
       await this.maintenanceModel.delete(maintenanceQuery);
       res.status(200).json({ message: 'Maintenance deleted' });
+    } catch (e) {
+      res.status(500).json(ErrorMessage(e));
+    }
+  };
+
+  generateEquipmentHistory = async (req: Request, res: Response) => {
+    try {
+      const { page, size, format = 'pdf', ...query } = req.query;
+      const filter: MaintenanceQuery = query;
+      const pagination = validatePagination(page, size);
+      const allMaintenances = await this.maintenanceModel.getAll(filter, pagination);
+
+      const equipmentName =
+        allMaintenances.items.length > 0 ? allMaintenances.items[0].equipment.name : '';
+
+      const reportData: ReportData = {
+        reportName: `Maintenance History: ${equipmentName}`,
+        headers: ['Technician', 'Type', 'Date'],
+        data: allMaintenances.items.map((maintenance) =>
+          mapToEquipmentMaintenanceHistoryTypeTable(maintenance)
+        )
+      };
+
+      const plugin = await pickPlugin(format as string);
+
+      if (!plugin) {
+        res.status(400).json({ message: 'Format not supported' });
+        return;
+      }
+
+      const buffer = await plugin.generate(reportData);
+
+      res
+        .status(200)
+        .setHeader('Content-Type', `application/${format}`)
+        .setHeader('Content-Disposition', `attachment; filename="report.${format}"`)
+        .send(buffer);
     } catch (e) {
       res.status(500).json(ErrorMessage(e));
     }

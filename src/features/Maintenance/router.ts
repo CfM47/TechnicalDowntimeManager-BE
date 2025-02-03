@@ -233,7 +233,7 @@ export const maintenanceRouter = (
   );
 
   router.route('/').post(maintenanceController.create).get(maintenanceController.getAll);
-
+  router.route('/equipment-history/report').get(maintenanceController.generateEquipmentHistory);
   router
     .route('/:id_technician/:id_equipment/:date')
     .get(maintenanceController.getById)

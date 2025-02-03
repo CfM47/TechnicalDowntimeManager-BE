@@ -2,6 +2,7 @@ import z from 'zod';
 import { eq, SQL } from 'drizzle-orm';
 import { maintenance } from './schema';
 import { MaintenanceTypes } from '../../enums';
+import { EquipmentMaintenanceHistoryTypeTable, MaintenanceType } from './types';
 
 const maintenanceType = z.enum(MaintenanceTypes);
 
@@ -51,4 +52,14 @@ export function MaintenanceQueryBuilder(query: MaintenanceQuery): SQL[] {
   if (query.type) filters.push(eq(maintenance.type, query.type));
   if (query.cost) filters.push(eq(maintenance.cost, query.cost));
   return filters;
+}
+
+export function mapToEquipmentMaintenanceHistoryTypeTable(
+  maintenance: MaintenanceType
+): EquipmentMaintenanceHistoryTypeTable {
+  return {
+    Technician: maintenance.technician.name,
+    Type: maintenance.type,
+    Date: maintenance.date
+  };
 }

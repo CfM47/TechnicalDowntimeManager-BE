@@ -1,6 +1,12 @@
 import z from 'zod';
 import { eq, SQL } from 'drizzle-orm';
 import { technician } from './schema';
+import {
+  TechnicianInterventionType,
+  TechnicianInterventionTypeTable,
+  TechnicianPerformanceType,
+  TechnicianPerformanceTypeTable
+} from './types';
 
 /**
  * Zod schema for validating Technician objects.
@@ -42,4 +48,25 @@ export function TechnicianQueryBuilder(query: TechnicianQuery): SQL[] {
   if (query.exp_years) filters.push(eq(technician.exp_years, query.exp_years));
   if (query.specialty) filters.push(eq(technician.specialty, query.specialty));
   return filters;
+}
+
+export function mapToPerformanceTypeTable(
+  technician: TechnicianPerformanceType
+): TechnicianPerformanceTypeTable {
+  return {
+    Name: technician.name,
+    Score_Avg: technician.score_avg,
+    Total_Rates: technician.total_rates,
+    Total_Maintenances: technician.total_maintenances
+  };
+}
+
+export function mapToInterventionTypeTable(
+  intervention: TechnicianInterventionType
+): TechnicianInterventionTypeTable {
+  return {
+    Date: intervention.date,
+    Type: intervention.type,
+    Additional_Info: intervention.aditional_info
+  };
 }

@@ -1,6 +1,6 @@
 import { IDowntimeModel } from '../../Interfaces/IDowntimeModel';
 import { Request, Response } from 'express';
-import { DowntimeQuery, downtimeSchema } from './utils';
+import { DowntimeQuery, downtimeSchema, mapToLastYearTypeTable } from './utils';
 import { NewDowntime, Downtime } from './schema';
 import {
   ErrorMessage,
@@ -13,6 +13,9 @@ import { IEquipmentModel } from '../../Interfaces/IEquipmentModel';
 import { EquipmentQuery } from '../Equipment/utils';
 import { IDepartmentModel } from '../../Interfaces/IDepartmentModel';
 import { IUserModel } from '../../Interfaces/IUserModel';
+import { DowntimeType } from './types';
+import { pickPlugin } from '../../core/utils';
+import { ReportData } from '../../core/utils';
 
 /**
  * Controller class for handling downtime-related operations.
@@ -235,6 +238,42 @@ export class DowntimeController {
       const pagination: Pagination = validatePagination(page, size);
       const allDowntimesLastYear = await this.downtimeModel.getLastYearDowntime(pagination);
       res.status(200).json(allDowntimesLastYear);
+    } catch (e) {
+      res.status(500).json(ErrorMessage(e));
+    }
+  };
+
+  generateReportLastYear = async (req: Request, res: Response) => {
+    try {
+      const { page, size, format = 'pdf' } = req.query;
+      const pagination: Pagination = validatePagination(page, size);
+      const allDowntimesLastYear = await this.downtimeModel.getLastYearDowntime(pagination);
+
+      const reportData: ReportData = {
+        reportName: 'Last Year Downtimes Report',
+        headers: ['Sender', 'Receiver', 'Equipment', 'Destiny'],
+        data: allDowntimesLastYear.items.map((downtime: DowntimeType) =>
+          mapToLastYearTypeTable(downtime)
+        )
+      };
+
+      const plugin = await pickPlugin(format as string);
+
+      if (!plugin) {
+        res.status(400).json({ message: 'Format not supported' });
+        return;
+      }
+
+      const buffer = await plugin.generate(reportData);
+
+      // res.setHeader('Content-Disposition', `attachment; filename="report.${format}"`);
+      // res.setHeader('Content-Type', `application/${format}`);
+
+      res
+        .status(200)
+        .setHeader('Content-Type', `application/${format}`)
+        .setHeader('Content-Disposition', `attachment; filename="report.${format}"`)
+        .send(buffer);
     } catch (e) {
       res.status(500).json(ErrorMessage(e));
     }
