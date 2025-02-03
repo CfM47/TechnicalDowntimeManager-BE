@@ -67,8 +67,7 @@ export class AuthController {
 
     res.status(200).json({
       token: token,
-      name: userData.name,
-      id_role: userData.id_role
+      name: userData.name
     });
   };
 
@@ -81,7 +80,13 @@ export class AuthController {
         return;
       }
 
-      const { token } = req.body;
+      const authHeader = req.headers.authorization;
+      if (!authHeader) {
+        res.status(401).json({ message: 'Unauthorized' });
+        return;
+      }
+
+      const token = authHeader.split(' ')[1];
       if (!token) {
         res.status(401).json({ message: 'Unauthorized' });
         return;

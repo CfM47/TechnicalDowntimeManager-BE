@@ -24,7 +24,7 @@ export const authRouter = (
   const router = Router();
   const authController = new AuthController(userModel, roleModel, resourceModel, roleResourceModel);
 
-  router.post('/signin', authController.signin);
+  router.post('/signin', authController.signin).post('/authorize', authController.authorize);
 
   return router;
 };
