@@ -25,7 +25,7 @@ beforeAll((done) => {
 });
 
 afterAll((done) => {
-  server.close(done); // Cierra el servidor después de todas las pruebas
+  server.close(done);
 });
 
 export { server };

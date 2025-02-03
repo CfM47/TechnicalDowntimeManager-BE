@@ -2,10 +2,6 @@ import request from 'supertest';
 import testingApp from '../../../TestDirectoryServer/testingApp';
 
 /**
- * Sets up the Express application with necessary middleware and routes.
- */
-
-/**
  * Test suite for CRUD operations on the Department entity.
  *
  * This suite includes tests for creating, retrieving, updating, and deleting

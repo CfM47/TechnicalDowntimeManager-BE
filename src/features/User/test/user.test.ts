@@ -1,8 +1,5 @@
 import request from 'supertest';
 import testingApp from '../../../TestDirectoryServer/testingApp';
-/**
- * Sets up the Express application with necessary middleware and routes.
- */
 
 /**
  * Test suite for User CRUD operations.
@@ -14,11 +11,15 @@ describe('User CRUD', () => {
   let userId = '';
 
   it('should create a new user', async () => {
+    const department = await request(testingApp).post('/api/department').send({
+      name: 'Departamento de Pruebas'
+    });
+    const id_department = department.body.id;
     const response = await request(testingApp).post('/api/user').send({
       name: 'roberto',
       password: 'revolucionario2025',
       role: 'Técnico',
-      id_department: '4bef9dc3-6584-41f8-9415-a9bd8726f646',
+      id_department: id_department,
       isTechnician: false
     });
     expect(response.status).toEqual(201);

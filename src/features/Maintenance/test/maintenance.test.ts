@@ -2,10 +2,6 @@ import request from 'supertest';
 import testingApp from '../../../TestDirectoryServer/testingApp';
 
 /**
- * Sets up the Express application with necessary middleware and routes.
- */
-
-/**
  * Test suite for Maintenance CRUD operations.
  */
 describe('Maintenance CRUD', () => {
@@ -17,15 +13,41 @@ describe('Maintenance CRUD', () => {
    * Test case for creating a new maintenance record.
    */
   it('should create a new maintenance', async () => {
+    const department = await request(testingApp).post('/api/department').send({
+      name: 'Departamento de Pruebas'
+    });
+    const id_department = department.body.id;
+    const user = await request(testingApp).post('/api/user').send({
+      name: 'roberto',
+      password: 'revolucionario2025',
+      role: 'Técnico',
+      id_department: id_department,
+      isTechnician: false
+    });
+    const id_user = user.body.id;
+    const technician = await request(testingApp).post('/api/technician').send({
+      id_user: id_user,
+      exp_years: 2,
+      specialty: 'panadero'
+    });
+    id_technician = technician.body.id;
+
+    const equipment = await request(testingApp).post('/api/equipment').send({
+      name: 'High resolution X-Ray machine',
+      type: 'Electrónico',
+      status: 'Mantenimiento',
+      id_department: id_department
+    });
+
+    id_equipment = equipment.body.id;
+
     const response = await request(testingApp).post('/api/maintenance').send({
-      id_technician: '500e408b-681e-418a-b51a-76d86d5feec6',
+      id_technician: id_technician,
       type: 'Preventivo',
       cost: 12,
-      id_equipment: '86bef522-ad02-4e29-a4ba-b4fc96a01bb1'
+      id_equipment: id_equipment
     });
     expect(response.status).toEqual(201);
-    id_equipment = response.body.equipment.id;
-    id_technician = response.body.technician.id;
     date = response.body.date;
   });
 
@@ -36,22 +58,6 @@ describe('Maintenance CRUD', () => {
     const response = await request(testingApp).get('/api/maintenance');
     expect(response.status).toEqual(200);
   });
-
-  // /**
-  //  * Test case for retrieving maintenance records by technician ID.
-  //  */
-  // it('should get maintenance records by technician ID', async () => {
-  //   const response = await request(testingApp).get(`/api/maintenance/technician/${id_technician}`);
-  //   expect(response.status).toEqual(200);
-  // });
-  //
-  // /**
-  //  * Test case for retrieving maintenance records by equipment ID.
-  //  */
-  // it('should get maintenance records by equipment ID', async () => {
-  //   const response = await request(testingApp).get(`/api/maintenance/equipment/${id_equipment}`);
-  //   expect(response.status).toEqual(200);
-  // });
 
   /**
    * Test case for handling errors when creating a new maintenance record with missing fields.
