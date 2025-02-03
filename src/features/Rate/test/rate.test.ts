@@ -14,15 +14,47 @@ describe('Rate CRUD', () => {
    * Sends a POST request to create a new rate and verifies the response status.
    */
   it('should create a new rate', async () => {
+    const department = await request(testingApp).post('/api/department').send({
+      name: 'Departamento de Pruebas'
+    });
+    const id_department = department.body.id;
+    const user = await request(testingApp).post('/api/user').send({
+      name: 'roberto',
+      password: 'revolucionario2025',
+      role: 'Técnico',
+      id_department: id_department,
+      isTechnician: false
+    });
+    const id_userT = user.body.id;
+    const technician = await request(testingApp).post('/api/technician').send({
+      id_user: id_userT,
+      exp_years: 2,
+      specialty: 'panadero'
+    });
+
+    id_technician = technician.body.id;
+
+    const department2 = await request(testingApp).post('/api/department').send({
+      name: 'Departamento de Pruebas2'
+    });
+    const id_department2 = department2.body.id;
+    const user2 = await request(testingApp).post('/api/user').send({
+      name: 'luis',
+      password: 'revolucionario2026',
+      role: 'Jefe de sección',
+      id_department: id_department2,
+      isTechnician: false
+    });
+
+    id_user = user2.body.id;
+
     const response = await request(testingApp).post('/api/rate').send({
-      id_technician: 'af4685e7-87ef-4a82-9e88-7155be87f899',
-      id_user: '9f6dbbd9-3a80-4138-8f06-c467aec3f946',
+      id_technician: id_technician,
+      id_user: id_user,
       score: 5,
       comment: 'Excellent service'
     });
     expect(response.status).toEqual(200);
-    id_technician = response.body.technician.id;
-    id_user = response.body.user.id;
     date = response.body.date;
   });
 

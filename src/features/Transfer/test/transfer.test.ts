@@ -2,10 +2,6 @@ import request from 'supertest';
 import testingApp from '../../../TestDirectoryServer/testingApp';
 
 /**
- * Sets up the Express application with necessary middleware and routes.
- */
-
-/**
  * Test suite for Transfer CRUD operations.
  * This suite tests the following functionalities:
  * - Creating a new transfer
@@ -15,28 +11,61 @@ import testingApp from '../../../TestDirectoryServer/testingApp';
  * - Deleting a transfer by ID
  */
 describe('Transfer CRUD', () => {
+
   let id_sender = '';
   let id_receiver = '';
   let id_equipment = '';
+  let date = '';
   let id_origin_dep = '';
   let id_receiver_dep = '';
-  let date = '';
+
   it('should create a new transfer', async () => {
+    const department_origin = await request(testingApp).post('/api/department').send({
+      name: 'Departamento de Pruebas'
+    });
+    const department_receiver = await request(testingApp).post('/api/department').send({
+      name: 'Departamento de recibir'
+    });
+    id_origin_dep = department_origin.body.id;
+    id_receiver_dep = department_receiver.body.id;
+
+    const sender = await request(testingApp).post('/api/user').send({
+      name: 'roberto',
+      password: 'revolucionario2025',
+      role: 'Técnico',
+      id_department: id_origin_dep,
+      isTechnician: false
+    });
+
+    const receiver = await request(testingApp).post('/api/user').send({
+      name: 'luis',
+      password: 'revolucionario2026',
+      role: 'Técnico',
+      id_department: id_receiver_dep,
+      isTechnician: false
+    });
+    id_sender = sender.body.id;
+    id_receiver = receiver.body.id;
+
+    const equipment = await request(testingApp).post('/api/equipment').send({
+      name: 'Equipo de Pruebas',
+      type: 'Electrónico',
+      status: 'Mantenimiento',
+      id_department: id_origin_dep
+    });
+
+    id_equipment = equipment.body.id;
+
     const response = await request(testingApp).post('/api/transfer').send({
-      id_sender: '02d6ddd9-7f7e-4c60-8c2d-79cba69736b9',
-      id_receiver: 'af4685e7-87ef-4a82-9e88-7155be87f899',
-      id_equipment: '86bef522-ad02-4e29-a4ba-b4fc96a01bb1',
-      id_origin_dep: '08f6e7f5-0649-47b4-81bc-05c3734ecd1f',
-      id_receiver_dep: '4bef9dc3-6584-41f8-9415-a9bd8726f646',
+      id_sender: id_sender,
+      id_receiver: id_receiver,
+      id_equipment: id_equipment,
+      id_origin_dep: id_origin_dep,
+      id_receiver_dep: id_receiver_dep,
       status: 'Pendiente'
     });
     expect(response.status).toEqual(201);
 
-    id_sender = response.body.sender.id;
-    id_receiver = response.body.receiver.id;
-    id_equipment = response.body.equipment.id;
-    id_origin_dep = response.body.origin_dep.id;
-    id_receiver_dep = response.body.receiver_dep.id;
     date = response.body.date;
   });
 
@@ -70,11 +99,11 @@ describe('Transfer CRUD', () => {
 
   it('should not create a transfer with invalid status', async () => {
     const response = await request(testingApp).post('/api/transfer').send({
-      id_sender: '02d6ddd9-7f7e-4c60-8c2d-79cba69736b9',
-      id_receiver: 'af4685e7-87ef-4a82-9e88-7155be87f899',
-      id_equipment: '86bef522-ad02-4e29-a4ba-b4fc96a01bb1',
-      id_origin_dep: '08f6e7f5-0649-47b4-81bc-05c3734ecd1f',
-      id_receiver_dep: '4bef9dc3-6584-41f8-9415-a9bd8726f646',
+      id_sender: id_sender,
+      id_receiver: id_receiver,
+      id_equipment: id_equipment,
+      id_origin_dep: id_origin_dep,
+      id_receiver_dep: id_receiver_dep,
       status: 'Bien'
     });
     expect(response.status).toEqual(400);
@@ -82,11 +111,11 @@ describe('Transfer CRUD', () => {
 
   it('should not create a transfer with same department', async () => {
     const response = await request(testingApp).post('/api/transfer').send({
-      id_sender: '02d6ddd9-7f7e-4c60-8c2d-79cba69736b9',
-      id_receiver: 'af4685e7-87ef-4a82-9e88-7155be87f899',
-      id_equipment: '86bef522-ad02-4e29-a4ba-b4fc96a01bb1',
-      id_origin_dep: '08f6e7f5-0649-47b4-81bc-05c3734ecd1f',
-      id_receiver_dep: '08f6e7f5-0649-47b4-81bc-05c3734ecd1f',
+      id_sender: id_sender,
+      id_receiver: id_receiver,
+      id_equipment: id_equipment,
+      id_origin_dep: id_origin_dep,
+      id_receiver_dep: id_origin_dep,
       status: 'Pendiente'
     });
     expect(response.status).toEqual(400);
@@ -94,11 +123,11 @@ describe('Transfer CRUD', () => {
 
   it('should not create a transfer with same sender and receiver', async () => {
     const response = await request(testingApp).post('/api/transfer').send({
-      id_sender: '02d6ddd9-7f7e-4c60-8c2d-79cba69736b9',
-      id_receiver: '02d6ddd9-7f7e-4c60-8c2d-79cba69736b9',
-      id_equipment: '86bef522-ad02-4e29-a4ba-b4fc96a01bb1',
-      id_origin_dep: '08f6e7f5-0649-47b4-81bc-05c3734ecd1f',
-      id_receiver_dep: '4bef9dc3-6584-41f8-9415-a9bd8726f646',
+      id_sender: id_sender,
+      id_receiver: id_sender,
+      id_equipment: id_equipment,
+      id_origin_dep: id_origin_dep,
+      id_receiver_dep: id_receiver_dep,
       status: 'Pendiente'
     });
     expect(response.status).toEqual(400);
@@ -106,10 +135,10 @@ describe('Transfer CRUD', () => {
 
   it('should return 400 for creating a transfer with missing fields', async () => {
     const response = await request(testingApp).post('/api/transfer/').send({
-      id_sender: '02d6ddd9-7f7e-4c60-8c2d-79cba69736b9',
-      id_receiver: '02d6ddd9-7f7e-4c60-8c2d-79cba69736b9',
-      id_equipment: '86bef522-ad02-4e29-a4ba-b4fc96a01bb1',
-      id_receiver_dep: '4bef9dc3-6584-41f8-9415-a9bd8726f646'
+      id_sender: id_sender,
+      id_receiver: id_receiver,
+      id_equipment: id_equipment,
+      id_receiver_dep: id_receiver_dep
     });
     expect(response.status).toEqual(400);
   });

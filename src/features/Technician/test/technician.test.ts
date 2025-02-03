@@ -1,10 +1,5 @@
 import request from 'supertest';
 import testingApp from '../../../TestDirectoryServer/testingApp';
-
-/**
- * Sets up the Express application with necessary middleware and routes.
- */
-
 /**
  * Test suite for Technician CRUD operations.
  *
@@ -19,13 +14,24 @@ describe('Technician CRUD', () => {
   let id_user = '';
 
   it('should create a new technician', async () => {
+    const department = await request(testingApp).post('/api/department').send({
+      name: 'Departamento de Pruebas'
+    });
+    const id_department = department.body.id;
+    const user = await request(testingApp).post('/api/user').send({
+      name: 'roberto',
+      password: 'revolucionario2025',
+      role: 'Técnico',
+      id_department: id_department,
+      isTechnician: false
+    });
+    id_user = user.body.id;
     const response = await request(testingApp).post('/api/technician').send({
-      id_user: '02d6ddd9-7f7e-4c60-8c2d-79cba69736b9',
+      id_user: id_user,
       exp_years: 2,
       specialty: 'panadero'
     });
     expect(response.status).toEqual(201);
-    id_user = response.body.id;
   });
 
   it('should get all technicians', async () => {

@@ -2,10 +2,6 @@ import request from 'supertest';
 import testingApp from '../../../TestDirectoryServer/testingApp';
 
 /**
- * Sets up the Express application with necessary middleware and routes.
- */
-
-/**
  * Test suite for Equipment CRUD operations.
  */
 describe('Equipment CRUD', () => {
@@ -15,11 +11,15 @@ describe('Equipment CRUD', () => {
    * Test case for creating a new equipment.
    */
   it('should create a new equipment', async () => {
+    const department = await request(testingApp).post('/api/department').send({
+      name: 'Departamento de Pruebas'
+    });
+    const id_department = department.body.id;
     const response = await request(testingApp).post('/api/equipment').send({
       name: 'High resolution X-Ray machine',
       type: 'Electrónico',
       status: 'Mantenimiento',
-      id_department: '4bef9dc3-6584-41f8-9415-a9bd8726f646'
+      id_department: id_department
     });
     expect(response.status).toEqual(201);
     equipmentId = response.body.id;
