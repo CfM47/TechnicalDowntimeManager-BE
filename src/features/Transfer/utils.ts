@@ -8,6 +8,14 @@ import {
   TransferType
 } from './types';
 
+/**
+ * Represents the status of a transfer operation.
+ *
+ * The `transferStatus` variable ensures that only values from the predefined `TransferStatuses` enumeration are allowed.
+ * It enforces type safety by validating the status of a transfer against the specified enumeration.
+ *
+ * Use this variable to store or validate the current status of transfer-related processes in the system.
+ */
 const transferStatus = z.enum(TransferStatuses);
 
 /**
@@ -15,7 +23,18 @@ const transferStatus = z.enum(TransferStatuses);
  */
 
 /**
- * Schema for validating transfer objects.
+ * Schema definition for a transfer object.
+ *
+ * This schema is used to validate the data structure for transfers involving a sender,
+ * receiver, equipment, receiver department, and the transfer status. Each field is expected
+ * to meet specific validation requirements.
+ *
+ * Fields:
+ * - id_sender: Represents the unique identifier for the sender. Must be a valid UUID.
+ * - id_receiver: Represents the unique identifier for the receiver. Must be a valid UUID.
+ * - id_equipment: Represents the unique identifier for the equipment being transferred. Must be a valid UUID.
+ * - id_receiver_dep: Represents the unique identifier for the receiver's department. Must be a valid UUID.
+ * - status: Represents the current status of the transfer. Refers to the predefined transferStatus schema.
  */
 export const transferSchema = z.object({
   id_sender: z.string().uuid(),
@@ -26,7 +45,18 @@ export const transferSchema = z.object({
 });
 
 /**
- * Type definition for transfer query parameters.
+ * Represents a transfer query with optional parameters for filtering or specifying transfer details.
+ *
+ * This type is used to define the structure of a transfer query object.
+ *
+ * Properties:
+ * - `id_sender` (string, optional): The unique identifier of the sender.
+ * - `id_receiver` (string, optional): The unique identifier of the receiver.
+ * - `id_equipment` (string, optional): The unique identifier of the equipment being transferred.
+ * - `date` (string, optional): The date of the transfer in a specific format (e.g., ISO 8601).
+ * - `id_origin_dep` (string, optional): The unique identifier of the originating department.
+ * - `id_receiver_dep` (string, optional): The unique identifier of the receiving department.
+ * - `status` (string, optional): The status of the transfer (e.g., pending, completed, etc.).
  */
 export type TransferQuery = {
   id_sender?: string;
@@ -39,10 +69,20 @@ export type TransferQuery = {
 };
 
 /**
- * Builds an array of SQL filters based on the provided transfer query parameters.
+ * Builds a query for filtering transfer records based on the provided criteria.
  *
- * @param query - The transfer query parameters.
- * @returns An array of SQL filters.
+ * @param {TransferQuery} query - An object containing the filtering criteria for the transfer query.
+ * The available properties in the query object include:
+ *   - `id_sender`: The ID of the sender.
+ *   - `id_receiver`: The ID of the receiver.
+ *   - `id_equipment`: The ID of the equipment being transferred.
+ *   - `date`: The date of the transfer.
+ *   - `id_origin_dep`: The ID of the originating department.
+ *   - `id_receiver_dep`: The ID of the receiving department.
+ *   - `status`: The status of the transfer.
+ * Only properties present in the query object will be used to generate filters.
+ *
+ * @return {SQL[]} An array of SQL filter conditions based on the given query parameters.
  */
 export function TransferQueryBuilder(query: TransferQuery): SQL[] {
   const filters: SQL[] = [];
@@ -56,6 +96,12 @@ export function TransferQueryBuilder(query: TransferQuery): SQL[] {
   return filters;
 }
 
+/**
+ * Maps a TransferType object to an EquipmentTransferRecordTypeTable.
+ *
+ * @param {TransferType} transfer - Object containing transfer details such as sender, origin department, destination department, receiver, and date.
+ * @return {EquipmentTransferRecordTypeTable} A structured object that represents the transfer details in the format of an EquipmentTransferRecordTypeTable.
+ */
 export function mapToEquipmentTransferRecordTypeTable(
   transfer: TransferType
 ): EquipmentTransferRecordTypeTable {
@@ -68,6 +114,12 @@ export function mapToEquipmentTransferRecordTypeTable(
   };
 }
 
+/**
+ * Maps a TransferType object to a DepartmentTransferRecordTypeTable object.
+ *
+ * @param {TransferType} transfer - The transfer object containing details about the sender, receiver, origin department, and equipment.
+ * @return {DepartmentTransferRecordTypeTable} A new object formatted as a DepartmentTransferRecordTypeTable with mapped properties.
+ */
 export function mapToDepartmentTransferRecordTypeTable(
   transfer: TransferType
 ): DepartmentTransferRecordTypeTable {

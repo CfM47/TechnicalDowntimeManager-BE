@@ -12,10 +12,36 @@ import { authRouter } from './features/Auth/router';
 import { getAllFormats } from './core/utils';
 
 /**
- * Configures and returns the main application router with all feature routes.
+ * Configures and initializes the main application router with specific route handlers.
  *
- * @param {Models} appModels - The models used by the application.
- * @returns {Router} The configured router.
+ * This function sets up multiple sub-routers, each associated with a particular
+ * domain or feature of the application (e.g., user management, equipment, transfers,
+ * maintenance, etc.). The function accepts an argument containing various models
+ * and injects them into the corresponding routers to handle database interactions
+ * and business logic.
+ *
+ * Routes:
+ * - `/user`: Handles user-related operations by integrating user, technician,
+ *   and department models.
+ * - `/technician`: Handles technician-related operations using technician and
+ *   user models.
+ * - `/equipment`: Manages equipment-related operations with the equipment and
+ *   department models.
+ * - `/rate`: Manages rate-related functionality using rate and user models.
+ * - `/department`: Handles department-based operations with the department model.
+ * - `/transfer`: Manages equipment transfer functionality using transfer, user,
+ *   equipment, and department models.
+ * - `/maintenance`: Handles operations related to maintenance requests using maintenance,
+ *   technician, and equipment models.
+ * - `/downtime`: Manages downtime-related operations with downtime, department,
+ *   equipment, and user models.
+ * - `/auth`: Handles user authentication with the user model.
+ * - `/available-export-formats`: Provides available data export formats as a GET endpoint.
+ *
+ * @param {Models} appModels - An object containing the application's data models
+ * necessary for initializing route handlers. Each sub-router requires specific
+ * models to execute respective operations.
+ * @returns {Router} An Express.js Router instance with all routes and middleware configured.
  */
 export const appRouter = (appModels: Models): Router => {
   const router = Router();

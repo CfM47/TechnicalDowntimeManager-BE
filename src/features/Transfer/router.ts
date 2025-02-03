@@ -299,13 +299,22 @@ import { IDepartmentModel } from '../../Interfaces/IDepartmentModel';
  */
 
 /**
- * Creates a router for transfer-related routes.
+ * Configures and returns an express router for handling transfer-related operations.
  *
- * @param transferModel - The transfer model to be used by the controller.
- * @param userModel - The user model to be used by the controller.
- * @param equipmentModel - The equipment model to be used by the controller.
- * @param departmentModel - The department model to be used by the controller.
- * @returns The configured router.
+ * @function transferRouter
+ * @param {ITransferModel} transferModel - The model responsible for handling transfer data.
+ * @param {IUserModel} userModel - The model responsible for handling user data.
+ * @param {IEquipmentModel} equipmentModel - The model responsible for handling equipment data.
+ * @param {IDepartmentModel} departmentModel - The model responsible for handling department data.
+ * @returns {Router} An express router instance, configured with routes for transfer-related operations.
+ *
+ * The router provides the following endpoints:
+ * - POST and GET requests to `/`: Handles creation of a new transfer and retrieval of all transfers.
+ * - GET request to `/equipment-record/report`: Generates and retrieves a report of equipment transfer records.
+ * - GET request to `/department-record/report`: Generates and retrieves a report of department transfer records.
+ * - GET, PUT, and DELETE requests to
+ *   `/:id_sender/:id_receiver/:id_equipment/:date/:id_origin_dep/:id_receiver_dep`:
+ *   Handles retrieval, update, and deletion of a specific transfer record using various identifiers.
  */
 export const transferRouter = (
   transferModel: ITransferModel,

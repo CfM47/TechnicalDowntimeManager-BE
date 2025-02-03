@@ -10,7 +10,21 @@ import { DowntimeModel } from './features/Downtime/model';
 import { MaintenanceModel } from './features/Maintenance/model';
 
 /**
- * Initializes the application models and starts the Express application.
+ * An object containing various application models used throughout the system.
+ * Each property represents a specific model related to the application's functionalities.
+ *
+ * Properties:
+ * - `userModel` - Represents the User model.
+ * - `technicianModel` - Represents the Technician model.
+ * - `equipmentModel` - Represents the Equipment model.
+ * - `rateModel` - Represents the Rate model.
+ * - `transferModel` - Represents the Transfer model.
+ * - `departmentModel` - Represents the Department model.
+ * - `downtimeModel` - Represents the Downtime model.
+ * - `maintenanceModel` - Represents the Maintenance model.
+ *
+ * This collection of models serves as the primary interface for accessing
+ * and managing the entities associated with the respective domains.
  */
 export const appModels: Models = {
   userModel: new UserModel(),

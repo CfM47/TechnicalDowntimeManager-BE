@@ -199,11 +199,19 @@ import { IDepartmentModel } from '../../Interfaces/IDepartmentModel';
  */
 
 /**
- * Creates a router for user-related routes.
- * @param userModel - The user model to interact with the database.
- * @param technicianModel - The technician model to interact with the database.
- * @param departmentModel - The department model to interact with the database.
- * @returns An Express router with user routes.
+ * Factory function to create a user router for handling user-related HTTP routes.
+ *
+ * @param {IUserModel} userModel - The data model for user entities.
+ * @param {ITechnicianModel} technicianModel - The data model for technician entities.
+ * @param {IDepartmentModel} departmentModel - The data model for department entities.
+ * @returns {Router} A configured express router with user-related endpoints.
+ *
+ * The router provides the following endpoints:
+ * - POST `/` to create a new user.
+ * - GET `/` to retrieve all users.
+ * - GET `/:id` to retrieve a user by ID.
+ * - PUT `/:id` to update a user by ID.
+ * - DELETE `/:id` to delete a user by ID.
  */
 export const userRouter = (
   userModel: IUserModel,

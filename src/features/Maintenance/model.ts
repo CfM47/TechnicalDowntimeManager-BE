@@ -9,10 +9,9 @@ import { equipment } from '../Equipment/schema';
 import { countTableRows, PaginatedResponse, Pagination } from '../../utils';
 
 /**
- * Model for handling CRUD operations on the `Maintenance` resource.
- *
- * This model provides methods to create, retrieve, update, and delete maintenance records.
- * Each method interacts with the database to perform the necessary operations.
+ * The MaintenanceModel class provides methods for managing maintenance records, including creating,
+ * retrieving, updating, and deleting records. It implements the IMaintenanceModel interface and interacts
+ * with the database to perform these operations.
  */
 export class MaintenanceModel implements IMaintenanceModel {
   /**

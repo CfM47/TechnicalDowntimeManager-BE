@@ -163,11 +163,22 @@ import { TechnicianController } from './controller';
  */
 
 /**
- * Creates and configures the technician router.
+ * Creates and configures the technician router with the necessary routes.
  *
- * @param technicianModel - The technician model to interact with the database.
- * @param userModel - The user model to interact with the database.
- * @returns The configured router for technician routes.
+ * @param {ITechnicianModel} technicianModel - The data model representing technicians.
+ * @param {IUserModel} userModel - The data model representing users.
+ * @returns {Router} Configured router for handling technician-related routes.
+ *
+ * Routes:
+ * - POST '/' - Creates a new technician.
+ * - GET '/' - Retrieves all technicians.
+ * - GET '/:id/interventions' - Retrieves intervention data for a specific technician.
+ * - GET '/:id/interventions/report' - Generates a report for a technician's interventions.
+ * - GET '/performance' - Retrieves performance data for all technicians.
+ * - GET '/performance/report' - Generates a performance report for all technicians.
+ * - GET '/:id' - Retrieves a specific technician by their ID.
+ * - PUT '/:id' - Updates a specific technician by their ID.
+ * - DELETE '/:id' - Deletes a specific technician by their ID.
  */
 export const technicianRouter = (technicianModel: ITechnicianModel, userModel: IUserModel) => {
   const router = Router();

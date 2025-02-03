@@ -13,11 +13,9 @@ import { IDepartmentModel } from '../../Interfaces/IDepartmentModel';
 import { pickPlugin, ReportData } from '../../core/utils';
 
 /**
- * Controller for handling CRUD operations on equipment.
- *
- * This controller provides methods to create, retrieve, update, and delete
- * equipment records. It uses an equipment model to interact with the database
- * and performs validation on incoming requests.
+ * EquipmentController is responsible for handling operations related to managing
+ * equipment records, such as creating, retrieving, updating, and deleting equipment,
+ * as well as generating reports for equipment with frequent maintenances.
  */
 export class EquipmentController {
   equipmentModel: IEquipmentModel;

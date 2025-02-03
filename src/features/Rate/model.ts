@@ -9,10 +9,10 @@ import { user } from '../User/schema';
 import { countTableRows, PaginatedResponse, Pagination } from '../../utils';
 
 /**
- * Model class for handling CRUD operations on Rate entities.
+ * The `RateModel` class provides methods for interacting with rate data in the database.
+ * It includes functionality to create, retrieve, update, and delete rates, as well as to fetch multiple rates with filtering, pagination, and sorting options.
  *
- * This class provides methods to create, retrieve, update, and delete rates.
- * Each method interacts with the database to perform the necessary operations.
+ * Implements the `IRateModel` interface.
  */
 export class RateModel implements IRateModel {
   /**

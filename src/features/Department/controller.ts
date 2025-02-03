@@ -11,7 +11,7 @@ import { IDepartmentModel } from '../../Interfaces/IDepartmentModel';
 import { NewDepartment, Department } from './schema';
 
 /**
- * Controller class for handling CRUD operations on the Department entity.
+ * Controller responsible for handling department-related operations.
  */
 export class DepartmentController {
   departmentModel: IDepartmentModel;

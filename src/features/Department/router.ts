@@ -145,10 +145,12 @@ import { DepartmentController } from './controller';
  */
 
 /**
- * Sets up the router for department-related routes.
+ * A factory function for creating a router to handle HTTP requests for the department resource.
+ * The generated router supports CRUD operations such as creating, retrieving all departments,
+ * retrieving a specific department by ID, updating a department, and deleting a department.
  *
- * @param departmentModel - The model instance for department operations.
- * @returns The configured router.
+ * @param {IDepartmentModel} departmentModel - The data model for the department resource.
+ * @returns {Router} An Express router configured with routes for department resource handling.
  */
 export const departmentRouter = (departmentModel: IDepartmentModel) => {
   const router = Router();

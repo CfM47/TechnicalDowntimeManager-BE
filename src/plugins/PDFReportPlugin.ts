@@ -4,9 +4,10 @@ import { ReportData } from '../core/utils';
 import { IPlugin } from '../core/IPlugin';
 
 /**
- * PDF Report Generation Plugin implementing IPlugin interface
- * @class PDFReportPlugin
- * @implements {IPlugin}
+ * The `PDFReportPlugin` class implements the `IPlugin` interface and provides functionality
+ * to generate detailed PDF reports from structured report data.
+ * It uses the PDFKit library for PDF generation and supports creating styled tables
+ * and headers within the generated PDF.
  */
 export default class PDFReportPlugin implements IPlugin {
   /** @inheritdoc */

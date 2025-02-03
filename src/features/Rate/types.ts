@@ -5,13 +5,14 @@ import { user } from '../User/schema';
 import { rate } from './schema';
 
 /**
- * Represents a rate given by a user to a technician.
+ * Represents a rate type that contains information about a rating given by a user for a technician.
  *
- * @property technician - Information about the technician being rated.
- * @property user - Information about the user who provided the rate.
- * @property date - The date when the rate was given.
- * @property comment - A textual comment provided by the user.
- * @property score - An integer score given by the user.
+ * @interface RateType
+ * @property {TechnicianInfo} technician - The information about the technician being rated.
+ * @property {UserInfo} user - The information about the user who provided the rating.
+ * @property {string} date - The date when the rating was provided in ISO 8601 format.
+ * @property {string} comment - A comment or feedback provided by the user as part of the rating.
+ * @property {number} score - The score given as part of the rating, typically expressed as a number.
  */
 export interface RateType {
   technician: TechnicianInfo;
@@ -21,16 +22,32 @@ export interface RateType {
   score: number;
 }
 
+/**
+ * An object representing the order by criteria for sorting rates.
+ *
+ * @constant {Object} RateOrderBy
+ * @property {string} score - The rating score used as a criterion for sorting.
+ * @property {string} date - The date used as a criterion for sorting.
+ */
 export const RateOrderBy = {
   score: rate.score,
   date: rate.date
 };
 
 /**
- * Defines the selection fields for the `rate` table.
+ * Represents the selection data used for rating, containing information
+ * about the technician, user, and the associated details of the rating.
  *
- * This object specifies the fields to be selected when querying the `rate` table,
- * including related technician and user information.
+ * @typedef {Object} rateSelection
+ * @property {Object} technician - Details about the technician being rated.
+ * @property {number|string} technician.id - The identifier of the technician.
+ * @property {string} technician.name - The name of the technician.
+ * @property {Object} user - Details about the user providing the rating.
+ * @property {number|string} user.id - The identifier of the user providing the rating.
+ * @property {string} user.name - The name of the user providing the rating.
+ * @property {string|Date} date - The date when the rating was provided.
+ * @property {string} comment - The comment provided by the user as part of the rating.
+ * @property {number} score - The numeric score given in the rating.
  */
 export const rateSelection = {
   technician: {

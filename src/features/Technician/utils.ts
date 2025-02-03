@@ -9,12 +9,15 @@ import {
 } from './types';
 
 /**
- * Zod schema for validating Technician objects.
+ * Represents the schema for a technician entity.
  *
- * The schema includes the following fields:
- * - `id_user`: A UUID string representing the user ID.
- * - `exp_years`: An integer representing the years of experience, must be positive.
- * - `specialty`: A string representing the technician's specialty.
+ * This schema is used to validate the structure of a technician object.
+ * It defines the required fields and their respective data types. The object includes:
+ * - `id_user`: A UUID string that uniquely identifies the technician.
+ * - `exp_years`: A positive integer representing the number of years of experience.
+ * - `specialty`: A string indicating the area of specialty of the technician.
+ *
+ * This schema ensures the technician data adheres to the required structure and validations.
  */
 export const technicianSchema = z.object({
   id_user: z.string().uuid(),
@@ -23,12 +26,12 @@ export const technicianSchema = z.object({
 });
 
 /**
- * Type representing a query for Technician records.
+ * Represents a query object for filtering technicians based on specific attributes.
  *
- * Fields:
- * - `id_user`: Optional string representing the user ID.
- * - `exp_years`: Optional number representing the years of experience.
- * - `specialty`: Optional string representing the technician's specialty.
+ * @typedef {Object} TechnicianQuery
+ * @property {string} [id_user] - The unique identifier of the technician.
+ * @property {number} [exp_years] - The number of years of experience the technician has.
+ * @property {string} [specialty] - The specialty field of the technician.
  */
 export type TechnicianQuery = {
   id_user?: string;
@@ -37,10 +40,14 @@ export type TechnicianQuery = {
 };
 
 /**
- * Builds an array of SQL filters based on the provided TechnicianQuery.
+ * Builds an array of SQL filter conditions for querying technicians based on the provided query criteria.
  *
- * @param query - The TechnicianQuery object containing filter criteria.
- * @returns An array of SQL filter conditions.
+ * @param {TechnicianQuery} query - An object containing the query parameters to filter technician records.
+ *                                   It may include the following properties:
+ *                                   - id_user: The user ID of the technician.
+ *                                   - exp_years: The number of years of experience the technician has.
+ *                                   - specialty: The specialty field of the technician.
+ * @return {SQL[]} An array of SQL filter conditions derived from the provided query parameters.
  */
 export function TechnicianQueryBuilder(query: TechnicianQuery): SQL[] {
   const filters: SQL[] = [];
@@ -50,6 +57,12 @@ export function TechnicianQueryBuilder(query: TechnicianQuery): SQL[] {
   return filters;
 }
 
+/**
+ * Maps a TechnicianPerformanceType object to a TechnicianPerformanceTypeTable object.
+ *
+ * @param {TechnicianPerformanceType} technician - The technician performance data to be mapped.
+ * @return {TechnicianPerformanceTypeTable} The mapped technician performance type table data.
+ */
 export function mapToPerformanceTypeTable(
   technician: TechnicianPerformanceType
 ): TechnicianPerformanceTypeTable {
@@ -61,6 +74,12 @@ export function mapToPerformanceTypeTable(
   };
 }
 
+/**
+ * Maps a TechnicianInterventionType object to a TechnicianInterventionTypeTable object.
+ *
+ * @param {TechnicianInterventionType} intervention - The intervention object containing data to be mapped.
+ * @return {TechnicianInterventionTypeTable} The mapped TechnicianInterventionTypeTable object.
+ */
 export function mapToInterventionTypeTable(
   intervention: TechnicianInterventionType
 ): TechnicianInterventionTypeTable {

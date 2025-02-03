@@ -209,11 +209,18 @@ import { IUserModel } from '../../Interfaces/IUserModel';
  */
 
 /**
- * Creates a router for handling rate-related routes.
+ * Defines a rateRouter to handle rate-related HTTP requests and routes.
  *
- * @param rateModel - The model instance for interacting with rate data.
- * @param userModel - The model instance for interacting with user data.
- * @returns An Express router configured with rate routes.
+ * @param {IRateModel} rateModel - The rate model interface for interacting with rate data.
+ * @param {IUserModel} userModel - The user model interface for interacting with user data.
+ * @returns {Router} An Express router instance configured with rate-related routes.
+ *
+ * Routes:
+ * - POST /: Creates a new rate entry.
+ * - GET /: Retrieves all rate entries.
+ * - GET /:id_technician/:id_user/:date: Retrieves a specific rate entry by technician ID, user ID, and date.
+ * - PUT /:id_technician/:id_user/:date: Updates a specific rate entry by technician ID, user ID, and date.
+ * - DELETE /:id_technician/:id_user/:date: Deletes a specific rate entry by technician ID, user ID, and date.
  */
 export const rateRouter = (rateModel: IRateModel, userModel: IUserModel) => {
   const router = Router();

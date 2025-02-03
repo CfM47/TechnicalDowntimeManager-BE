@@ -23,6 +23,12 @@ import { countTableRows, PaginatedResponse, Pagination } from '../../utils';
  * - update(keys: TransferQuery, transferData: Partial<Transfer>): Updates a transfer record by its keys.
  */
 export class TransferModel implements ITransferModel {
+  /**
+   * Creates a new transfer record in the database and retrieves the created transfer.
+   *
+   * @param {NewTransfer} newTransfer - The details of the new transfer to be created.
+   * @return {Promise<TransferType | null>} A promise that resolves to the created transfer object, or null if not found.
+   */
   async create(newTransfer: NewTransfer): Promise<TransferType | null> {
     const [createdTransfer] = await db.insert(transfer).values(newTransfer).returning();
     const query: TransferQuery = {
@@ -36,11 +42,24 @@ export class TransferModel implements ITransferModel {
     return await this.getById(query);
   }
 
+  /**
+   * Deletes records from the 'transfer' table that match the provided query filters.
+   *
+   * @param {TransferQuery} keys - An object containing query filters to identify the records to delete.
+   * @return {Promise<void>} A promise that resolves when the deletion is complete.
+   */
   async delete(keys: TransferQuery): Promise<void> {
     const filter = TransferQueryBuilder(keys);
     await db.delete(transfer).where(and(...filter));
   }
 
+  /**
+   * Retrieves a list of transfers based on the specified filter and pagination criteria.
+   *
+   * @param {TransferQuery} filter - The query object containing filtering conditions for transfers.
+   * @param {Pagination} pagination - The pagination object specifying the page number and size.
+   * @return {Promise<PaginatedResponse<TransferType>>} A promise that resolves to a paginated response containing transfer items, pagination details, and the total count.
+   */
   async getAll(
     filter: TransferQuery,
     pagination: Pagination
@@ -72,6 +91,12 @@ export class TransferModel implements ITransferModel {
     };
   }
 
+  /**
+   * Retrieves a transfer record by the specified query keys.
+   *
+   * @param {TransferQuery} keys - The query parameters used to filter the transfer records.
+   * @return {Promise<TransferType | null>} Returns a promise that resolves to the transfer record if found, or null if no record matches the criteria.
+   */
   async getById(keys: TransferQuery): Promise<TransferType | null> {
     const filter = TransferQueryBuilder(keys);
     const [resultTransfer] = await db
@@ -93,6 +118,13 @@ export class TransferModel implements ITransferModel {
     return resultTransfer;
   }
 
+  /**
+   * Updates the transfer record in the database based on the provided query parameters and data.
+   *
+   * @param {TransferQuery} keys - Query parameters to identify the transfer record to update.
+   * @param {Partial<Transfer>} transferData - Partial transfer data to update the identified record.
+   * @return {Promise<TransferType | null>} A promise that resolves to the updated transfer object or null if not found.
+   */
   async update(keys: TransferQuery, transferData: Partial<Transfer>): Promise<TransferType | null> {
     const filter = TransferQueryBuilder(keys);
     const [updatedTransfer] = await db

@@ -10,10 +10,12 @@ import { db } from './db/config/db_connect';
 import bcrypt from 'bcrypt';
 
 /**
- * Seeds the database with initial data for departments, users, technicians, equipments, rates, transfers, maintenances, and downtimes.
+ * The `seed` function initializes and populates an application's database with predefined departments and users.
+ * It creates department entries based on the `departments` array and user entries based on the `users` array.
+ * This data is mainly used for bootstrapping the application with initial values such as departments and users for further operations.
  *
- * This function inserts predefined data into the respective tables in the database.
- * It handles any errors that occur during the insertion process and logs them to the console.
+ * @async
+ * @function
  */
 const seed = async () => {
   const departments: NewDepartment[] = [

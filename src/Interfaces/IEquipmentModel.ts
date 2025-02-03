@@ -5,7 +5,13 @@ import { EquipmentType, EquipmentWithMaintenances } from '../features/Equipment/
 import { PaginatedResponse, Pagination } from '../utils';
 
 /**
- * Interface for the Equipment model, extending the generic repository interface.
+ * The IEquipmentModel interface extends the generic IRepository interface,
+ * providing operations specific to equipment entities within the application.
+ * It includes methods for querying and managing equipment-related data,
+ * along with additional functionalities tailored to equipment maintenance needs.
+ *
+ * This interface includes a method to retrieve equipment with frequent maintenance issues
+ * while supporting paginated responses for optimizing client requests and server efficiency.
  */
 export interface IEquipmentModel
   extends IRepository<EquipmentQuery, NewEquipment, Equipment, EquipmentType> {

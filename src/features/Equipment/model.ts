@@ -15,12 +15,8 @@ import { countTableRows, PaginatedResponse, Pagination } from '../../utils';
 import { maintenance } from '../Maintenance/schema';
 
 /**
- * Model for handling CRUD operations on equipment.
- *
- * This model provides methods to create, retrieve, update, and delete
- * equipment records. It uses the database connection to interact with
- * the equipment table and performs necessary operations based on the
- * provided queries.
+ * Represents the equipment management model, providing methods to perform
+ * CRUD operations and specific queries on equipment data.
  */
 export class EquipmentModel implements IEquipmentModel {
   /**

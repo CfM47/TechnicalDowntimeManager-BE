@@ -3,20 +3,19 @@ import { technician } from '../Technician/schema';
 import { user } from '../User/schema';
 
 /**
- * Defines the `rate` table schema.
+ * Represents the `rate` table schema.
  *
- * The `rate` table stores information about rates given by users to technicians.
- * Each rate is uniquely identified by a combination of `id_technician`, `id_user`, and `date`.
+ * This table is used to store rating information.
  *
  * Columns:
- * - `id_technician`: UUID of the technician being rated. References the `id_user` column in the `technician` table.
- * - `id_user`: UUID of the user who provided the rate. References the `id` column in the `user` table.
- * - `date`: Timestamp of when the rate was given. Defaults to the current timestamp.
- * - `comment`: A textual comment provided by the user. Maximum length is 255 characters.
- * - `score`: An integer score given by the user.
+ * - `id_technician`: Unique identifier for the technician being rated. Cannot be null and references the `id_user` column in the `technician` table.
+ * - `id_user`: Unique identifier for the user providing the rating. Cannot be null and references the `id` column in the `user` table.
+ * - `date`: The timestamp of when the rating was provided. Cannot be null and defaults to the current timestamp.
+ * - `comment`: A textual comment associated with the rating. Cannot be null and has a maximum length of 255 characters.
+ * - `score`: An integer representing the rating score. Cannot be null.
  *
- * Primary Key:
- * - Composite key consisting of `id_technician`, `id_user`, and `date`.
+ * Constraints:
+ * - The primary key consists of the `id_technician`, `id_user`, and `date` columns.
  */
 export const rate = pgTable(
   'rate',
@@ -40,5 +39,14 @@ export const rate = pgTable(
   }
 );
 
+/**
+ * The `Rate` type represents the inferred selected value from the `rate` object.
+ * This is dynamically derived based on the `rate` object's structure and selection logic.
+ * It allows for defining and ensuring type consistency when interacting with the rate object.
+ */
 export type Rate = typeof rate.$inferSelect;
+/**
+ * Represents a new rate model derived from the inferred type of `rate.$inferInsert`.
+ * This type is typically used to define or enforce the structure for inserting new rate entries.
+ */
 export type NewRate = typeof rate.$inferInsert;

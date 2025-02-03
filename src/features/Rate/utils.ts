@@ -3,13 +3,14 @@ import { eq, SQL } from 'drizzle-orm';
 import { rate } from './schema';
 
 /**
- * Zod schema for validating rate objects.
+ * rateSchema is a schema definition used for validating rating information.
+ * It ensures that the necessary data fields meet specific requirements for structure and value.
  *
- * This schema validates the structure of a rate object, ensuring that:
- * - `id_technician` is a valid UUID string.
- * - `id_user` is a valid UUID string.
- * - `comment` is a string.
- * - `score` is a number between 1 and 5 (inclusive).
+ * Properties:
+ * - id_technician: A unique identifier for the technician, represented as a valid UUID string.
+ * - id_user: A unique identifier for the user providing the rating, represented as a valid UUID string.
+ * - comment: A textual comment or feedback associated with the rating.
+ * - score: A numerical score rating, constrained to be between 1 and 5 inclusive.
  */
 export const rateSchema = z.object({
   id_technician: z.string().uuid(),
@@ -19,14 +20,17 @@ export const rateSchema = z.object({
 });
 
 /**
- * Type definition for querying rates.
+ * Represents a query object for rating-related data.
  *
- * This type defines the possible fields that can be used to filter rate queries:
- * - `id_technician`: Optional UUID string of the technician.
- * - `id_user`: Optional UUID string of the user.
- * - `date`: Optional string representing the date.
- * - `comment`: Optional string containing the comment.
- * - `score`: Optional number representing the score.
+ * This object is used to store information about a technician's rating,
+ * user details, date of feedback, comments, and the associated score.
+ *
+ * Properties:
+ * - id_technician (optional): The unique identifier of the technician being rated.
+ * - id_user (optional): The unique identifier of the user providing the rating.
+ * - date (optional): The date when the rating was submitted, formatted as a string.
+ * - comment (optional): Additional feedback or comments provided by the user.
+ * - score (optional): A numerical score representing the rating provided by the user.
  */
 export type RateQuery = {
   id_technician?: string;
@@ -37,14 +41,12 @@ export type RateQuery = {
 };
 
 /**
- * Builds an array of SQL filters based on the provided rate query.
+ * Builds an array of SQL filter conditions based on the provided RateQuery parameters.
+ * Each non-null parameter in the RateQuery object adds a corresponding filter condition.
  *
- * This function takes a `RateQuery` object and constructs an array of SQL filters
- * to be used in querying the `rate` table. Each field in the query object is
- * converted to an SQL equality condition if it is defined.
- *
- * @param query - The `RateQuery` object containing the filter criteria.
- * @returns An array of SQL filters to be used in a query.
+ * @param {RateQuery} query - An object representing filtering criteria for the rate query.
+ * It may contain properties such as id_user, id_technician, comment, score, and date.
+ * @return {SQL[]} An array of SQL conditions based on the provided query parameters.
  */
 export function RateQueryBuilder(query: RateQuery): SQL[] {
   const filters: SQL[] = [];

@@ -152,15 +152,18 @@ import { IDepartmentModel } from '../../Interfaces/IDepartmentModel';
  */
 
 /**
- * Creates a router for equipment-related routes.
+ * Creates and configures an equipment router.
  *
- * This function sets up the routes for creating, retrieving, updating, and deleting
- * equipment records. It uses the provided equipment model to instantiate the controller
- * and define the route handlers.
+ * This router defines the API endpoints related to equipment management
+ * and interacts with the EquipmentController to handle the respective
+ * HTTP requests. The routes are configured to handle operations such as
+ * creating equipment, fetching all equipment records, retrieving specific
+ * equipment by ID, updating and deleting equipment, and generating reports
+ * associated with equipment maintenance.
  *
- * @param equipmentModel - The equipment model to be used by the controller.
- * @param departmentModel
- * @returns The configured router.
+ * @param {IEquipmentModel} equipmentModel - The model instance for accessing and managing equipment data.
+ * @param {IDepartmentModel} departmentModel - The model instance for accessing and managing department data.
+ * @returns {Router} The configured router supporting equipment-related routes.
  */
 export const equipmentRouter = (
   equipmentModel: IEquipmentModel,

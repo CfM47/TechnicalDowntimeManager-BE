@@ -20,14 +20,8 @@ import { pickPlugin, ReportData } from '../../core/utils';
 import { TechnicianInterventionType, TechnicianPerformanceType } from './types';
 
 /**
- * Controller for managing technicians.
- *
- * This controller provides the following functionalities:
- * - Creating a new technician
- * - Retrieving all technicians
- * - Retrieving a technician by ID
- * - Updating a technician by ID
- * - Deleting a technician by ID
+ * TechnicianController manages HTTP requests related to technicians,
+ * including creation, retrieval, update, deletion, and generation of reports.
  */
 export class TechnicianController {
   userModel: IUserModel;
@@ -204,6 +198,25 @@ export class TechnicianController {
     }
   };
 
+  /**
+   * Asynchronously generates and returns a technicians performance report in the specified format.
+   *
+   * @param {Request} req - The HTTP request object containing query parameters.
+   * @param {Response} res - The HTTP response object used to send the generated report or error messages.
+   *
+   * @throws {Error} Throws an error if any issue occurs during the report generation process.
+   *
+   * Query Parameters:
+   *   - `page` (optional): The page number for pagination.
+   *   - `size` (optional): The size of items per page for pagination.
+   *   - `format` (optional, default is 'pdf'): The file format in which the report should be generated (e.g., pdf, csv).
+   *
+   * Response:
+   *   - On success: Returns the performance report as a downloadable file in the specified format with status code 200.
+   *   - On failure:
+   *       - Returns a 400 status code if the specified format is not supported.
+   *       - Returns a 500 status code in case of other errors.
+   */
   generateTechniciansPerformance = async (req: Request, res: Response) => {
     try {
       const { page, size, format = 'pdf' } = req.query;
@@ -237,6 +250,37 @@ export class TechnicianController {
     }
   };
 
+  /**
+   * Generates an intervention report for a specific technician based on the provided parameters.
+   *
+   * This asynchronous function retrieves the intervention data for a technician, formats it into
+   * a report, and sends the generated report file as a response in the requested format (e.g., PDF).
+   * The function also supports pagination for retrieving a subset of intervention records.
+   *
+   * @param {Request} req - The request object containing parameters such as technician ID, pagination details (page, size), and report format.
+   * @param {Response} res - The response object used to send the generated report or error messages back to the client.
+   *
+   * @throws {Error} Will return a 500 status code if an unexpected error occurs during the report generation.
+   * @throws {Error} Will return a 400 status code if the requested format is not supported.
+   *
+   * Parameters:
+   * - `req.params.id` (string): The ID of the technician whose intervention data is to be retrieved.
+   * - `req.query.page` (number): The page number for paginated results (optional).
+   * - `req.query.size` (number): The number of results per page for paginated results (optional).
+   * - `req.query.format` (string): The desired format of the report file (e.g., 'pdf'). Defaults to 'pdf' if not provided.
+   *
+   * Behavior:
+   * - Validates the pagination parameters.
+   * - Fetches intervention data from the database for the specified technician ID and pagination settings.
+   * - Transforms the intervention data into a format suitable for report generation.
+   * - Selects the appropriate plugin to generate the report file based on the requested format.
+   * - Sends the generated report file as an attachment in the HTTP response with appropriate headers.
+   *
+   * Response:
+   * - HTTP 200: If the report generation is successful, the response will include the generated report file.
+   * - HTTP 400: If the requested format is not supported.
+   * - HTTP 500: If an internal error occurs during the process.
+   */
   generateTechniciansIntervention = async (req: Request, res: Response) => {
     try {
       const technicianId = req.params.id;
