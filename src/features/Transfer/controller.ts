@@ -1,11 +1,17 @@
 import { ITransferModel } from '../../Interfaces/ITransferModel';
 import { Request, Response } from 'express';
-import { TransferQuery, transferSchema } from './utils';
+import {
+  mapToDepartmentTransferRecordTypeTable,
+  mapToEquipmentTransferRecordTypeTable,
+  TransferQuery,
+  transferSchema
+} from './utils';
 import { NewTransfer, Transfer } from './schema';
 import { ErrorMessage, validate, validatePagination, validateUpdate } from '../../utils';
 import { IUserModel } from '../../Interfaces/IUserModel';
 import { IEquipmentModel } from '../../Interfaces/IEquipmentModel';
 import { IDepartmentModel } from '../../Interfaces/IDepartmentModel';
+import { pickPlugin, ReportData } from '../../core/utils';
 
 /**
  * Controller class for handling Transfer-related operations.
@@ -267,6 +273,80 @@ export class TransferController {
       }
       await this.transferModel.delete(transferQuery);
       res.status(200).json({ message: 'Transfer deleted' });
+    } catch (e) {
+      res.status(500).json(ErrorMessage(e));
+    }
+  };
+
+  generateEquipmentTransferRecord = async (req: Request, res: Response) => {
+    try {
+      const { page, size, format = 'pdf', ...query } = req.query;
+      const filter: TransferQuery = query;
+      const pagination = validatePagination(page, size);
+      const allTransfers = await this.transferModel.getAll(filter, pagination);
+
+      const equipmentName =
+        allTransfers.items.length > 0 ? allTransfers.items[0].equipment.name : '';
+
+      const reportData: ReportData = {
+        reportName: `Maintenance History: ${equipmentName}`,
+        headers: ['Sender', 'Origin_Department', 'Destiny_Department', 'Receiver', 'Date'],
+        data: allTransfers.items.map((transfers) =>
+          mapToEquipmentTransferRecordTypeTable(transfers)
+        )
+      };
+
+      const plugin = await pickPlugin(format as string);
+
+      if (!plugin) {
+        res.status(400).json({ message: 'Format not supported' });
+        return;
+      }
+
+      const buffer = await plugin.generate(reportData);
+
+      res
+        .status(200)
+        .setHeader('Content-Type', `application/${format}`)
+        .setHeader('Content-Disposition', `attachment; filename="report.${format}"`)
+        .send(buffer);
+    } catch (e) {
+      res.status(500).json(ErrorMessage(e));
+    }
+  };
+
+  generateDepartmentTransferRecord = async (req: Request, res: Response) => {
+    try {
+      const { page, size, format = 'pdf', ...query } = req.query;
+      const filter: TransferQuery = query;
+      const pagination = validatePagination(page, size);
+      const allTransfers = await this.transferModel.getAll(filter, pagination);
+
+      const departmentName =
+        allTransfers.items.length > 0 ? allTransfers.items[0].receiver_dep.name : '';
+
+      const reportData: ReportData = {
+        reportName: `Maintenance History: ${departmentName}`,
+        headers: ['Sender', 'Receiver', 'Origin_Department', 'Equipment'],
+        data: allTransfers.items.map((transfers) =>
+          mapToDepartmentTransferRecordTypeTable(transfers)
+        )
+      };
+
+      const plugin = await pickPlugin(format as string);
+
+      if (!plugin) {
+        res.status(400).json({ message: 'Format not supported' });
+        return;
+      }
+
+      const buffer = await plugin.generate(reportData);
+
+      res
+        .status(200)
+        .setHeader('Content-Type', `application/${format}`)
+        .setHeader('Content-Disposition', `attachment; filename="report.${format}"`)
+        .send(buffer);
     } catch (e) {
       res.status(500).json(ErrorMessage(e));
     }

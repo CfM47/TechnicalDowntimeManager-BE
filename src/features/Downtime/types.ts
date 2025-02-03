@@ -47,3 +47,10 @@ export const downtimeSelection = {
   status: downtime.status,
   cause: downtime.cause
 };
+
+export interface DowntimeLastYearTypeTable {
+  Sender: string;
+  Receiver: string;
+  Equipment: string;
+  Destiny: string;
+}

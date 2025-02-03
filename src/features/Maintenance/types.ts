@@ -39,3 +39,9 @@ export const maintenanceSelection = {
   type: maintenance.type,
   cost: maintenance.cost
 };
+
+export interface EquipmentMaintenanceHistoryTypeTable {
+  Technician: string;
+  Type: string;
+  Date: string;
+}

@@ -7,9 +7,10 @@ import {
   validatePagination,
   validateUpdate
 } from '../../utils';
-import { EquipmentQuery, equipmentSchema } from './utils';
+import { EquipmentQuery, equipmentSchema, mapToDefectiveEquipmentTypeTable } from './utils';
 import { Equipment, NewEquipment } from './schema';
 import { IDepartmentModel } from '../../Interfaces/IDepartmentModel';
+import { pickPlugin, ReportData } from '../../core/utils';
 
 /**
  * Controller for handling CRUD operations on equipment.
@@ -173,6 +174,38 @@ export class EquipmentController {
       const equipments =
         await this.equipmentModel.getEquipmentsWithFrequentMaintenances(pagination);
       res.status(200).json(equipments);
+    } catch (e) {
+      res.status(500).json(ErrorMessage(e));
+    }
+  };
+
+  generateReportEquipmentWithFrequentMaintenances = async (req: Request, res: Response) => {
+    try {
+      const { page, size, format = 'pdf' } = req.query;
+      const pagination: Pagination = validatePagination(page, size);
+      const equipments =
+        await this.equipmentModel.getEquipmentsWithFrequentMaintenances(pagination);
+
+      const reportData: ReportData = {
+        reportName: 'Defective Equipments Report',
+        headers: ['Name', 'Type', 'Status', 'Department', 'Total_Maintenances'],
+        data: equipments.items.map((equipment) => mapToDefectiveEquipmentTypeTable(equipment))
+      };
+
+      const plugin = await pickPlugin(format as string);
+
+      if (!plugin) {
+        res.status(400).json({ message: 'Format not supported' });
+        return;
+      }
+
+      const buffer = await plugin.generate(reportData);
+
+      res
+        .status(200)
+        .setHeader('Content-Type', `application/${format}`)
+        .setHeader('Content-Disposition', `attachment; filename="report.${format}"`)
+        .send(buffer);
     } catch (e) {
       res.status(500).json(ErrorMessage(e));
     }

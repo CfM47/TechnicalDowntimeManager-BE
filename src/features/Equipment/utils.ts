@@ -2,6 +2,7 @@ import z from 'zod';
 import { eq, SQL } from 'drizzle-orm';
 import { equipment } from './schema';
 import { EquipmentStatuses, EquipmentTypes } from '../../enums';
+import { DefectiveEquipmentTypeTable, EquipmentWithMaintenances } from './types';
 
 /**
  * Zod schema for validating equipment state and type.
@@ -54,4 +55,22 @@ export function EquipmentQueryBuilder(query: EquipmentQuery): SQL[] {
   if (query.id_department) filters.push(eq(equipment.id_department, query.id_department));
   if (query.acquisition_date) filters.push(eq(equipment.acquisition_date, query.acquisition_date));
   return filters;
+}
+
+/**
+ * Maps an EquipmentWithMaintenances object to a DefectiveEquipmentType object.
+ *
+ * @param equipment - The EquipmentWithMaintenances object to map.
+ * @returns The mapped DefectiveEquipmentType object.
+ */
+export function mapToDefectiveEquipmentTypeTable(
+  equipment: EquipmentWithMaintenances
+): DefectiveEquipmentTypeTable {
+  return {
+    Name: equipment.name,
+    Type: equipment.type,
+    Status: equipment.status,
+    Department: equipment.department.name,
+    Total_Maintenances: equipment.totalMaintenances
+  };
 }

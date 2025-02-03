@@ -9,6 +9,7 @@ import { departmentRouter } from './features/Department/router';
 import { downtimeRouter } from './features/Downtime/router';
 import { maintenanceRouter } from './features/Maintenance/router';
 import { authRouter } from './features/Auth/router';
+import { getAllFormats } from './core/utils';
 
 /**
  * Configures and returns the main application router with all feature routes.
@@ -53,5 +54,6 @@ export const appRouter = (appModels: Models): Router => {
     )
   );
   router.use('/auth', authRouter(appModels.userModel));
+  router.get('/available-export-formats', getAllFormats);
   return router;
 };

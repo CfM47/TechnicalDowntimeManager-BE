@@ -2,6 +2,11 @@ import z from 'zod';
 import { eq, SQL } from 'drizzle-orm';
 import { transfer } from './schema';
 import { TransferStatuses } from '../../enums';
+import {
+  DepartmentTransferRecordTypeTable,
+  EquipmentTransferRecordTypeTable,
+  TransferType
+} from './types';
 
 const transferStatus = z.enum(TransferStatuses);
 
@@ -49,4 +54,27 @@ export function TransferQueryBuilder(query: TransferQuery): SQL[] {
   if (query.id_receiver_dep) filters.push(eq(transfer.id_receiver_dep, query.id_receiver_dep));
   if (query.status) filters.push(eq(transfer.status, query.status));
   return filters;
+}
+
+export function mapToEquipmentTransferRecordTypeTable(
+  transfer: TransferType
+): EquipmentTransferRecordTypeTable {
+  return {
+    Sender: transfer.sender.name,
+    Origin_Department: transfer.origin_dep.name,
+    Destiny_Department: transfer.receiver_dep.name,
+    Receiver: transfer.receiver.name,
+    Date: transfer.date
+  };
+}
+
+export function mapToDepartmentTransferRecordTypeTable(
+  transfer: TransferType
+): DepartmentTransferRecordTypeTable {
+  return {
+    Sender: transfer.sender.name,
+    Receiver: transfer.receiver.name,
+    Origin_Department: transfer.origin_dep.name,
+    Equipment: transfer.equipment.name
+  };
 }

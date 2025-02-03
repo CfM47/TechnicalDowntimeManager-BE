@@ -323,7 +323,10 @@ export const transferRouter = (
   );
 
   router.route('/').post(transferController.create).get(transferController.getAll);
-
+  router.route('/equipment-record/report').get(transferController.generateEquipmentTransferRecord);
+  router
+    .route('/department-record/report')
+    .get(transferController.generateDepartmentTransferRecord);
   router
     .route('/:id_sender/:id_receiver/:id_equipment/:date/:id_origin_dep/:id_receiver_dep')
     .get(transferController.getById)

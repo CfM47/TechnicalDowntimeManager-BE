@@ -1,7 +1,7 @@
 import { Equipment, NewEquipment } from '../features/Equipment/schema';
 import { EquipmentQuery } from '../features/Equipment/utils';
 import { IRepository } from './IRepository';
-import { EquipmentType } from '../features/Equipment/types';
+import { EquipmentType, EquipmentWithMaintenances } from '../features/Equipment/types';
 import { PaginatedResponse, Pagination } from '../utils';
 
 /**
@@ -11,5 +11,5 @@ export interface IEquipmentModel
   extends IRepository<EquipmentQuery, NewEquipment, Equipment, EquipmentType> {
   getEquipmentsWithFrequentMaintenances(
     pagination: Pagination
-  ): Promise<PaginatedResponse<EquipmentType>>;
+  ): Promise<PaginatedResponse<EquipmentWithMaintenances>>;
 }

@@ -6,8 +6,6 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerConfig from '../swaggerConfig';
 import { Models } from './utils';
-import { PluginManager } from './core/PluginManager';
-import { PDFReportPlugin } from './plugins/PDFReportPlugin';
 
 /**
  * Creates and configures an Express application.
@@ -24,10 +22,6 @@ export const createApp = (appModels: Models): express.Application => {
   app.use(cors());
   app.disable('x-powered-by');
 
-  const pluginManager = new PluginManager(app);
-  pluginManager.register(new PDFReportPlugin());
-  pluginManager.mountRoutes();
-
   const port = process.env.PORT || 3000;
 
   const swaggerSpec = swaggerJsdoc(swaggerConfig);
@@ -37,7 +31,6 @@ export const createApp = (appModels: Models): express.Application => {
   app.listen(port, () => {
     console.log(`Server is running on port http://localhost:${port}`);
     console.log(`Swagger docs are available at http://localhost:${port}/api-docs`);
-    pluginManager.startAll();
   });
 
   return app;

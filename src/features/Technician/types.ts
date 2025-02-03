@@ -114,3 +114,16 @@ export const technicianSelection = {
  * Includes only the `id` and `name` properties from the TechnicianType interface.
  */
 export type TechnicianInfo = Pick<TechnicianType, 'id' | 'name'>;
+
+export interface TechnicianPerformanceTypeTable {
+  Name: string;
+  Score_Avg: number;
+  Total_Rates: number;
+  Total_Maintenances: number;
+}
+
+export interface TechnicianInterventionTypeTable {
+  Date: string;
+  Type: string;
+  Additional_Info: string;
+}
