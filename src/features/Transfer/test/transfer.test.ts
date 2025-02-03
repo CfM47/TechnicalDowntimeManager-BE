@@ -11,7 +11,6 @@ import testingApp from '../../../TestDirectoryServer/testingApp';
  * - Deleting a transfer by ID
  */
 describe('Transfer CRUD', () => {
-
   let id_sender = '';
   let id_receiver = '';
   let id_equipment = '';
