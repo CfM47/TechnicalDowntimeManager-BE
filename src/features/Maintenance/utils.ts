@@ -4,14 +4,26 @@ import { maintenance } from './schema';
 import { MaintenanceTypes } from '../../enums';
 import { EquipmentMaintenanceHistoryTypeTable, MaintenanceType } from './types';
 
+/**
+ * Represents the type of maintenance for a specific entity or process.
+ * This variable is defined using a zod enumeration (z.enum) of predefined
+ * maintenance types, which are grouped under the `MaintenanceTypes` definition.
+ * It ensures that the value assigned to `maintenanceType` strictly adheres
+ * to one of these predefined types.
+ */
 const maintenanceType = z.enum(MaintenanceTypes);
 
 /**
- * Zod schema for validating maintenance records.
+ * Represents the schema for the maintenance data structure.
  *
- * This schema validates the structure of a maintenance record, ensuring that
- * the technician ID and equipment ID are valid UUIDs, the type is a valid
- * maintenance type, and the cost is a positive number.
+ * This schema defines the properties required for a maintenance record and enforces validation rules
+ * to ensure data integrity.
+ *
+ * Properties:
+ * - `id_technician`: A string representing the unique identifier of the technician performing the maintenance. Must be a valid UUID.
+ * - `id_equipment`: A string representing the unique identifier of the equipment being maintained. Must be a valid UUID.
+ * - `type`: The type of maintenance being performed. This is validated against the predefined values in the `maintenanceType`.
+ * - `cost`: A positive number representing the cost associated with the maintenance task.
  */
 export const maintenanceSchema = z.object({
   id_technician: z.string().uuid(),
@@ -21,10 +33,14 @@ export const maintenanceSchema = z.object({
 });
 
 /**
- * Type representing a query for maintenance records.
+ * Represents a maintenance query used to filter maintenance records.
  *
- * This type defines the possible fields that can be used to query maintenance
- * records, including technician ID, equipment ID, date, type, and cost.
+ * @typedef {Object} MaintenanceQuery
+ * @property {string} [id_technician] - The unique identifier of a technician.
+ * @property {string} [id_equipment] - The unique identifier of an equipment.
+ * @property {string} [date] - The date on which the maintenance was performed, formatted as a string.
+ * @property {string} [type] - The type or nature of the maintenance performed.
+ * @property {number} [cost] - The cost associated with the maintenance.
  */
 export type MaintenanceQuery = {
   id_technician?: string;
@@ -35,14 +51,10 @@ export type MaintenanceQuery = {
 };
 
 /**
- * Builds an array of SQL filters based on the provided maintenance query.
+ * Builds an array of SQL filters based on the provided MaintenanceQuery object.
  *
- * This function takes a `MaintenanceQuery` object and constructs an array of
- * SQL filters to be used in querying the `maintenance` table. Each field in
- * the query object is converted to an SQL equality condition if it is defined.
- *
- * @param query - The query object containing the fields to filter by.
- * @returns An array of SQL filters based on the query object.
+ * @param {MaintenanceQuery} query - An object containing maintenance query parameters such as technician ID, equipment ID, date, type, and cost.
+ * @return {SQL[]} An array of SQL filter conditions derived from the given query parameters.
  */
 export function MaintenanceQueryBuilder(query: MaintenanceQuery): SQL[] {
   const filters: SQL[] = [];
@@ -54,6 +66,12 @@ export function MaintenanceQueryBuilder(query: MaintenanceQuery): SQL[] {
   return filters;
 }
 
+/**
+ * Maps a MaintenanceType object to an EquipmentMaintenanceHistoryTypeTable object.
+ *
+ * @param {MaintenanceType} maintenance - The maintenance object containing details such as technician, type, and date.
+ * @return {EquipmentMaintenanceHistoryTypeTable} A table object containing mapped maintenance history details.
+ */
 export function mapToEquipmentMaintenanceHistoryTypeTable(
   maintenance: MaintenanceType
 ): EquipmentMaintenanceHistoryTypeTable {

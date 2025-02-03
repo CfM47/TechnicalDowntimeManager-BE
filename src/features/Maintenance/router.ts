@@ -210,14 +210,20 @@ import { ITechnicianModel } from '../../Interfaces/ITechnicianModel';
  */
 
 /**
- * Creates a router for maintenance-related routes.
+ * Defines and configures the routes for maintenance-related operations.
  *
- * This function sets up the routes for creating, retrieving, updating, and deleting maintenance records.
+ * @param {IMaintenanceModel} maintenanceModel - The data model for maintenance operations.
+ * @param {ITechnicianModel} technicianModel - The data model for technician information.
+ * @param {IEquipmentModel} equipmentModel - The data model for equipment details.
+ * @returns {Router} An Express router instance configured with maintenance routes.
  *
- * @param maintenanceModel - The model used for maintenance operations.
- * @param technicianModel
- * @param equipmentModel
- * @returns The configured router.
+ * Routes:
+ * - POST `/` - Creates a new maintenance record.
+ * - GET `/` - Retrieves all maintenance records.
+ * - GET `/equipment-history/report` - Generates a report of equipment maintenance history.
+ * - GET `/:id_technician/:id_equipment/:date` - Retrieves a specific maintenance record based on technician ID, equipment ID, and date.
+ * - PUT `/:id_technician/:id_equipment/:date` - Updates a specific maintenance record.
+ * - DELETE `/:id_technician/:id_equipment/:date` - Deletes a specific maintenance record.
  */
 export const maintenanceRouter = (
   maintenanceModel: IMaintenanceModel,

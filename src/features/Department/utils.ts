@@ -3,17 +3,23 @@ import { eq, SQL } from 'drizzle-orm';
 import { department } from './schema';
 
 /**
- * Zod schema for validating a department object.
+ * Represents the schema definition for a department entity.
  *
- * The schema includes the following fields:
- * - `name`: A string that represents the name of the department.
+ * This schema uses `zod` to validate the structure of a department object.
+ * It ensures that the department object contains the required fields and adheres
+ * to the specified types.
  */
 export const departmentSchema = z.object({
   name: z.string()
 });
 
 /**
- * Represents the query parameters for filtering departments.
+ * Represents a query object for fetching or filtering departments. It allows specifying
+ * optional parameters to narrow down the search results.
+ *
+ * @typedef {Object} DepartmentQuery
+ * @property {string} [id] - The unique identifier of the department.
+ * @property {string} [name] - The name of the department.
  */
 export type DepartmentQuery = {
   id?: string;
@@ -21,10 +27,10 @@ export type DepartmentQuery = {
 };
 
 /**
- * Builds an array of SQL filters based on the provided query parameters.
+ * Constructs an array of SQL filter conditions based on the specified department query.
  *
- * @param query - The query parameters for filtering departments.
- * @returns An array of SQL filters.
+ * @param {DepartmentQuery} query - The query object containing department filter criteria such as `id` and `name`.
+ * @return {SQL[]} An array of SQL filter conditions derived from the query.
  */
 export function DepartmentQueryBuilder(query: DepartmentQuery): SQL[] {
   const filters: SQL[] = [];

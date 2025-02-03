@@ -9,7 +9,8 @@ import {
 import { PaginatedResponse, Pagination } from '../utils';
 
 /**
- * Interface for the Technician model, extending the generic repository interface.
+ * Represents the interface for the Technician model, extending the repository interface.
+ * Provides methods to manage and retrieve technician-related data.
  */
 export interface ITechnicianModel
   extends IRepository<TechnicianQuery, NewTechnician, Technician, TechnicianType> {

@@ -1,12 +1,12 @@
 import { PaginatedResponse, Pagination } from '../utils';
 
 /**
- * Generic repository interface for CRUD operations.
+ * IRepository interface defines a generic contract for CRUD operations on a data repository.
  *
- * @template TQuery - The type for query parameters.
- * @template TNew - The type for new entities.
- * @template TInsert - The type for entities to be inserted.
- * @template T - The type for the entity.
+ * @template TQuery - The type defining the query/filter parameters used for fetching records.
+ * @template TNew - The type representing the structure of the data for creating a new record.
+ * @template TInsert - The type for partial or complete updates to an existing record.
+ * @template T - The type of the resulting record returned from repository operations.
  */
 
 export interface IRepository<TQuery, TNew, TInsert, T> {

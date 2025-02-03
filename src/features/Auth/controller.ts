@@ -7,9 +7,10 @@ import { UserQuery } from '../User/utils';
 import { User } from '../User/schema';
 
 /**
- * Controller for handling authentication-related operations.
+ * Controller responsible for handling user authentication actions.
  *
- * This controller provides methods for signing in users.
+ * This class provides methods for authenticating users and managing
+ * their authentication-related data, such as signing in and generating tokens.
  */
 export class AuthController {
   private userModel: IUserModel;

@@ -10,6 +10,11 @@ import { equipment } from '../Equipment/schema';
 import { department } from '../Department/schema';
 import { countTableRows, PaginatedResponse, Pagination } from '../../utils';
 
+/**
+ * DowntimeModel is a service class responsible for handling operations related to downtime records.
+ * It provides methods to create, retrieve, update, delete, and query downtime records
+ * from a persistent data source with optional filtering and pagination.
+ */
 export class DowntimeModel implements IDowntimeModel {
   /**
    * Creates a new downtime record.

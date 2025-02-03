@@ -8,8 +8,8 @@ import { userSelection, UserType } from './types';
 import { countTableRows, PaginatedResponse, Pagination } from '../../utils';
 
 /**
- * Implementation of the IUserModel interface.
- * Provides methods for creating, deleting, retrieving, and updating users in the database.
+ * The UserModel class provides methods to interact with the user database.
+ * It implements `IUserModel` and enables CRUD operations for user records.
  */
 
 export class UserModel implements IUserModel {

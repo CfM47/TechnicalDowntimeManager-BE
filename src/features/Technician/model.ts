@@ -23,14 +23,10 @@ import { downtime } from '../Downtime/schema';
 import { unionAll } from 'drizzle-orm/pg-core';
 
 /**
- * Model for managing technicians.
- *
- * This model provides methods to:
- * - Create a new technician
- * - Retrieve all technicians
- * - Retrieve a technician by ID
- * - Update a technician by ID
- * - Delete a technician by ID
+ * Represents the TechnicianModel class which provides various functionalities
+ * to manage technicians including creation, deletion, retrieval, updates,
+ * and accessing performance or intervention-related data.
+ * Implements the ITechnicianModel interface.
  */
 export class TechnicianModel implements ITechnicianModel {
   /**

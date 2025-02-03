@@ -5,10 +5,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 /**
- * Singleton class to manage the database connection using drizzle-orm and pg.
- *
- * This class ensures that only one instance of the database connection is created
- * and provides methods to get the instance and close the connection.
+ * Represents a singleton encapsulation of a database connection.
+ * This class is used to manage the database connection, ensuring only a single instance exists and providing methods to access and close the connection.
  */
 class Database {
   private static instance: Database;
@@ -50,6 +48,16 @@ class Database {
   }
 }
 
+/**
+ * Represents the active database connection instance, which is accessed
+ * through the singleton instance of the Database class.
+ *
+ * This variable provides an interface to interact with the connected
+ * database, allowing operations such as queries, updates, and transactions.
+ *
+ * Proper initialization of the `Database` singleton is required before
+ * accessing this variable to ensure a valid connection is established.
+ */
 const db = Database.getInstance().db;
 
 export { db };

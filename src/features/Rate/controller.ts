@@ -5,10 +5,9 @@ import { RateQuery, rateSchema } from './utils';
 import { IUserModel } from '../../Interfaces/IUserModel';
 
 /**
- * Controller class for handling CRUD operations on Rate entities.
- *
- * This class provides methods to create, retrieve, update, and delete rates.
- * Each method interacts with the `IRateModel` to perform the necessary database operations.
+ * RateController is responsible for managing operations related to rates, including creating,
+ * fetching, updating, and deleting rates in the system. It interacts with rate and user models
+ * to perform these operations and handles request and response objects.
  */
 export class RateController {
   rateModel: IRateModel;

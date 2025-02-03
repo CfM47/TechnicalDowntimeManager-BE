@@ -4,15 +4,29 @@ import { equipment } from '../Equipment/schema';
 import { MaintenanceTypes } from '../../enums';
 
 /**
- * Defines the schema for the `maintenance` table.
+ * Represents an enumerated PostgreSQL type named 'maintenanceType' that is created using the provided `MaintenanceTypes`.
+ * This type is typically used to define a set of constant values in the database for maintenance types.
  *
- * The `maintenance` table stores records of maintenance activities performed by technicians on equipment.
- * Each record includes the technician ID, equipment ID, date of maintenance, type of maintenance, and cost.
- * The primary key is a composite key consisting of `id_technician`, `id_equipment`, and `date`.
+ * @typedef {pgEnum} maintenanceType
+ * @param {string} maintenanceType - Enumeration name.
+ * @param {object} MaintenanceTypes - The set of values to define the enum type.
  */
 
 export const type = pgEnum('maintenanceType', MaintenanceTypes);
 
+/**
+ * Represents the 'maintenance' table in the database, containing details about equipment maintenance records.
+ *
+ * Fields:
+ * - `id_technician`: A UUID referencing the unique identifier of the technician responsible for the maintenance. This field is mandatory and is a foreign key referencing the `id_user` column in the `technician` table.
+ * - `id_equipment`: A UUID referencing the unique identifier of the equipment being maintained. This field is mandatory and is a foreign key referencing the `id` column in the `equipment` table.
+ * - `date`: A timestamp indicating the date and time when the maintenance occurred. This field is mandatory, defaults to the current date and time, and is stored as a string.
+ * - `type`: Represents the type of maintenance performed. This field is mandatory.
+ * - `cost`: Represents the cost associated with the maintenance. This field is a real number and is mandatory.
+ *
+ * Primary Key:
+ * - Combines the `id_technician`, `id_equipment`, and `date` columns to uniquely identify a maintenance record.
+ */
 export const maintenance = pgTable(
   'maintenance',
   {
@@ -36,11 +50,23 @@ export const maintenance = pgTable(
 );
 
 /**
- * Type representing a selected maintenance record.
+ * Represents the structure of a Maintenance entity as inferred by the database schema.
+ *
+ * This type is derived from `maintenance.$inferSelect` and is used for type definition
+ * to ensure consistency when working with the underlying Maintenance model.
+ *
+ * It is typically utilized to define the shape of data retrieved from or inserted into
+ * the Maintenance table, providing a typed interface for the entity's properties.
  */
 export type Maintenance = typeof maintenance.$inferSelect;
 
 /**
- * Type representing a new maintenance record to be inserted.
+ * Represents the structure for a new maintenance record insertion.
+ *
+ * This type is derived from the inferred insert type of the `maintenance` object,
+ * providing the expected shape and fields for creating a new entry in the maintenance system.
+ *
+ * Typically used when defining the data input for adding maintenance records to ensure
+ * type safety and consistency with the database schema.
  */
 export type NewMaintenance = typeof maintenance.$inferInsert;

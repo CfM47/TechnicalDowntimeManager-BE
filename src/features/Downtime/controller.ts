@@ -18,11 +18,7 @@ import { pickPlugin } from '../../core/utils';
 import { ReportData } from '../../core/utils';
 
 /**
- * Controller class for handling downtime-related operations.
- *
- * This class provides methods for creating, retrieving, updating, and deleting
- * downtime records. It interacts with the downtime model to perform these operations
- * and sends appropriate HTTP responses based on the outcome.
+ * Controller for managing downtime-related operations.
  */
 export class DowntimeController {
   downtimeModel: IDowntimeModel;

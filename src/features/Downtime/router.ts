@@ -249,13 +249,16 @@ import { IUserModel } from '../../Interfaces/IUserModel';
  */
 
 /**
- * Creates a router for downtime-related routes.
+ * A function that creates and configures an Express router to handle
+ * downtime-related operations. This router provides endpoints for
+ * creating, retrieving, updating, deleting, and generating reports on
+ * downtime data, as well as retrieving downtime data for the last year.
  *
- * @param downtimeModel - The model to be used by the downtime controller.
- * @param departmentModel
- * @param equipmentModel
- * @param userModel
- * @returns The configured router for downtime routes.
+ * @param {IDowntimeModel} downtimeModel - The model used to interact with downtime records in the database.
+ * @param {IDepartmentModel} departmentModel - The model used to interact with department data in the database.
+ * @param {IEquipmentModel} equipmentModel - The model used to interact with equipment data in the database.
+ * @param {IUserModel} userModel - The model used to interact with user data in the database.
+ * @returns {Router} An Express router configured with downtime-related routes.
  */
 export const downtimeRouter = (
   downtimeModel: IDowntimeModel,

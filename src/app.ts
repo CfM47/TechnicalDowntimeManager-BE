@@ -16,6 +16,19 @@ import { Models } from './utils';
 
 dotenv.config();
 
+/**
+ * A function to create and configure an Express application with predefined middleware, routes, and settings.
+ *
+ * @function
+ * @param {Models} appModels - The domain models used for configuring the application and its API routes.
+ * @returns {express.Application} Returns the configured Express application instance.
+ *
+ * @description
+ * This function initializes an Express application. It sets up JSON parsing, cross-origin resource sharing (CORS),
+ * and disables the "x-powered-by" header for security purposes. Swagger-based API documentation is hosted
+ * under the `/api-docs` route, and application APIs are provided under the `/api` route. The server listens
+ * on a specified port, which defaults to `3000` if not provided through the environment variables.
+ */
 export const createApp = (appModels: Models): express.Application => {
   const app = express();
   app.use(express.json());

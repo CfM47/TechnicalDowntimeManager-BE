@@ -5,10 +5,15 @@ import { DowntimeType } from '../features/Downtime/types';
 import { PaginatedResponse, Pagination } from '../utils';
 
 /**
- * Interface for the Downtime model.
+ * Interface representing a model for handling downtime-related data operations.
+ * Extends the capabilities of the generic IRepository with additional methods specific to downtime management.
  *
- * This interface extends the generic repository interface `IRepository`
- * with specific methods for handling downtime data.
+ * @extends IRepository
+ *
+ * @template DowntimeQuery - The type representing the structure of downtime query parameters.
+ * @template NewDowntime - The type representing the structure of a new downtime record.
+ * @template Downtime - The type representing the structure of an existing downtime record.
+ * @template DowntimeType - The type representing the detailed structure or category of downtime information.
  */
 
 export interface IDowntimeModel

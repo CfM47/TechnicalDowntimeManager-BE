@@ -14,10 +14,7 @@ import { EquipmentQuery } from '../Equipment/utils';
 import { pickPlugin, ReportData } from '../../core/utils';
 
 /**
- * Controller for handling CRUD operations on the `Maintenance` resource.
- *
- * This controller provides methods to create, retrieve, update, and delete maintenance records.
- * Each method interacts with the `IMaintenanceModel` to perform the necessary database operations.
+ * Controller responsible for managing maintenance-related operations.
  */
 export class MaintenanceController {
   maintenanceModel: IMaintenanceModel;
@@ -203,6 +200,24 @@ export class MaintenanceController {
     }
   };
 
+  /**
+   * Asynchronously generates a maintenance history report for equipment based on the provided filters and format, and sends the report as a downloadable file.
+   *
+   * @param {Request} req - The HTTP request object, including query parameters for pagination, format, and filters.
+   * @param {Response} res - The HTTP response object used to send the generated report or error messages.
+   * @throws {Error} If an error occurs during report generation or fetching data, a 500 status with an error message is returned.
+   *
+   * Query Parameters:
+   * - `page` (optional): Page number for paginated results.
+   * - `size` (optional): Number of items per page for pagination.
+   * - `format` (optional): Format of the report, defaults to 'pdf'.
+   * - Additional filters for querying maintenance data can be passed as query parameters.
+   *
+   * Response:
+   * - Returns a downloadable report file in the specified format with a `200` status code if successful.
+   * - Returns a `400` status with an error message if the format is not supported.
+   * - Returns a `500` status with an error message if an unknown error occurs.
+   */
   generateEquipmentHistory = async (req: Request, res: Response) => {
     try {
       const { page, size, format = 'pdf', ...query } = req.query;

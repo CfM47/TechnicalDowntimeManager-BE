@@ -14,8 +14,8 @@ import { IDepartmentModel } from '../../Interfaces/IDepartmentModel';
 import { pickPlugin, ReportData } from '../../core/utils';
 
 /**
- * Controller class for handling Transfer-related operations.
- * This class provides methods for creating, retrieving, updating, and deleting transfers.
+ * Controller responsible for handling transfer-related operations such as creation,
+ * retrieval, updating, and deletion of transfers.
  */
 export class TransferController {
   transferModel: ITransferModel;

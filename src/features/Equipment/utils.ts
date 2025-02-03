@@ -5,13 +5,34 @@ import { EquipmentStatuses, EquipmentTypes } from '../../enums';
 import { DefectiveEquipmentTypeTable, EquipmentWithMaintenances } from './types';
 
 /**
- * Zod schema for validating equipment state and type.
+ * Represents the state of equipment, constrained to a predefined set of statuses.
+ *
+ * The variable `equipmentState` is defined using a `z.enum`, ensuring that it only accepts
+ * values from the `EquipmentStatuses` enumeration. This provides strict validation and ensures
+ * that the equipment state is always within the allowed statuses.
+ *
+ * Common use cases include tracking operational status, maintenance requirements, or other
+ * state-specific behavior of an equipment.
+ *
+ * @type {z.ZodEnum<typeof EquipmentStatuses>}
  */
 const equipmentState = z.enum(EquipmentStatuses);
+/**
+ * Represents the type of equipment, constrained to a specific set of valid types defined by `EquipmentTypes`.
+ * This variable is declared as a Zod enum schema and validates the assigned value against the predefined set.
+ */
 const equipmentType = z.enum(EquipmentTypes);
 
 /**
- * Zod schema for validating equipment data.
+ * Schema definition for equipment data.
+ *
+ * The `equipmentSchema` object defines the structure and validation rules for equipment-related information.
+ *
+ * Properties:
+ * - `name`: A required string field that specifies the name of the equipment, limited to a maximum of 255 characters.
+ * - `type`: Custom property representing the category or type of the equipment, based on the predefined `equipmentType`.
+ * - `status`: Custom property representing the operational status of the equipment, adhering to the predefined `equipmentState`.
+ * - `id_department`: A required UUID string that identifies the department associated with the equipment.
  */
 export const equipmentSchema = z.object({
   name: z.string().max(255),
@@ -20,11 +41,19 @@ export const equipmentSchema = z.object({
   id_department: z.string().uuid()
 });
 /**
- * Type representing a query object for filtering equipment records.
+ * A type representing a query for filtering equipment records.
  *
- * This type defines the possible properties that can be used to filter
- * equipment records in the database. Each property is optional and corresponds
- * to a column in the `equipment` table.
+ * This type defines the possible fields that can be used to filter equipment information
+ * when querying a data source. Each field is optional, allowing selective querying based on
+ * specified criteria.
+ *
+ * @typedef {Object} EquipmentQuery
+ * @property {string} [id] - The unique identifier of the equipment.
+ * @property {string} [name] - The name of the equipment.
+ * @property {string} [type] - The type or category of the equipment.
+ * @property {string} [status] - The current status of the equipment (e.g., active, inactive, maintenance).
+ * @property {string} [id_department] - The identifier of the department to which the equipment belongs.
+ * @property {string} [acquisition_date] - The date the equipment was acquired, typically formatted as a string.
  */
 export type EquipmentQuery = {
   id?: string;
@@ -36,15 +65,10 @@ export type EquipmentQuery = {
 };
 
 /**
- * Builds an array of SQL filters based on the provided equipment query.
+ * Builds a list of SQL filter conditions based on the provided equipment query.
  *
- * This function takes an `EquipmentQuery` object and constructs an array of SQL filter conditions
- * that can be used to query the `equipment` table. Each property in the query object corresponds
- * to a column in the `equipment` table, and if a property is defined, a filter condition is added
- * to the array.
- *
- * @param query - The query object containing filter criteria for the equipment.
- * @returns An array of SQL filter conditions to be used in a database query.
+ * @param {EquipmentQuery} query - The query object containing filter parameters for equipment.
+ * @return {SQL[]} A list of SQL filter conditions based on the query parameters.
  */
 export function EquipmentQueryBuilder(query: EquipmentQuery): SQL[] {
   const filters: SQL[] = [];
@@ -58,10 +82,10 @@ export function EquipmentQueryBuilder(query: EquipmentQuery): SQL[] {
 }
 
 /**
- * Maps an EquipmentWithMaintenances object to a DefectiveEquipmentType object.
+ * Converts equipment data with maintenance information into a format compatible with the defective equipment type table.
  *
- * @param equipment - The EquipmentWithMaintenances object to map.
- * @returns The mapped DefectiveEquipmentType object.
+ * @param {EquipmentWithMaintenances} equipment - The equipment object containing details about the equipment and its maintenances.
+ * @return {DefectiveEquipmentTypeTable} An object containing the mapped data for the defective equipment type table.
  */
 export function mapToDefectiveEquipmentTypeTable(
   equipment: EquipmentWithMaintenances

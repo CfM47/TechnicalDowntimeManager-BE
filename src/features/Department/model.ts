@@ -7,7 +7,9 @@ import { departmentSelection, DepartmentType } from './types';
 import { countTableRows, PaginatedResponse, Pagination } from '../../utils';
 
 /**
- * Model class for handling CRUD operations on the Department entity.
+ * The DepartmentModel class provides methods to interact with the department database table.
+ * It implements the IDepartmentModel interface and includes functionality for creating,
+ * updating, retrieving, and deleting department records.
  */
 export class DepartmentModel implements IDepartmentModel {
   /**
