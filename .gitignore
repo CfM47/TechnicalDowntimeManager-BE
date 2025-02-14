@@ -137,3 +137,5 @@ build/
 drizzle/
 
 /src/test
+
+docs/
