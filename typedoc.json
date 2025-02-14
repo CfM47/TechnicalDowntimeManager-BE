@@ -1,0 +1,9 @@
+{
+  "entryPointStrategy": "expand",
+  "entryPoints": ["./src"],
+  "out": "docs",
+  "exclude": ["**/node_modules/**", "**/test/**"],
+  "plugin": ["typedoc-github-wiki-theme", "typedoc-plugin-markdown"],
+  "name": "Technical Downtime Manager --Backend",
+  "includeVersion": true
+}
